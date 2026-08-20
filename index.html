@@ -1,988 +1,1013 @@
-<!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<!doctype html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daniel Guedegbe | Software Engineer</title>
-  <meta name="description" content="Portfolio de Daniel Guedegbe, Développeur Full Stack Python & JavaScript basé à Abidjan. Expert Django, Flutter, FastAPI, CI/CD.">
-  <meta name="author" content="Jean Marie Daniel Vianney Guedegbe">
-  <meta property="og:title" content="Daniel Guedegbe | Software Engineer">
-  <meta property="og:description" content="Portfolio de Daniel Guedegbe, Développeur Full Stack Python & JavaScript basé à Abidjan.">
-  <meta property="og:type" content="website">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daniel Guedegbe — Ingénieur Backend Python/Django, Abidjan</title>
+<meta name="description" content="Daniel Guedegbe — Ingénieur Logiciel Backend Senior, spécialiste Python/Django, basé à Abidjan. Architectures fintech, paiements mobiles, plateformes e-commerce et ERP en production." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0A0E17;
+  --bg-raised:#101623;
+  --card:#131A29;
+  --card-hover:#171F31;
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.16);
+  --text:#E8ECF4;
+  --text-soft:#8D97AC;
+  --text-dim:#5B657A;
+  --py-blue:#4B8BBE;
+  --py-blue-bright:#63B3ED;
+  --py-gold:#FFD43B;
+  --py-gold-deep:#E8AE00;
+  --ok:#3DDC97;
+  --err:#FF6B6B;
+  --shadow: 0 40px 80px -30px rgba(0,0,0,.6);
+  --ease: cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  cursor:default;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--py-gold);color:#0A0E17;}
+.wrap{max-width:1260px;margin:0 auto;padding:0 2.5rem;}
+section{padding:8rem 0;position:relative;}
+@media(max-width:768px){section{padding:5rem 0;} .wrap{padding:0 1.4rem;}}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.01em;color:var(--text);}
+code,.mono{font-family:'JetBrains Mono',monospace;}
 
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
+/* ============ BOOT SCREEN ============ */
+#boot{
+  position:fixed;inset:0;z-index:9999;background:#05070C;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .6s var(--ease), visibility .6s var(--ease);
+}
+#boot.hide{opacity:0;visibility:hidden;pointer-events:none;}
+#boot .boot-inner{font-family:'JetBrains Mono',monospace;color:var(--ok);font-size:.9rem;width:min(440px,86vw);}
+#boot .boot-line{opacity:0;animation:bootline .35s forwards;white-space:nowrap;overflow:hidden;}
+#boot .boot-line:nth-child(1){animation-delay:.05s;}
+#boot .boot-line:nth-child(2){animation-delay:.35s;}
+#boot .boot-line:nth-child(3){animation-delay:.65s;}
+#boot .boot-line:nth-child(4){animation-delay:.95s;}
+#boot .boot-bar{margin-top:1rem;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+#boot .boot-bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--py-blue),var(--py-gold));animation:bootbar 1.4s 1.1s forwards var(--ease);}
+@keyframes bootline{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+@keyframes bootbar{to{width:100%;}}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+/* ============ PROGRESS ============ */
+#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--py-blue),var(--py-gold));z-index:1000;}
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            inter: ['Inter', 'sans-serif'],
-            roboto: ['Roboto', 'sans-serif'],
-            fira: ['"Fira Code"', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
+/* ============ AMBIENT BG ============ */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.glow-orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.22;}
+.glow-orb.o1{width:520px;height:520px;background:var(--py-blue);top:-10%;left:-8%;animation:drift 22s ease-in-out infinite;}
+.glow-orb.o2{width:460px;height:460px;background:var(--py-gold);bottom:-8%;right:-6%;animation:drift 26s ease-in-out infinite reverse;}
+@keyframes drift{0%,100%{transform:translate(0,0);}50%{transform:translate(60px,-40px);}}
 
-  <style>
-    :root {
-      --bg: #0F172A;
-      --card: #1E293B;
-      --primary: #3776AB;
-      --accent: #FFD43B;
-      --text: #F8FAFC;
-      --border: rgba(248,250,252,0.08);
-      --glow: rgba(55,118,171,0.25);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Roboto', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+/* ============ REVEAL ============ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.reveal.visible{opacity:1;transform:none;}
 
-    [data-theme="light"] {
-      --bg: #f0f4f8; --card: #ffffff; --primary: #2563eb; --accent: #f59e0b;
-      --text: #1e293b; --border: rgba(0,0,0,0.08); --glow: rgba(37,99,235,0.15);
-    }
+/* ============ NAV ============ */
+header{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,14,23,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+nav.wrap{display:flex;align-items:center;justify-content:space-between;height:72px;}
+.brand{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:.5rem;color:var(--text);}
+.brand .prompt-sym{color:var(--ok);}
+.brand .blink{display:inline-block;width:8px;height:1.1em;background:var(--py-gold);margin-left:2px;animation:blink 1.1s steps(1) infinite;vertical-align:-2px;}
+@keyframes blink{50%{opacity:0;}}
+.nav-links{display:flex;gap:2.2rem;list-style:none;}
+.nav-links a{font-family:'JetBrains Mono',monospace;text-decoration:none;font-size:.76rem;letter-spacing:.02em;color:var(--text-soft);position:relative;padding-bottom:4px;transition:color .3s;}
+.nav-links a::before{content:'# ';color:var(--py-gold);opacity:0;transition:opacity .3s;}
+.nav-links a:hover::before,.nav-links a.active::before{opacity:1;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.74rem;letter-spacing:.03em;padding:.7rem 1.4rem;border-radius:8px;display:inline-flex;align-items:center;gap:.55rem;transition:all .35s var(--ease);border:1px solid var(--line-strong);white-space:nowrap;position:relative;overflow:hidden;}
+.btn-primary{background:linear-gradient(135deg,var(--py-blue),#3A6D96);color:#fff;border-color:transparent;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px -12px rgba(75,139,190,.55);}
+.btn-gold{background:var(--py-gold);color:#0A0E17;border-color:var(--py-gold);font-weight:600;}
+.btn-gold:hover{background:var(--py-gold-deep);transform:translateY(-2px);box-shadow:0 14px 28px -12px rgba(255,212,59,.5);}
+.btn-ghost{background:transparent;color:var(--text);}
+.btn-ghost:hover{border-color:var(--text);background:rgba(255,255,255,.05);}
+.menu-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;}
+.menu-toggle span{width:22px;height:1px;background:var(--text);}
+.mobile-menu{display:none;flex-direction:column;gap:1.2rem;padding:1.4rem 1.4rem 1.8rem;border-top:1px solid var(--line);background:var(--bg-raised);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--text);}
 
-    h1,h2,h3,h4,h5,h6 { font-family: 'Inter', sans-serif; font-weight: 700; }
-    code, pre, .font-code { font-family: 'Fira Code', monospace; }
+/* ============ EYEBROW (Python comment style) ============ */
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-dim);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;}
+.eyebrow .hash{color:var(--ok);}
+.eyebrow .kw{color:var(--py-gold);}
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+/* ============ HERO ============ */
+#hero{padding-top:11rem;padding-bottom:5rem;position:relative;z-index:2;}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:4rem;align-items:center;}
+.status-pill{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem 1rem;border:1px solid var(--line-strong);border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-soft);margin-bottom:2rem;background:rgba(61,220,151,.06);}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);position:relative;}
+.status-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--ok);animation:pulse 2.2s ease-out infinite;}
+@keyframes pulse{0%{transform:scale(.7);opacity:.8;}100%{transform:scale(2.4);opacity:0;}}
+.hero-title{font-size:clamp(2.5rem,5.4vw,4.3rem);line-height:1.07;font-weight:800;max-width:15ch;}
+.hero-title .accent{background:linear-gradient(100deg,var(--py-blue-bright),var(--py-gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-sub{font-size:1.05rem;color:var(--text-soft);max-width:48ch;margin:1.7rem 0 2.4rem;font-weight:300;}
+.hero-sub strong{color:var(--text);font-weight:600;}
+.hero-ctas{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:3.2rem;}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.stat-item{padding:1.3rem 1.2rem 1.3rem 0;border-right:1px solid var(--line);}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;color:var(--py-gold);display:flex;align-items:baseline;gap:.15rem;}
+.stat-num .plus{font-size:1rem;color:var(--py-blue-bright);}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-top:.4rem;}
 
-    .navbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(15,23,42,0.85); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border); transition: background 0.3s;
-    }
-    [data-theme="light"] .navbar { background: rgba(240,244,248,0.9); }
+/* TERMINAL WINDOW */
+.term{background:#0D1220;border:1px solid var(--line-strong);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;}
+.term-bar{display:flex;align-items:center;gap:8px;padding:.85rem 1.1rem;border-bottom:1px solid var(--line);background:#0F1524;}
+.term-bar i{width:11px;height:11px;border-radius:50%;background:var(--line-strong);}
+.term-bar i:nth-child(1){background:#FF6259;}
+.term-bar i:nth-child(2){background:#FFBE2E;}
+.term-bar i:nth-child(3){background:#28C93F;}
+.term-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);margin-left:.5rem;}
+.term-body{padding:1.5rem 1.4rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9;min-height:280px;}
+.term-body .c-kw{color:#C792EA;}
+.term-body .c-fn{color:var(--py-blue-bright);}
+.term-body .c-str{color:var(--ok);}
+.term-body .c-com{color:var(--text-dim);}
+.term-body .c-num{color:var(--py-gold);}
+.term-body .c-plain{color:var(--text-soft);}
+#typed-code{white-space:pre-wrap;}
+.term-cursor{display:inline-block;width:8px;height:1.05em;background:var(--py-gold);vertical-align:-2px;animation:blink 1s steps(1) infinite;}
 
-    .nav-link {
-      position: relative; font-family: 'Inter', sans-serif; font-size: 0.85rem;
-      font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
-      color: rgba(248,250,252,0.7); padding: 0.5rem 0; transition: color 0.2s; text-decoration: none;
-    }
-    [data-theme="light"] .nav-link { color: rgba(30,41,59,0.7); }
-    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
-    .nav-link:hover, .nav-link.active { color: var(--text); }
-    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+/* ============ SECTION HEAD ============ */
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;margin-bottom:3.5rem;}
+.section-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem);max-width:18ch;}
+.section-head .lead{max-width:38ch;color:var(--text-soft);font-size:.95rem;font-weight:300;padding-bottom:.3rem;}
+@media(max-width:800px){.section-head{flex-direction:column;align-items:flex-start;gap:1.1rem;}}
 
-    .btn-primary { display:inline-flex;align-items:center;gap:0.5rem;background:var(--primary);color:#fff;font-family:'Inter',sans-serif;font-weight:600;padding:0.75rem 1.75rem;border-radius:8px;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;font-size:0.9rem; }
-    .btn-primary:hover { background:#2563eb;transform:translateY(-2px);box-shadow:0 8px 25px rgba(55,118,171,0.4); }
-    .btn-accent { display:inline-flex;align-items:center;gap:0.5rem;background:var(--accent);color:#0F172A;font-family:'Inter',sans-serif;font-weight:700;padding:0.75rem 1.75rem;border-radius:8px;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;font-size:0.9rem; }
-    .btn-accent:hover { transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,212,59,0.35);filter:brightness(1.1); }
-    .btn-outline { display:inline-flex;align-items:center;gap:0.5rem;background:transparent;color:var(--text);font-family:'Inter',sans-serif;font-weight:600;padding:0.75rem 1.75rem;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;text-decoration:none;font-size:0.9rem; }
-    .btn-outline:hover { border-color:var(--primary);color:var(--primary);background:rgba(55,118,171,0.08); }
-    .btn-whatsapp { display:inline-flex;align-items:center;gap:0.5rem;background:#25d366;color:#fff;font-family:'Inter',sans-serif;font-weight:600;padding:0.75rem 1.75rem;border-radius:8px;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;font-size:0.9rem; }
-    .btn-whatsapp:hover { background:#20b558;transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,211,102,0.3); }
+/* ============ PROFILE ============ */
+#profil{border-top:1px solid var(--line);}
+.profil-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:4rem;}
+.profil-grid p{color:var(--text-soft);font-weight:300;font-size:1rem;margin-bottom:1.3rem;max-width:58ch;}
+.profil-grid p:last-child{margin-bottom:0;}
+.profil-grid strong{color:var(--text);font-weight:600;}
+.avatar-card{border:1px solid var(--line-strong);border-radius:16px;background:var(--card);padding:1.6rem;position:relative;overflow:hidden;margin-bottom:1.6rem;}
+.avatar-frame{aspect-ratio:1/1;border-radius:12px;background:linear-gradient(150deg,#152036,#0D1220);border:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.avatar-frame .avatar-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(75,139,190,.35),transparent 60%);}
+.avatar-initials{font-family:'Space Grotesk',sans-serif;font-size:4.2rem;font-weight:800;background:linear-gradient(135deg,var(--py-blue-bright),var(--py-gold));-webkit-background-clip:text;background-clip:text;color:transparent;position:relative;z-index:1;}
+.avatar-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ok),transparent);animation:scan 2.6s linear infinite;opacity:.7;}
+@keyframes scan{0%{top:0%;}100%{top:100%;}}
+.avatar-hint{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-dim);margin-top:.9rem;text-align:center;line-height:1.5;}
+.facts{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:1.8rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.facts .brace{color:var(--text-dim);}
+.fact-row{display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px dashed var(--line);}
+.fact-row:last-child{border-bottom:none;}
+.fact-row .k{color:var(--py-blue-bright);}
+.fact-row .v{color:var(--text-soft);text-align:right;}
+.fact-row a{color:var(--ok);border-bottom:1px solid transparent;transition:border-color .3s;}
+.fact-row a:hover{border-color:var(--ok);}
 
-    .card { background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all 0.3s; }
-    .card:hover { transform:translateY(-4px);border-color:var(--primary);box-shadow:0 16px 48px rgba(55,118,171,0.15); }
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem;}
+.principle{border-top:2px solid var(--line-strong);padding-top:1.4rem;transition:border-color .3s;}
+.principle:hover{border-color:var(--py-gold);}
+.principle .pn{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--py-gold);margin-bottom:.8rem;}
+.principle h3{font-size:1.08rem;margin-bottom:.6rem;font-weight:600;}
+.principle p{color:var(--text-soft);font-size:.86rem;font-weight:300;max-width:32ch;}
+@media(max-width:900px){.profil-grid,.principles{grid-template-columns:1fr;}}
 
-    .section-label { font-family:'Fira Code',monospace;font-size:0.75rem;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem; }
-    .section-title { font-family:'Inter',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;background:linear-gradient(135deg,var(--text) 0%,rgba(248,250,252,0.6) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-    [data-theme="light"] .section-title { background:linear-gradient(135deg,#1e293b 0%,#475569 100%);-webkit-background-clip:text;background-clip:text; }
+/* ============ STACK ============ */
+#stack{background:var(--bg-raised);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.stack-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.8rem;transition:transform .4s var(--ease),border-color .4s;}
+.stack-card:hover{transform:translateY(-5px);border-color:var(--py-blue);}
+.stack-card .imp{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-dim);margin-bottom:1rem;}
+.stack-card .imp .kw{color:#C792EA;}
+.stack-card .imp .mod{color:var(--py-blue-bright);}
+.stack-card h3{font-size:1.05rem;margin-bottom:1rem;font-weight:600;}
+.pill-row{display:flex;flex-wrap:wrap;gap:.45rem;}
+.pill-row span{font-family:'JetBrains Mono',monospace;font-size:.68rem;border:1px solid var(--line-strong);padding:.3rem .68rem;border-radius:999px;color:var(--text-soft);transition:all .3s;}
+.pill-row span:hover{border-color:var(--py-gold);color:var(--py-gold);}
+@media(max-width:900px){.stack-grid{grid-template-columns:1fr;}}
 
-    .skill-bar-bg { background:var(--border);border-radius:999px;overflow:hidden; }
-    .skill-bar-fill { height:6px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;width:0;transition:width 1.2s ease; }
+/* ============ EXPERIENCE — GIT LOG ============ */
+.gitlog{border-top:1px solid var(--line-strong);}
+.commit{position:relative;padding:2.4rem 0 2.4rem 2.6rem;border-bottom:1px solid var(--line);}
+.commit::before{content:'';position:absolute;left:6px;top:2.6rem;bottom:-1px;width:1px;background:var(--line-strong);}
+.commit:last-child::before{display:none;}
+.commit::after{content:'';position:absolute;left:0;top:2.9rem;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--py-gold);}
+.commit.current::after{border-color:var(--ok);box-shadow:0 0 0 4px rgba(61,220,151,.15);}
+.commit-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.8rem;margin-bottom:.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+.commit-hash{color:var(--py-gold);}
+.commit-date{color:var(--text-dim);}
+.commit-branch{color:var(--ok);background:rgba(61,220,151,.1);padding:.15rem .55rem;border-radius:999px;}
+.commit-msg{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;margin:.5rem 0 .3rem;}
+.commit-company{color:var(--py-blue-bright);font-weight:600;}
+.commit-loc{font-size:.78rem;color:var(--text-dim);margin-bottom:1rem;}
+.commit ul{list-style:none;margin-bottom:1.2rem;}
+.commit li{position:relative;padding-left:1.4rem;margin-bottom:.55rem;font-size:.92rem;color:var(--text-soft);font-weight:300;max-width:70ch;}
+.commit li::before{content:'+';position:absolute;left:0;color:var(--ok);font-weight:700;font-family:'JetBrains Mono',monospace;}
+.tech-row{display:flex;flex-wrap:wrap;gap:.5rem;}
+.tech-row span{font-family:'JetBrains Mono',monospace;font-size:.66rem;border:1px solid var(--line-strong);padding:.28rem .65rem;border-radius:6px;color:var(--text-soft);}
 
-    .tag { display:inline-block;padding:0.2rem 0.7rem;background:rgba(55,118,171,0.12);color:var(--primary);border:1px solid rgba(55,118,171,0.25);border-radius:999px;font-family:'Fira Code',monospace;font-size:0.72rem;white-space:nowrap; }
-    .tag-accent { background:rgba(255,212,59,0.12);color:var(--accent);border-color:rgba(255,212,59,0.25); }
+/* ============ PROJECTS ============ */
+.proj{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;padding:4rem 0;border-bottom:1px solid var(--line);}
+.proj:first-of-type{padding-top:0;}
+.proj:last-of-type{border-bottom:none;padding-bottom:0;}
+.proj:nth-of-type(even) .proj-visual{order:2;}
+.proj-class{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--text-dim);margin-bottom:1rem;}
+.proj-class .kw{color:#C792EA;}
+.proj-class .name{color:var(--py-gold);}
+.proj h3{font-size:clamp(1.5rem,2.6vw,1.9rem);margin-bottom:.9rem;max-width:22ch;}
+.proj p.desc{color:var(--text-soft);font-weight:300;font-size:.95rem;margin-bottom:1.4rem;max-width:52ch;}
+.proj .feature-list{list-style:none;margin-bottom:1.4rem;}
+.proj .feature-list li{position:relative;padding-left:1.3rem;margin-bottom:.5rem;font-size:.87rem;color:var(--text-soft);font-weight:300;}
+.proj .feature-list li::before{content:'▸';position:absolute;left:0;color:var(--py-blue-bright);}
+.proj-link{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;border-bottom:1px solid var(--text);padding-bottom:.3rem;transition:gap .3s var(--ease),color .3s,border-color .3s;}
+.proj-link:hover{gap:.9rem;color:var(--py-gold);border-color:var(--py-gold);}
+.proj-visual{aspect-ratio:4/3.1;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .6s var(--ease);}
+.proj-visual:hover{transform:translateY(-6px);}
+.pv-bar{display:flex;gap:6px;padding:.85rem 1rem;border-bottom:1px solid var(--line);}
+.pv-bar i{width:8px;height:8px;border-radius:50%;background:var(--line-strong);}
+.pv-body{padding:1.3rem;height:calc(100% - 36px);}
 
-    .whatsapp-float { position:fixed;bottom:2rem;right:2rem;z-index:999;width:3.5rem;height:3.5rem;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:all 0.3s;text-decoration:none; }
-    .whatsapp-float:hover { transform:scale(1.1);box-shadow:0 8px 30px rgba(37,211,102,0.5); }
+/* wallet mock */
+.wallet-mock .wm-row{display:flex;justify-content:space-between;align-items:center;background:var(--bg-raised);border:1px solid var(--line);border-radius:10px;padding:.75rem .9rem;margin-bottom:.6rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
+.wallet-mock .wm-row b{color:var(--py-gold);font-size:.9rem;}
+.wallet-mock .wm-tag{font-size:.6rem;color:var(--ok);background:rgba(61,220,151,.1);padding:.15rem .5rem;border-radius:999px;}
+.wallet-mock .wm-chart{display:flex;align-items:flex-end;gap:6px;height:70px;margin-top:1rem;}
+.wallet-mock .wm-chart div{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--py-blue-bright),var(--py-blue));}
 
-    .theme-toggle { width:40px;height:22px;background:var(--border);border-radius:999px;position:relative;cursor:pointer;border:1px solid rgba(255,255,255,0.1);transition:background 0.3s; }
-    .theme-toggle::after { content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--accent);border-radius:50%;transition:transform 0.3s; }
-    [data-theme="light"] .theme-toggle::after { transform:translateX(18px); }
+/* pos mock */
+.pos-mock .pos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem;}
+.pos-mock .pos-item{background:var(--bg-raised);border:1px solid var(--line);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-soft);}
+.pos-mock .pos-total{border-top:1px dashed var(--line-strong);padding-top:.8rem;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.8rem;}
+.pos-mock .pos-total b{color:var(--ok);font-size:1.05rem;}
 
-    @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 0 0 var(--glow)} 50%{box-shadow:0 0 0 12px transparent} }
+/* wave payment mock */
+.wave-mock{background:linear-gradient(160deg,#0D1220,#0A0E17);}
+.wave-mock .wv-status{display:flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ok);margin-bottom:1rem;}
+.wave-mock .wv-line{height:6px;border-radius:4px;background:var(--bg-raised);margin-bottom:.6rem;}
+.wave-mock .wv-line.w1{width:80%;} .wave-mock .wv-line.w2{width:55%;} .wave-mock .wv-line.w3{width:65%;background:var(--py-blue);}
+.wave-mock .wv-amount{margin-top:1.1rem;font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--py-gold);font-weight:700;}
+.wave-mock .wv-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-dim);}
 
-    .animate-fade-up { animation:fadeInUp 0.7s ease both; }
-    .animate-fade-in { animation:fadeIn 0.6s ease both; }
-    .animate-float { animation:float 4s ease-in-out infinite; }
-    .delay-100{animation-delay:0.1s} .delay-200{animation-delay:0.2s} .delay-300{animation-delay:0.3s} .delay-400{animation-delay:0.4s} .delay-500{animation-delay:0.5s}
+/* food delivery mock (spaghetti) */
+.food-mock .fm-hero{background:linear-gradient(135deg,#1a1330,#0A0E17);border-radius:8px;padding:1rem;margin-bottom:.8rem;}
+.food-mock .fm-hero .fm-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--py-gold);margin-bottom:.4rem;}
+.food-mock .fm-hero h4{font-family:'Space Grotesk',sans-serif;font-size:1rem;color:#fff;}
+.food-mock .fm-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;}
+.food-mock .fm-card{aspect-ratio:1/1;border-radius:8px;background:linear-gradient(135deg,var(--bg-raised),#1a2236);}
 
-    .reveal { opacity:0;transform:translateY(20px);transition:all 0.7s ease; }
-    .reveal.is-visible { opacity:1;transform:none; }
+/* terminal API mock */
+.api-mock .mock-body{font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.9;color:var(--text-soft);}
+.api-mock .t-prompt{color:var(--py-gold);}
+.api-mock .t-str{color:var(--ok);}
+.api-mock .t-ok{color:var(--bg);background:var(--ok);padding:.1rem .4rem;border-radius:4px;font-weight:600;}
 
-    .hero-bg { background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(55,118,171,0.18) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 50%,rgba(255,212,59,0.06) 0%,transparent 50%),var(--bg); }
-    .grid-pattern { background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px; }
+/* map mock */
+.map-mock svg{width:100%;height:100%;display:block;}
 
-    .code-block { background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;font-family:'Fira Code',monospace;font-size:0.82rem;color:#e6edf3;overflow-x:auto; }
-    .code-block .kw{color:#ff7b72} .code-block .str{color:#a5d6ff} .code-block .fn{color:#d2a8ff} .code-block .cm{color:#8b949e} .code-block .num{color:#79c0ff}
+@media(max-width:900px){.proj,.proj:nth-of-type(even) .proj-visual{grid-template-columns:1fr;order:initial;}.proj{gap:2rem;}}
 
-    .mobile-menu { display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem; }
-    .mobile-menu.open { display:flex; }
+/* ============ OTHER PROJECTS ============ */
+#autres{background:var(--bg-raised);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.grid-others{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.other-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.7rem;transition:transform .4s var(--ease),border-color .4s;}
+.other-card:hover{transform:translateY(-5px);border-color:var(--py-gold);}
+.other-card .oc-tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--py-gold);margin-bottom:.9rem;display:block;}
+.other-card h3{font-size:1.05rem;margin-bottom:.6rem;font-weight:600;}
+.other-card p{font-size:.83rem;color:var(--text-soft);font-weight:300;margin-bottom:1rem;}
+@media(max-width:900px){.grid-others{grid-template-columns:1fr;}}
 
-    .tab-btn { font-family:'Inter',sans-serif;font-weight:500;font-size:0.85rem;padding:0.6rem 1.25rem;border-radius:8px;border:1px solid var(--border);color:rgba(248,250,252,0.6);cursor:pointer;transition:all 0.2s;background:transparent; }
-    .tab-btn.active { background:var(--primary);color:#fff;border-color:var(--primary); }
-    [data-theme="light"] .tab-btn { color:rgba(30,41,59,0.6); }
+/* ============ AWARDS ============ */
+.awards{border-top:1px solid var(--line-strong);}
+.award-row{display:grid;grid-template-columns:130px 1fr 170px;gap:2rem;align-items:start;padding:2rem 0;border-bottom:1px solid var(--line);}
+.award-row:last-child{border-bottom:none;}
+.award-row .ar-date{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--py-gold);padding-top:.3rem;}
+.award-row h3{font-size:1.1rem;margin-bottom:.5rem;font-weight:600;}
+.award-row p{font-size:.87rem;color:var(--text-soft);font-weight:300;max-width:56ch;}
+.award-row .ar-rank{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-align:right;color:var(--ok);padding-top:.3rem;}
+@media(max-width:800px){.award-row{grid-template-columns:1fr;gap:.5rem;}.award-row .ar-rank{text-align:left;}}
 
-    .cursor-glow { position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(55,118,171,0.06) 0%,transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);transition:opacity 0.3s; }
+/* ============ EDUCATION ============ */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;}
+.edu-list{list-style:none;}
+.edu-list li{padding:1rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1.4rem;font-size:.9rem;}
+.edu-list li:last-child{border-bottom:none;}
+.edu-list .e-title{font-weight:600;max-width:34ch;color:var(--text);}
+.edu-list .e-sub{display:block;font-size:.78rem;color:var(--text-dim);font-weight:300;margin-top:.2rem;}
+.edu-list .e-year{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--py-gold);white-space:nowrap;padding-top:.15rem;}
+@media(max-width:800px){.edu-grid{grid-template-columns:1fr;gap:.5rem;}}
 
-    @media (max-width:768px) { .desktop-nav{display:none} .mobile-hamburger{display:block} .section-title{font-size:2rem} }
-    @media (min-width:769px) { .mobile-hamburger{display:none} }
-  </style>
+/* ============ TESTIMONIALS ============ */
+#temoignages{background:var(--bg-raised);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.testi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;}
+.testi-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:2.1rem;}
+.testi-card .tq{font-family:'Space Grotesk',sans-serif;font-size:2.3rem;color:var(--py-gold);line-height:.4;margin-bottom:.7rem;}
+.testi-card p{font-size:.94rem;color:var(--text-soft);font-weight:300;font-style:italic;margin-bottom:1.5rem;max-width:48ch;}
+.testi-author{display:flex;align-items:center;gap:.85rem;}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--py-blue),var(--py-gold));display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.8rem;color:#0A0E17;}
+.testi-name{font-weight:600;font-size:.88rem;}
+.testi-role{font-size:.72rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
+@media(max-width:800px){.testi-grid{grid-template-columns:1fr;}}
+
+/* ============ CTA ============ */
+#cta{text-align:center;position:relative;z-index:2;}
+#cta h2{font-size:clamp(2rem,4.6vw,3.6rem);max-width:22ch;margin:0 auto 1.5rem;line-height:1.15;}
+#cta p{color:var(--text-soft);font-weight:300;max-width:50ch;margin:0 auto 2.4rem;}
+#cta .hero-ctas{justify-content:center;margin-bottom:0;}
+
+/* ============ CONTACT ============ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.contact-list{list-style:none;border-top:1px solid var(--line-strong);}
+.contact-list li{display:flex;justify-content:space-between;gap:1.4rem;padding:1.3rem 0;border-bottom:1px solid var(--line);align-items:baseline;}
+.contact-list .cl-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);}
+.contact-list .cl-value{font-size:1rem;font-weight:600;text-align:right;}
+.contact-list a{border-bottom:1px solid transparent;transition:border-color .3s,color .3s;}
+.contact-list a:hover{border-color:var(--py-gold);color:var(--py-gold);}
+.available-tag{color:var(--ok);}
+.cal-card{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:1.5rem;}
+.cal-card h4{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1.3rem;font-weight:500;}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr;}.contact-list .cl-value{text-align:left;}.contact-list li{flex-direction:column;gap:.3rem;}}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);padding:2.6rem 0;}
+.footer-grid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.4rem;}
+.footer-links{display:flex;gap:1.8rem;list-style:none;}
+.footer-links a{font-size:.78rem;color:var(--text-soft);transition:color .3s;}
+.footer-links a:hover{color:var(--py-gold);}
+.footer-copy{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);}
+
+/* ============ RESPONSIVE / MOBILE NAV ============ */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .menu-toggle{display:flex;}
+  .nav-right .btn-primary{display:none;}
+  .hero-grid{grid-template-columns:1fr;}
+  .term{order:-1;max-width:520px;margin:0 auto 1rem;}
+  .stat-strip{grid-template-columns:repeat(2,1fr);}
+  .stat-item:nth-child(2n){border-right:none;}
+  .stat-item:nth-child(n+3){border-top:1px solid var(--line);}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+}
+</style>
 </head>
+<body>
 
-<body class="font-roboto">
-  <div class="cursor-glow" id="cursorGlow"></div>
+<!-- BOOT SCREEN -->
+<div id="boot">
+  <div class="boot-inner">
+    <div class="boot-line">$ python manage.py runportfolio</div>
+    <div class="boot-line">Loading daniel_guedegbe.engineer...</div>
+    <div class="boot-line">Connexion Abidjan → Internet ... <span style="color:#3DDC97">OK</span></div>
+    <div class="boot-line">Compilation du profil ...</div>
+    <div class="boot-bar"><i></i></div>
+  </div>
+</div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar px-6 py-4">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <a href="#about" class="flex items-center gap-3" style="text-decoration:none">
-        <img src="assets/logo.png" onerror="this.style.display='none'" alt="Daniel Guedegbe" class="h-9 w-auto">
-        <span class="font-inter font-bold text-lg" style="color:var(--accent)">&lt;Daniel.dev/&gt;</span>
-      </a>
-      <div class="desktop-nav flex items-center gap-8">
-        <a href="#about" class="nav-link">À propos</a>
-        <a href="#portfolio" class="nav-link">Projets</a>
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#blog" class="nav-link">Blog</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </div>
-      <div class="flex items-center gap-4">
-        <button class="theme-toggle" id="themeToggle" aria-label="Changer le thème"></button>
-        <a href="https://wa.me/2250748733365?text=Bonjour Daniel, je vous contacte depuis votre portfolio." target="_blank" rel="noopener" class="btn-whatsapp hidden md:inline-flex" style="padding:0.5rem 1rem;font-size:0.8rem">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.714a.5.5 0 0 0 .61.638l6.044-1.567A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.513-5.213-1.408l-.374-.22-3.875 1.005 1.03-3.765-.242-.383A9.938 9.938 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
-          WhatsApp
-        </a>
-        <button class="mobile-hamburger p-2" id="hamburger" aria-label="Menu">
-          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="19" y2="6"/><line x1="3" y1="12" x2="19" y2="12"/><line x1="3" y1="18" x2="19" y2="18"/></svg>
-        </button>
-      </div>
+<div id="progress"></div>
+<div class="grain"></div>
+<div class="glow-orb o1"></div>
+<div class="glow-orb o2"></div>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <nav class="wrap">
+    <a href="#hero" class="brand"><span class="prompt-sym">&gt;_</span> daniel@backend<span class="blink"></span></a>
+    <ul class="nav-links">
+      <li><a href="#profil">profil</a></li>
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#parcours">parcours</a></li>
+      <li><a href="#travaux">projets</a></li>
+      <li><a href="#distinctions">distinctions</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://wa.me/2250748733365" target="_blank" class="btn btn-ghost">WhatsApp</a>
+      <a href="#contact" class="btn btn-gold">Planifier un échange</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
-
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <button id="closeMobile" style="position:absolute;top:1.5rem;right:1.5rem;color:var(--text);background:none;border:none;font-size:1.5rem;cursor:pointer">✕</button>
-    <a href="#about" class="nav-link text-2xl" onclick="closeMobileMenu()">À propos</a>
-    <a href="#portfolio" class="nav-link text-2xl" onclick="closeMobileMenu()">Projets</a>
-    <a href="#services" class="nav-link text-2xl" onclick="closeMobileMenu()">Services</a>
-    <a href="#blog" class="nav-link text-2xl" onclick="closeMobileMenu()">Blog</a>
-    <a href="#contact" class="nav-link text-2xl" onclick="closeMobileMenu()">Contact</a>
-    <a href="https://wa.me/2250748733365" target="_blank" class="btn-whatsapp mt-4">WhatsApp</a>
+    <a href="#profil"># profil</a>
+    <a href="#stack"># stack</a>
+    <a href="#parcours"># parcours</a>
+    <a href="#travaux"># projets</a>
+    <a href="#distinctions"># distinctions</a>
+    <a href="#contact"># contact</a>
+    <a href="https://wa.me/2250748733365" target="_blank">WhatsApp →</a>
   </div>
+</header>
 
-  <main style="padding-top:73px">
-
-    <!-- ═══ HERO ═══ -->
-    <section id="about" class="hero-bg grid-pattern min-h-screen flex items-center relative overflow-hidden" style="padding:6rem 1.5rem 4rem">
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="animate-float" style="position:absolute;top:10%;right:10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(55,118,171,0.08),transparent);animation-delay:0s"></div>
-        <div class="animate-float" style="position:absolute;bottom:15%;left:5%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,212,59,0.05),transparent);animation-delay:2s"></div>
-      </div>
-      <div class="max-w-7xl mx-auto w-full relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <div class="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full animate-fade-up" style="background:rgba(55,118,171,0.1);border:1px solid rgba(55,118,171,0.25)">
-              <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse-glow 2s infinite"></span>
-              <span class="font-fira text-xs" style="color:var(--accent)">Disponible pour de nouveaux projets</span>
-            </div>
-            <p class="section-label animate-fade-up delay-100">// Bonjour, je suis</p>
-            <h1 class="font-inter animate-fade-up delay-200" style="font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.05;margin-bottom:1rem">
-              <span style="background:linear-gradient(135deg,var(--text) 0%,rgba(248,250,252,0.7) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Daniel<br>Guedegbe</span>
-            </h1>
-            <div class="animate-fade-up delay-300 mb-6">
-              <span class="font-fira text-xl" style="color:var(--primary)">
-                <span id="typed-text"></span><span style="color:var(--accent);animation:blink 1s step-end infinite">|</span>
-              </span>
-            </div>
-            <p class="font-roboto text-base leading-relaxed animate-fade-up delay-400 mb-8" style="color:rgba(248,250,252,0.65);max-width:520px">
-              Développeur Full Stack Python & JavaScript avec plus de 6 ans d'expérience dans la conception de solutions web et mobiles robustes. Spécialisé en Django, FastAPI, Next.js et Flutter.<br>
-              <span class="tag mt-2" style="display:inline-block">+6 ans d'expérience</span>
-            </p>
-            <div class="code-block animate-fade-up delay-500 mb-8" style="max-width:420px">
-              <span class="kw">const</span> <span class="fn">developer</span> = {<br>
-              &nbsp;&nbsp;name: <span class="str">"Daniel"</span>,<br>
-              &nbsp;&nbsp;stack: [<span class="str">"Django"</span>, <span class="str">"Flutter"</span>, <span class="str">"FastAPI"</span>],<br>
-              &nbsp;&nbsp;open: <span class="num">true</span> <span class="cm">// available</span><br>
-              }
-            </div>
-            <div class="flex flex-wrap gap-4 animate-fade-up delay-500">
-              <a href="#portfolio" class="btn-primary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Voir mes projets
-              </a>
-              <a href="#contact" class="btn-accent">💡 Demander un devis</a>
-              <a href="https://wa.me/2250748733365" target="_blank" class="btn-whatsapp">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.714a.5.5 0 0 0 .61.638l6.044-1.567A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.513-5.213-1.408l-.374-.22-3.875 1.005 1.03-3.765-.242-.383A9.938 9.938 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
-                WhatsApp
-              </a>
-            </div>
-            <div class="flex gap-4 mt-8 animate-fade-up delay-500">
-              <a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank" class="tag" style="text-decoration:none">LinkedIn</a>
-              <a href="https://github.com/daniel10027" target="_blank" class="tag" style="text-decoration:none">GitHub</a>
-              <a href="https://drive.google.com/file/d/1KhDSByuCEa4rQIq7xhDzMujKdHriKrpg/view?usp=sharing" target="_blank" class="tag tag-accent" style="text-decoration:none">📄 CV</a>
-            </div>
+<main>
+  <!-- ═══ HERO ═══ -->
+  <section id="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="status-pill reveal visible"><span class="status-dot"></span> Disponible remote / hybride · Abidjan, Côte d'Ivoire</div>
+          <h1 class="hero-title reveal visible">J'écris le code que <span class="accent">l'Afrique numérique</span> fait tourner.</h1>
+          <p class="hero-sub reveal visible">Je m'appelle <strong>Daniel Guedegbe</strong> — Ingénieur Logiciel Backend Senior basé à Abidjan, amoureux de Python depuis plus de six ans. Je conçois des architectures Django/DRF robustes, des systèmes de paiement mobile et des plateformes qui tiennent en production, pas seulement en démo.</p>
+          <div class="hero-ctas reveal visible">
+            <a href="#travaux" class="btn btn-primary">Voir les projets shippés</a>
+            <a href="https://drive.google.com/file/d/1WobBU8LyFQWqRjznG0AHsm00Cpl_dJgs/view?usp=sharing" target="_blank" class="btn btn-ghost">Télécharger le CV</a>
           </div>
-          <div class="flex flex-col items-center gap-8">
-            <div class="relative animate-fade-up delay-200">
-              <div style="width:280px;height:280px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));padding:3px">
-                <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--card)">
-                  <img src="assets/profile.jpg" alt="Daniel Guedegbe" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/about/pg_hqfpcr'">
-                </div>
-              </div>
-              <div class="absolute -bottom-3 -right-3 card px-3 py-2 flex items-center gap-2" style="background:var(--card)">
-                <span style="color:var(--accent);font-size:1.2rem">⭐</span>
-                <div>
-                  <div class="font-inter font-bold text-sm" style="color:var(--text)">+6 ans</div>
-                  <div class="font-roboto text-xs" style="color:rgba(248,250,252,0.5)">d'expérience</div>
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-3 gap-4 w-full max-w-sm animate-fade-up delay-400">
-              <div class="card text-center p-4"><div class="font-inter font-bold text-2xl" style="color:var(--accent)">12+</div><div class="font-roboto text-xs mt-1" style="color:rgba(248,250,252,0.5)">Projets livrés</div></div>
-              <div class="card text-center p-4"><div class="font-inter font-bold text-2xl" style="color:var(--primary)">6+</div><div class="font-roboto text-xs mt-1" style="color:rgba(248,250,252,0.5)">Années exp.</div></div>
-              <div class="card text-center p-4"><div class="font-inter font-bold text-2xl" style="color:#22c55e">8+</div><div class="font-roboto text-xs mt-1" style="color:rgba(248,250,252,0.5)">Clients satisfaits</div></div>
-            </div>
+          <div class="stat-strip reveal visible">
+            <div class="stat-item"><div class="stat-num"><span class="count" data-target="6">0</span><span class="plus">+</span></div><div class="stat-label">Années Python/Django</div></div>
+            <div class="stat-item"><div class="stat-num"><span class="count" data-target="14">0</span><span class="plus">+</span></div><div class="stat-label">Projets livrés</div></div>
+            <div class="stat-item"><div class="stat-num"><span class="count" data-target="3">0</span><span class="plus">+</span></div><div class="stat-label">Intégrations paiement Wave</div></div>
+            <div class="stat-item"><div class="stat-num"><span class="count" data-target="3">0</span></div><div class="stat-label">Distinctions / hackathons</div></div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <div class="flex justify-center py-6" style="background:var(--bg)">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0.4">
-        <span class="font-fira text-xs" style="color:var(--text)">scroll</span>
-        <div style="width:1px;height:40px;background:linear-gradient(to bottom,var(--primary),transparent)"></div>
+        <!-- TERMINAL -->
+        <div class="term reveal visible">
+          <div class="term-bar"><i></i><i></i><i></i><span class="term-title">~/daniel_guedegbe.py</span></div>
+          <div class="term-body"><span id="typed-code"></span><span class="term-cursor"></span></div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- ═══ BIOGRAPHIE ═══ -->
-    <section id="biography" class="py-24 px-6">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 reveal">
-          <p class="section-label">// Qui suis-je</p>
-          <h2 class="section-title">Biographie</h2>
+  <!-- ═══ PROFIL ═══ -->
+  <section id="profil">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow"><span class="hash">#</span> <span class="kw">01</span> — profil</div>
+          <h2>Six années de rigueur, un langage.</h2>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-          <div class="card p-5 reveal"><span class="font-fira text-xs" style="color:var(--primary)">Nom</span><p class="font-inter font-semibold mt-1">Jean Marie Daniel Vianney Guedegbe</p></div>
-          <div class="card p-5 reveal"><span class="font-fira text-xs" style="color:var(--primary)">Email</span><p class="font-inter font-semibold mt-1"><a href="mailto:danieldanielguedegbe10027@gmail.com" style="color:var(--accent)">danieldanielguedegbe10027@gmail.com</a></p></div>
-          <div class="card p-5 reveal"><span class="font-fira text-xs" style="color:var(--primary)">Téléphone</span><p class="font-inter font-semibold mt-1"><a href="tel:+2250748733365" style="color:var(--accent)">+225 07 48 73 33 65</a></p></div>
-          <div class="card p-5 reveal"><span class="font-fira text-xs" style="color:var(--primary)">LinkedIn</span><p class="font-inter font-semibold mt-1"><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank" style="color:var(--accent)">daniel-guedegbe</a></p></div>
-          <div class="card p-5 reveal"><span class="font-fira text-xs" style="color:var(--primary)">GitHub</span><p class="font-inter font-semibold mt-1"><a href="https://github.com/daniel10027" target="_blank" style="color:var(--accent)">daniel10027</a></p></div>
-          <div class="card p-5 reveal"><span class="font-fira text-xs" style="color:var(--primary)">Localisation</span><p class="font-inter font-semibold mt-1">Abidjan, Côte d'Ivoire</p></div>
-        </div>
-        <div class="text-center mb-16 reveal">
-          <a href="https://drive.google.com/file/d/1KhDSByuCEa4rQIq7xhDzMujKdHriKrpg/view?usp=sharing" target="_blank" class="btn-accent mr-4">📄 Télécharger mon CV</a>
-          <a href="https://drive.google.com/file/d/1KhDSByuCEa4rQIq7xhDzMujKdHriKrpg/view?usp=sharing" target="_blank" class="btn-outline">👁️ Voir le CV en ligne</a>
-        </div>
-
-        <!-- Tabs -->
+        <p class="lead">Un parcours construit autour d'une conviction : la valeur d'un logiciel se mesure à sa capacité à tourner sans interruption, longtemps après sa livraison.</p>
+      </div>
+      <div class="profil-grid">
         <div class="reveal">
-          <div class="flex gap-3 mb-10 flex-wrap">
-            <button class="tab-btn active" data-tab="experience" onclick="switchTab('experience',this)">💼 Expériences</button>
-            <button class="tab-btn" data-tab="education" onclick="switchTab('education',this)">🎓 Formations</button>
-            <button class="tab-btn" data-tab="skills" onclick="switchTab('skills',this)">⚡ Compétences</button>
-          </div>
-
-          <!-- Experience -->
-          <div id="tab-experience" class="tab-pane">
-            <div class="space-y-6">
-              <div class="card p-6 reveal" style="border-left:3px solid var(--primary)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Consultant Backend Developer</h3><p class="font-roboto font-medium mt-1" style="color:var(--primary)">ORANGE LIBERIA</p></div>
-                  <span class="tag tag-accent text-sm flex-shrink-0">sept. 2025 — Présent</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">En tant que Consultant Backend Developer au sein du système Orange Liberia, j'interviens sur des projets critiques en mode hybride. Développement de microservices backend en Python (Flask), conception d'APIs RESTful performantes et sécurisées. Mise en place de pipelines CI/CD, déploiements automatisés via Ansible. Personnalisation de modules Odoo. Gestion et optimisation des bases de données SQL Server et NoSQL.</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">Odoo</span><span class="tag">SQL Server</span><span class="tag">NoSQL</span><span class="tag">API REST</span><span class="tag">Docker</span><span class="tag">Ansible</span><span class="tag">CI/CD</span>
-                </div>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--primary)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Full Stack Developer</h3><p class="font-roboto font-medium mt-1" style="color:var(--primary)">Illigo <a href="https://www.illigo.mobi/" target="_blank" style="color:var(--accent);font-size:0.75rem">↗</a></p></div>
-                  <span class="tag tag-accent text-sm flex-shrink-0">mai 2025 — Présent</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Développement et évolution de solutions web et mobiles dans le secteur de la mobilité intelligente. Backend avec Django : APIs robustes, traitements asynchrones avec Celery et Redis, bases de données PostgreSQL. Revues de code, tests automatisés, collaboration avec les équipes produit et frontend.</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="tag">Django</span><span class="tag">DRF</span><span class="tag">Celery</span><span class="tag">Redis</span><span class="tag">PostgreSQL</span><span class="tag">Docker</span><span class="tag">FastAPI</span><span class="tag">Flutter</span><span class="tag">GitHub</span>
-                </div>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--primary)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">IT Department Manager</h3><p class="font-roboto font-medium mt-1" style="color:var(--primary)">IIPEA <a href="https://iipea.com/" target="_blank" style="color:var(--accent);font-size:0.75rem">↗</a></p></div>
-                  <span class="tag tag-accent text-sm flex-shrink-0">2019 — 2024</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Conception, développement et maintenance d'applications web robustes avec Python/Django. Gestion de l'ensemble du cycle de vie du développement. Encadrement d'une équipe de développeurs, fournissant conseils techniques et suivi. Planification des projets et proposition de solutions innovantes.</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="tag">Python</span><span class="tag">Django</span><span class="tag">JavaScript</span><span class="tag">PostgreSQL</span><span class="tag">Gestion d'équipe</span><span class="tag">Management</span>
-                </div>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--primary)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Back-End Developer Python/Django</h3><p class="font-roboto font-medium mt-1" style="color:var(--primary)">Sass Group</p></div>
-                  <span class="tag tag-accent text-sm flex-shrink-0">mars 2022 — avr. 2023</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Conception et développement du back-end de l'application Sentinelle. Suivi de présence avancé intégrant RFID, codes QR et biométrie. Développement de notifications instantanées, géolocalisation en temps réel, système de gestion des ressources, module de reporting personnalisé.</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="tag">Python</span><span class="tag">Django</span><span class="tag">DRF</span><span class="tag">PostgreSQL</span><span class="tag">Redis</span><span class="tag">Django Channels</span><span class="tag">OpenCV</span><span class="tag">Docker</span><span class="tag">GitLab CI/CD</span>
-                </div>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--primary)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Mobile / Back-End Developer Python/Django</h3><p class="font-roboto font-medium mt-1" style="color:var(--primary)">TROPIC BTP</p></div>
-                  <span class="tag tag-accent text-sm flex-shrink-0">mars 2021 — janv. 2022</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Conception et développement du Back-End avec Python Django. Gestion complète de la base de données. Implémentation d'une application de pointage et de suivi de chantier avec géolocalisation, suivi du temps de travail et génération de rapports.</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="tag">Python</span><span class="tag">Django</span><span class="tag">DRF</span><span class="tag">Git</span><span class="tag">Flutter</span><span class="tag">Firebase</span><span class="tag">PostgreSQL</span>
-                </div>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--primary)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Site Manager</h3><p class="font-roboto font-medium mt-1" style="color:var(--primary)">Vivo Energy</p></div>
-                  <span class="tag tag-accent text-sm flex-shrink-0">mai 2021 — déc. 2021</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Suivi des stocks de lubrifiants et de carburants. Coordination et suivi des livraisons d'hydrocarbures. Gestion des flux de trésorerie associés aux opérations des stations.</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="tag">Gestion d'équipe</span><span class="tag">Gestion des stocks</span><span class="tag">Gestion des flux de trésorerie</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Education -->
-          <div id="tab-education" class="tab-pane" style="display:none">
-            <div class="space-y-6">
-              <div class="card p-6 reveal" style="border-left:3px solid var(--accent)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">MSc in Software Engineering</h3><p class="font-roboto font-medium mt-1" style="color:var(--accent)">Wolf University / GOMYCODE</p></div>
-                  <span class="tag text-sm flex-shrink-0">2026 — En cours</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Programme de 15 mois accrédité (EQF Level 7). Web development, JavaScript, TypeScript, React.js, Node.js, cloud technologies, SQL & NoSQL. Apprentissage basé sur des projets pratiques.</p>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--accent)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Master en Informatique — Génie Logiciel</h3><p class="font-roboto font-medium mt-1" style="color:var(--accent)">Institut International Polytechnique des Elites d'Abidjan</p></div>
-                  <span class="tag text-sm flex-shrink-0">2023</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Formation de niveau Master en conception, développement et déploiement de solutions logicielles complexes. Architecture logicielle, développement orienté objet, gestion de projets agiles, tests automatisés.</p>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--accent)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Master en Big Data Analytics</h3><p class="font-roboto font-medium mt-1" style="color:var(--accent)">Université Virtuelle de Côte d'Ivoire</p></div>
-                  <span class="tag text-sm flex-shrink-0">2023</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Génie Logiciel, architecture logicielle, méthodologies agiles, qualité logicielle et technologies émergentes.</p>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--accent)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Licence en Bases de Données</h3><p class="font-roboto font-medium mt-1" style="color:var(--accent)">Université Virtuelle de Côte d'Ivoire</p></div>
-                  <span class="tag text-sm flex-shrink-0">2020</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Maîtrise approfondie des SGBDR, modélisation conceptuelle et logique, optimisation de schémas relationnels, SQL complexe, sécurité des données, architecture distribuée.</p>
-              </div>
-              <div class="card p-6 reveal" style="border-left:3px solid var(--accent)">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                  <div><h3 class="font-inter font-bold text-lg">Baccalauréat Série Scientifique (C)</h3><p class="font-roboto font-medium mt-1" style="color:var(--accent)">Lycée Municipal de Port-Bouët</p></div>
-                  <span class="tag text-sm flex-shrink-0">2017</span>
-                </div>
-                <p class="font-roboto text-sm leading-relaxed" style="color:rgba(248,250,252,0.65)">Mathématiques, physique et sciences naturelles. Compétences analytiques et méthodologie de résolution de problèmes.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Skills -->
-          <div id="tab-skills" class="tab-pane" style="display:none">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🐍 Python</span><span class="font-fira text-xs" style="color:var(--accent)">95%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="95"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🎸 Django / DRF</span><span class="font-fira text-xs" style="color:var(--accent)">93%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="93"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">⚡ FastAPI</span><span class="font-fira text-xs" style="color:var(--accent)">85%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="85"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🌶️ Flask</span><span class="font-fira text-xs" style="color:var(--accent)">90%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="90"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🗄️ PostgreSQL / MySQL</span><span class="font-fira text-xs" style="color:var(--accent)">88%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="88"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🔴 Redis / Celery</span><span class="font-fira text-xs" style="color:var(--accent)">82%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="82"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🐳 Docker / Compose</span><span class="font-fira text-xs" style="color:var(--accent)">85%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="85"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🌿 Git / GitHub / GitLab</span><span class="font-fira text-xs" style="color:var(--accent)">90%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="90"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🚀 CI/CD & Cloud</span><span class="font-fira text-xs" style="color:var(--accent)">80%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="80"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">📱 Flutter</span><span class="font-fira text-xs" style="color:var(--accent)">75%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="75"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">⬛ Next.js</span><span class="font-fira text-xs" style="color:var(--accent)">80%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="80"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">📜 TypeScript / JavaScript</span><span class="font-fira text-xs" style="color:var(--accent)">70%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="70"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">🅰️ Angular</span><span class="font-fira text-xs" style="color:var(--accent)">68%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="68"></div></div></div>
-              <div class="reveal"><div class="flex justify-between items-center mb-2"><span class="font-inter font-semibold text-sm">✅ Tests (TDD)</span><span class="font-fira text-xs" style="color:var(--accent)">80%</span></div><div class="skill-bar-bg h-1.5"><div class="skill-bar-fill" data-width="80"></div></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ PORTFOLIO ═══ -->
-    <section id="portfolio" class="py-24 px-6" style="background:rgba(30,41,59,0.3)">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 reveal">
-          <p class="section-label">// Mes réalisations</p>
-          <h2 class="section-title">Portfolio</h2>
-          <p class="font-roboto text-base mt-4 max-w-2xl mx-auto" style="color:rgba(248,250,252,0.6)">Développeur Full Stack Python & JavaScript avec plus de 6 ans d'expérience. Spécialisé en Django, FastAPI, Next.js et Flutter.</p>
-        </div>
-        <div class="flex flex-wrap gap-3 mb-10 justify-center reveal">
-          <button class="tab-btn active" onclick="filterProjects('all',this)">Tous</button>
-          <button class="tab-btn" onclick="filterProjects('web',this)">Web</button>
-          <button class="tab-btn" onclick="filterProjects('mobile',this)">Mobile</button>
-          <button class="tab-btn" onclick="filterProjects('api',this)">API</button>
-          <button class="tab-btn" onclick="filterProjects('saas',this)">SaaS</button>
-          <button class="tab-btn" onclick="filterProjects('fintech',this)">Fintech</button>
-          <button class="tab-btn" onclick="filterProjects('edtech',this)">EdTech</button>
-          <button class="tab-btn" onclick="filterProjects('erp',this)">ERP</button>
-          <button class="tab-btn" onclick="filterProjects('backend',this)">Backend</button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projectsGrid">
-
-          <!-- Wave SDK -->
-          <article class="card project-card reveal" data-cats="backend api fintech">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_wave.png" alt="Wave Business API Python SDK" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Capture_d%C3%A9cran_2026-03-16_134747.png'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Backend</span><span class="tag text-xs">API</span><span class="tag text-xs">Fintech</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">Wave Business API Python SDK</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 Open Source / Personnel</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Python SDK complet pour l'API Wave Business — Paiements, Payouts & Webhooks</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Python</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">REST API</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">HMAC-SHA256</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">PyPI</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027/wave-business-api" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- BRVM -->
-          <article class="card project-card reveal" data-cats="web api saas fintech backend">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_brvm.png" alt="BRVMAnalytics" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Capture_d%C3%A9cran_2026-03-15_131921.png'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Web</span><span class="tag text-xs">API</span><span class="tag text-xs">SaaS</span><span class="tag text-xs">Fintech</span><span class="tag text-xs">Backend</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">BRVMAnalytics</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 MySelf</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Plateforme de données boursières en temps réel pour la BRVM (Bourse Régionale des Valeurs Mobilières de l'UEMOA)</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Python</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">REST API</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">PostgreSQL</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://brvm.myoctogone.com/" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir le projet →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- PandaTree -->
-          <article class="card project-card reveal" data-cats="erp">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_pandatree.jpg" alt="PandaTree" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/zer_ppcyxm'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-              <div style="position:absolute;top:1rem;right:1rem"><span class="tag tag-accent">⭐ Featured</span></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">ERP</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">PandaTree — Système National de Gestion et Cartographie des Arbres</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 CNRA</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Plateforme nationale de cartographie, reconnaissance et valorisation du patrimoine végétal ivoirien</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">DRF</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">PostgreSQL</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Flutter</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027/PandaTree/" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- FNE IVOIRE -->
-          <article class="card project-card reveal" data-cats="backend web saas fintech">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_fne.png" alt="FNE IVOIRE" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Capture_d%C3%A9cran_2026-03-15_133421.png'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Backend</span><span class="tag text-xs">Web</span><span class="tag text-xs">SaaS</span><span class="tag text-xs">Fintech</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">FNE IVOIRE</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 OCTOGONE TECHNOLOGIE</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Plateforme SaaS ivoirienne tout-en-un pour la Facturation Normalisée Électronique, conforme API FNE DGI 2025</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Python</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">REST API</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Celery</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://fne.myoctogone.com/" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir le projet →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Spaghetti -->
-          <article class="card project-card reveal" data-cats="web">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_spaghetti.jpg" alt="Spaghetti d'Abidjan" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Capture_d%C3%A9cran_du_2025-10-09_21-37-09_vv2pp0'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-              <div style="position:absolute;top:1rem;right:1rem"><span class="tag tag-accent">⭐ Featured</span></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Web</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">Spaghetti d'Abidjan — Plateforme de commande de repas</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 Spaghetti d'Abidjan</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Mini plateforme de commande de repas africains en ligne</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">JavaScript</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Leaflet.js</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- AlloCar -->
-          <article class="card project-card reveal" data-cats="mobile web">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_allocar.jpg" alt="AlloCar" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Gemini_Generated_Image_zgup4uzgup4uzgup_toic8k'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-              <div style="position:absolute;top:1rem;right:1rem"><span class="tag tag-accent">⭐ Featured</span></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Mobile</span><span class="tag text-xs">Web</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">AlloCar — Plateforme de covoiturage intelligente en Afrique</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 AlloCar Technologies</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Covoiturage moderne adapté aux réalités africaines</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Flask</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Angular</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Flutter</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://allocar.app" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir le projet →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- School Management -->
-          <article class="card project-card reveal" data-cats="edtech backend web mobile api">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_school.png" alt="School Management" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Capture_d%C3%A9cran_2026-03-15_133301.png'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">EdTech</span><span class="tag text-xs">Backend</span><span class="tag text-xs">Web</span><span class="tag text-xs">Mobile</span><span class="tag text-xs">API</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">School Management System (Octogone)</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 Interne / IIPEA</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Plateforme complète de gestion scolaire</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">DRF</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">PostgreSQL</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- TimesTrackers -->
-          <article class="card project-card reveal" data-cats="erp web mobile api backend saas">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_timestracker.png" alt="TimesTrackers" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/Capture_d%C3%A9cran_2026-03-15_133204.png'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">ERP</span><span class="tag text-xs">Web</span><span class="tag text-xs">Mobile</span><span class="tag text-xs">SaaS</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">TimesTrackers — Gestion des présences et optimisation RH</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 Saas Group</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Application innovante de suivi des présences en entreprise</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Flutter</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">REST API</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Sentinelle -->
-          <article class="card project-card reveal" data-cats="erp">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_sentinelle.jpg" alt="Sentinelle" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/sentinelle_qrbygm'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">ERP</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">Sentinelle — Solution de Gestion de Personnel Complète</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 INOVGROUP</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Solution RH complète : présence, biométrie, reporting</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Python</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">DRF</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- OS-IRIS -->
-          <article class="card project-card reveal" data-cats="erp">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_osiris.jpg" alt="OS-IRIS" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/iris_ixtfhe'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">ERP</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">OS-IRIS — Solution de Gestion de Stock et Ventes</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 INNOV GROUP</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">ERP tout-en-un pour digitaliser la gestion commerciale</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Python</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">PostgreSQL</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Momofund -->
-          <article class="card project-card reveal" data-cats="mobile fintech">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_momofund.jpg" alt="Momofund" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/momo_gdnurw'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Mobile</span><span class="tag text-xs">Fintech</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">Momofund — Plateforme de Crowdfunding Mobile Money</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 Hackathon MTN MTS</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Crowdfunding via MTN Mobile Money pour l'inclusion financière en Afrique</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Flutter</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">MTN MoMo API</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Ma Resie -->
-          <article class="card project-card reveal" data-cats="web mobile">
-            <div style="position:relative;height:200px;overflow:hidden;background:var(--card)">
-              <img src="assets/proj_maresie.jpg" alt="Ma Resie" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s" class="project-img" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/portfolio/maresie_bll8ss'">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(15,23,42,0.9),transparent);opacity:0;transition:opacity 0.3s" class="card-overlay"></div>
-            </div>
-            <div class="p-5">
-              <div class="flex flex-wrap gap-2 mb-3"><span class="tag text-xs">Web</span></div>
-              <h3 class="font-inter font-bold text-base mb-2 leading-tight">Ma Resie — Application de Location de Résidences</h3>
-              <p class="font-roboto text-xs mb-3" style="color:var(--primary)">👤 Interne</p>
-              <p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Trouvez facilement des locations de résidences dans le monde</p>
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Next.js</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Django</span>
-                <span class="font-fira text-xs px-2 py-0.5 rounded" style="background:rgba(55,118,171,0.1);color:var(--primary)">Leaflet.js</span>
-              </div>
-              <div class="flex gap-3 items-center">
-                <a href="https://github.com/daniel10027" target="_blank" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.8rem;flex:1;justify-content:center">Voir sur GitHub →</a>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ SERVICES ═══ -->
-    <section id="services" class="py-24 px-6">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 reveal">
-          <p class="section-label">// Ce que je fais</p>
-          <h2 class="section-title">Services</h2>
-          <p class="font-roboto text-base mt-4 max-w-2xl mx-auto" style="color:rgba(248,250,252,0.6)">Je propose une gamme complète de services couvrant l'ensemble du cycle de développement logiciel.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">🛠️</div><h3 class="font-inter font-bold text-base mb-3">Développement Backend & APIs</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Architectures backend robustes avec Python/Django et DRF. APIs REST sécurisées, évolutives et documentées.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">$500</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">🌐</div><h3 class="font-inter font-bold text-base mb-3">Développement Web</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Applications web modernes avec Next.js ou Angular. Expérience utilisateur excellente, design responsive, optimisation SEO.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">$700</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">📱</div><h3 class="font-inter font-bold text-base mb-3">Développement Mobile</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Applications multiplateformes iOS/Android avec Flutter. Notifications push, géolocalisation, paiements en ligne.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">$800</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">☁️</div><h3 class="font-inter font-bold text-base mb-3">Cloud & Déploiement</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Déploiement complet avec Docker, Nginx, Gunicorn et pipelines CI/CD. Environnement sécurisé et scalable.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">$200</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">🧠</div><h3 class="font-inter font-bold text-base mb-3">Architecture Logicielle</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Analyse de besoins et conception de solutions évolutives. Clean Architecture et Domain Driven Design.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">Sur devis</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">⚙️</div><h3 class="font-inter font-bold text-base mb-3">Automatisation & Asynchrone</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Systèmes automatisés avec Celery et Redis. Tâches en arrière-plan, traitement de gros volumes.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">$200</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">🔄</div><h3 class="font-inter font-bold text-base mb-3">Maintenance & Support</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Maintenance continue pour garantir stabilité, sécurité et performance. Intervention sur bugs, mises à jour, optimisation.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">$200/mois</div></div></div>
-          <div class="card p-6 reveal text-center"><div class="text-4xl mb-4">🎓</div><h3 class="font-inter font-bold text-base mb-3">Formation & Accompagnement</h3><p class="font-roboto text-sm leading-relaxed mb-4" style="color:rgba(248,250,252,0.6)">Sessions de formation personnalisées sur Django, Flutter, Next.js, Docker ou CI/CD.</p><div class="mt-auto pt-4" style="border-top:1px solid var(--border)"><span class="font-fira text-xs" style="color:rgba(248,250,252,0.4)">À partir de</span><div class="font-inter font-bold text-lg" style="color:var(--accent)">Sur devis</div></div></div>
-        </div>
-        <div class="text-center mt-12 reveal">
-          <a href="mailto:danieldanielguedegbe10027@gmail.com" class="btn-accent text-lg" style="padding:1rem 2.5rem">💡 Demander un devis gratuit et personnalisé</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ CLIENTS & PARTENAIRES ═══ -->
-    <section id="partners" class="py-20 px-6" style="background:rgba(30,41,59,0.3)">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-12 reveal">
-          <p class="section-label">// Ils me font confiance</p>
-          <h2 class="section-title" style="font-size:2.5rem">Clients & Partenaires</h2>
-        </div>
-        <div class="flex flex-wrap justify-center items-center gap-10 mb-16">
-          <a href="https://www.illigo.mobi/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_illigo.png" alt="Illigo" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/illigo-removebg-preview_svonri'"></a>
-          <a href="https://www.minader.cm/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_minader.png" alt="MINADER" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/minn-removebg-preview_jtespa'"></a>
-          <a href="https://iipea.com/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_iipea.png" alt="IIPEA" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/iipea_t1qvaj'"></a>
-          <a href="https://www.cepici.gouv.ci/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_cepici.png" alt="CEPICI" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/cepici_vlu0p1'"></a>
-          <a href="https://innovgroupe.com/fr/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_innov.png" alt="INNOV GROUP" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/INNOV_fsnxuz'"></a>
-          <a href="#" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_saas.png" alt="Saas Group" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/images_n4rhqm'"></a>
-          <a href="https://oarchitectes.ci/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_oaci.png" alt="OACI" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/OACI_fud78c'"></a>
-          <a href="https://akacias-ci.com/" target="_blank" rel="noopener" class="reveal opacity-50 hover:opacity-100 transition-opacity"><img src="assets/partner_akacias.png" alt="Akacias" style="height:48px;object-fit:contain;filter:grayscale(100%) brightness(200%)" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/partners/logo_white_efmuyz'"></a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="card p-6 reveal"><div class="text-3xl mb-4" style="color:var(--accent)">"</div><p class="font-roboto text-base italic leading-relaxed mb-6" style="color:rgba(248,250,252,0.8)">Daniel a conçu pour nous une plateforme académique sur mesure, fiable et facile à utiliser. Son expertise en backend et son sens du détail ont permis d'automatiser des processus complexes.</p><div class="flex items-center gap-3"><div style="width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.2rem">J</div><div><p class="font-inter font-bold text-sm">Jean Kouassi</p><p class="font-roboto text-xs" style="color:rgba(248,250,252,0.5)">Directeur IT — GROUPE ECOLE SUP</p></div></div></div>
-          <div class="card p-6 reveal"><div class="text-3xl mb-4" style="color:var(--accent)">"</div><p class="font-roboto text-base italic leading-relaxed mb-6" style="color:rgba(248,250,252,0.8)">Nous avons collaboré avec Daniel sur un projet de suivi de présence en temps réel. Sa capacité à comprendre nos besoins et à livrer dans les délais a été remarquable.</p><div class="flex items-center gap-3"><div style="width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.2rem">Y</div><div><p class="font-inter font-bold text-sm">Yao N'Dri</p><p class="font-roboto text-xs" style="color:rgba(248,250,252,0.5)">CTO — SaaS Group Côte d'Ivoire</p></div></div></div>
-          <div class="card p-6 reveal"><div class="text-3xl mb-4" style="color:var(--accent)">"</div><p class="font-roboto text-base italic leading-relaxed mb-6" style="color:rgba(248,250,252,0.8)">Professionnel, réactif et force de proposition. Daniel a su transformer notre idée en une application fonctionnelle et performante, tout en respectant les exigences de sécurité.</p><div class="flex items-center gap-3"><div style="width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.2rem">N</div><div><p class="font-inter font-bold text-sm">Nadine Koné</p><p class="font-roboto text-xs" style="color:rgba(248,250,252,0.5)">Cheffe de projet — ONASUR</p></div></div></div>
-          <div class="card p-6 reveal"><div class="text-3xl mb-4" style="color:var(--accent)">"</div><p class="font-roboto text-base italic leading-relaxed mb-6" style="color:rgba(248,250,252,0.8)">La collaboration avec Daniel sur notre marketplace agricole a été une réussite. Il a bâti une architecture solide et scalable qui supporte aujourd'hui des centaines d'utilisateurs.</p><div class="flex items-center gap-3"><div style="width:44px;height:44px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.2rem">K</div><div><p class="font-inter font-bold text-sm">Kouadio Alain</p><p class="font-roboto text-xs" style="color:rgba(248,250,252,0.5)">Responsable Digital — MINADER</p></div></div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ BLOG ═══ -->
-    <section id="blog" class="py-24 px-6">
-      <div class="max-w-7xl mx-auto">
-        <div class="flex items-end justify-between mb-16 flex-wrap gap-6">
-          <div class="reveal"><p class="section-label">// Articles & Tutoriels</p><h2 class="section-title">News & Tips</h2></div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <article class="card reveal">
-            <div style="height:160px;overflow:hidden;background:var(--card)"><img src="assets/blog_cleanarch.jpg" alt="Clean Architecture" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/blog/CLEAN_ARCHITRZCTUR_iocrb8'"></div>
-            <div class="p-5"><div class="flex gap-2 mb-3 flex-wrap"><span class="tag text-xs">Architecture</span><span class="tag text-xs">Clean Code</span></div><h3 class="font-inter font-bold text-sm mb-2 leading-tight">Les bases de la Clean Architecture en Python</h3><p class="font-roboto text-xs leading-relaxed mb-4" style="color:rgba(248,250,252,0.5)">La Clean Architecture, mise en avant par Robert C. Martin, est une approche méthodique pour structurer vos applications…</p></div>
-          </article>
-          <article class="card reveal">
-            <div style="height:160px;overflow:hidden;background:var(--card)"><img src="assets/blog_scroller.jpg" alt="generate_scroller" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/blog/Gemini_Generated_Image_jkw6ikjkw6ikjkw6_eq3yx4'"></div>
-            <div class="p-5"><div class="flex gap-2 mb-3 flex-wrap"><span class="tag text-xs">Python</span><span class="tag text-xs">CLI</span></div><h3 class="font-inter font-bold text-sm mb-2 leading-tight">generate_scroller : Simplifiez la documentation de vos projets</h3><p class="font-roboto text-xs leading-relaxed mb-4" style="color:rgba(248,250,252,0.5)">Dans chaque projet Python, on finit toujours par accumuler une multitude de fichiers texte. Découvrez cet outil…</p></div>
-          </article>
-          <article class="card reveal">
-            <div style="height:160px;overflow:hidden;background:var(--card)"><img src="assets/blog_flask.jpg" alt="Flask" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/blog/flask_gbsmru'"></div>
-            <div class="p-5"><div class="flex gap-2 mb-3 flex-wrap"><span class="tag text-xs">Flask</span><span class="tag text-xs">Python</span></div><h3 class="font-inter font-bold text-sm mb-2 leading-tight">Découvrir Flask — Créer une application web en Python</h3><p class="font-roboto text-xs leading-relaxed mb-4" style="color:rgba(248,250,252,0.5)">Flask est un petit framework web Python léger, qui fournit des outils et des fonctionnalités utiles…</p></div>
-          </article>
-          <article class="card reveal">
-            <div style="height:160px;overflow:hidden;background:var(--card)"><img src="assets/blog_django.jpg" alt="Django" style="width:100%;height:100%;object-fit:cover" onerror="this.src='https://res.cloudinary.com/dyxl1d0qr/image/upload/v1/media/blog/Get-Started-With-Django_Watermarked_ylktdy'"></div>
-            <div class="p-5"><div class="flex gap-2 mb-3 flex-wrap"><span class="tag text-xs">Django</span><span class="tag text-xs">Python</span></div><h3 class="font-inter font-bold text-sm mb-2 leading-tight">Créer votre premier projet Django</h3><p class="font-roboto text-xs leading-relaxed mb-4" style="color:rgba(248,250,252,0.5)">Django est un framework web populaire en Python qui offre une structure robuste et des fonctionnalités avancées…</p></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ CONTACT ═══ -->
-    <section id="contact" class="py-24 px-6" style="background:rgba(30,41,59,0.3)">
-      <div class="max-w-5xl mx-auto">
-        <div class="text-center mb-16 reveal">
-          <p class="section-label">// Travaillons ensemble</p>
-          <h2 class="section-title">Contact</h2>
-          <p class="font-roboto text-base mt-4" style="color:rgba(248,250,252,0.6)">Disponible pour de nouveaux projets. Prenez rendez-vous ou écrivez-moi directement.</p>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          <div class="space-y-6 reveal">
-            <div class="card p-6">
-              <h3 class="font-inter font-bold text-base mb-4" style="color:var(--accent)">Contactez-moi directement</h3>
-              <div class="space-y-4">
-                <a href="https://wa.me/2250748733365" target="_blank" class="btn-whatsapp w-full justify-center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.714a.5.5 0 0 0 .61.638l6.044-1.567A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.513-5.213-1.408l-.374-.22-3.875 1.005 1.03-3.765-.242-.383A9.938 9.938 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
-                  Écrire sur WhatsApp
-                </a>
-                <a href="mailto:danieldanielguedegbe10027@gmail.com" class="btn-outline w-full justify-center">✉️ danieldanielguedegbe10027@gmail.com</a>
-                <a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank" class="btn-outline w-full justify-center">🔗 LinkedIn</a>
-                <a href="https://drive.google.com/file/d/1KhDSByuCEa4rQIq7xhDzMujKdHriKrpg/view?usp=sharing" target="_blank" class="btn-accent w-full justify-center">📄 Télécharger le CV</a>
-              </div>
-            </div>
-            <div class="card p-6 space-y-3">
-              <div class="flex justify-between items-center py-2" style="border-bottom:1px solid var(--border)"><span class="font-roboto text-sm" style="color:rgba(248,250,252,0.5)">Localisation</span><span class="font-inter font-semibold text-sm">Abidjan, Côte d'Ivoire</span></div>
-              <div class="flex justify-between items-center py-2" style="border-bottom:1px solid var(--border)"><span class="font-roboto text-sm" style="color:rgba(248,250,252,0.5)">Disponibilité</span><span class="font-inter font-semibold text-sm" style="color:#22c55e">✅ Disponible</span></div>
-              <div class="flex justify-between items-center py-2"><span class="font-roboto text-sm" style="color:rgba(248,250,252,0.5)">Mode travail</span><span class="font-inter font-semibold text-sm">Remote / Hybride</span></div>
-            </div>
-          </div>
-          <!-- Cal.com embed -->
-          <div class="reveal">
-            <div class="card p-4" style="min-height:400px">
-              <h3 class="font-inter font-bold text-sm mb-4 px-2" style="color:var(--accent)">📅 Prendre un rendez-vous</h3>
-              <div style="width:100%;height:450px;overflow:scroll" id="my-cal-inline"></div>
-              <script type="text/javascript">
-                (function(C,A,L){let p=function(a,ar){a.q.push(ar);};let d=C.document;C.Cal=C.Cal||function(){let cal=C.Cal;let ar=arguments;if(!cal.loaded){cal.ns={};cal.q=cal.q||[];d.head.appendChild(d.createElement("script")).src=A;cal.loaded=true;}if(ar[0]===L){const api=function(){p(api,arguments);};const namespace=ar[1];api.q=api.q||[];if(typeof namespace==="string"){cal.ns[namespace]=cal.ns[namespace]||api;p(cal.ns[namespace],ar);p(cal,["initNamespace",namespace]);}else p(cal,ar);return;}p(cal,ar);};})(window,"https://app.cal.com/embed/embed.js","init");
-                Cal("init","30min",{origin:"https://app.cal.com"});
-                Cal.ns["30min"]("inline",{elementOrSelector:"#my-cal-inline",config:{"layout":"month_view","theme":"dark"},calLink:"jean-marie-daniel-vianney-guedegbe-qfjxgu/30min"});
-                Cal.ns["30min"]("ui",{"theme":"dark","cssVarsPerTheme":{"dark":{"cal-brand":"#FFD43B"}},"hideEventTypeDetails":false,"layout":"month_view"});
-              </script>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer style="background:var(--card);border-top:1px solid var(--border)" class="mt-24">
-    <div class="max-w-7xl mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-        <div class="md:col-span-2">
-          <div class="font-inter font-bold text-2xl mb-4"><span style="color:var(--accent)">&lt;</span>Daniel<span style="color:var(--primary)">.</span>dev<span style="color:var(--accent)">/&gt;</span></div>
-          <p class="font-roboto text-sm leading-relaxed mb-6" style="color:rgba(248,250,252,0.6);max-width:320px">Software Engineer • Abidjan, Côte d'Ivoire<br>Conception de solutions web et mobiles performantes.</p>
-          <div class="flex gap-3 flex-wrap">
-            <a href="https://wa.me/2250748733365" target="_blank" class="btn-whatsapp" style="padding:0.5rem 1rem;font-size:0.8rem">WhatsApp</a>
-            <a href="https://drive.google.com/file/d/1KhDSByuCEa4rQIq7xhDzMujKdHriKrpg/view?usp=sharing" target="_blank" class="btn-outline" style="padding:0.5rem 1rem;font-size:0.8rem">📄 Télécharger CV</a>
-          </div>
+          <p>Depuis plus de six ans, je conçois et je livre des plateformes logicielles qui tiennent leurs promesses <strong>en production</strong> — pas seulement en démonstration. Basé à Abidjan, au cœur de l'écosystème technologique ouest-africain, j'interviens aujourd'hui comme consultant backend pour <strong>Orange Liberia</strong> et comme développeur full stack pour <strong>Illigo</strong>, une plateforme de mobilité intelligente reposant sur une infrastructure IoT complexe.</p>
+          <p>Mon terrain de jeu, c'est l'architecture : Python, Django et FastAPI côté serveur, Flutter côté mobile, et une attention particulière portée à la Clean Architecture, au Domain-Driven Design et aux principes SOLID. J'aime les systèmes qui survivent à leur créateur — un code lisible, testé, documenté, pensé pour être repris par d'autres équipes.</p>
+          <p>Avant cela, j'ai dirigé pendant cinq ans le département IT de <strong>IIPEA</strong>, où j'ai piloté la conception d'un ERP scolaire complet, primé lors du Moov Africa CI StartUp Challenge 2025. J'ai également construit des systèmes de présence biométrique, des plateformes de paiement mobile s'appuyant sur l'API MTN Mobile Money, et plus récemment des plateformes e-commerce complètes intégrant le paiement <strong>Wave</strong> de bout en bout.</p>
+          <p>Ce qui me motive : transformer des besoins métiers complexes — paiements, logistique, conformité fiscale, gestion d'actifs — en produits numériques fiables, élégants et faciles à maintenir. Je travaille aussi bien en autonomie complète qu'au sein d'équipes pluridisciplinaires, en français comme en anglais.</p>
         </div>
         <div>
-          <h4 class="font-inter font-semibold mb-5 text-sm tracking-widest uppercase" style="color:var(--accent)">Navigation</h4>
-          <ul class="space-y-3">
-            <li><a href="#about" class="font-roboto text-sm transition-colors hover:text-white" style="color:rgba(248,250,252,0.55);text-decoration:none">À propos</a></li>
-            <li><a href="#portfolio" class="font-roboto text-sm transition-colors hover:text-white" style="color:rgba(248,250,252,0.55);text-decoration:none">Projets</a></li>
-            <li><a href="#blog" class="font-roboto text-sm transition-colors hover:text-white" style="color:rgba(248,250,252,0.55);text-decoration:none">Blog</a></li>
-            <li><a href="#contact" class="font-roboto text-sm transition-colors hover:text-white" style="color:rgba(248,250,252,0.55);text-decoration:none">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-inter font-semibold mb-5 text-sm tracking-widest uppercase" style="color:var(--accent)">Contact</h4>
-          <ul class="space-y-3">
-            <li><a href="mailto:danieldanielguedegbe10027@gmail.com" class="font-roboto text-sm" style="color:rgba(248,250,252,0.55);text-decoration:none">danieldanielguedegbe10027@gmail.com</a></li>
-            <li><a href="tel:+2250748733365" class="font-roboto text-sm" style="color:rgba(248,250,252,0.55);text-decoration:none">+225 07 48 73 33 65</a></li>
-            <li class="font-roboto text-sm" style="color:rgba(248,250,252,0.55)">Abidjan, Côte d'Ivoire</li>
-          </ul>
-          <div class="flex gap-3 mt-6">
-            <a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background:var(--border)">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="https://github.com/daniel10027" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg flex items-center justify-center transition-all hover:scale-110" style="background:var(--border)">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            </a>
+          <div class="avatar-card reveal">
+            <div class="avatar-frame">
+              <div class="avatar-glow"></div>
+              <span class="avatar-initials">DG</span>
+              <div class="avatar-scan"></div>
+            </div>
+            <p class="avatar-hint"># remplacer par une vraie photo :<br>&lt;img src="ta-photo.jpg"&gt; à la place du bloc .avatar-frame</p>
+          </div>
+          <div class="facts reveal">
+            <div class="fact-row"><span class="k">nom</span><span class="v">Jean Marie Daniel Vianney Guedegbe</span></div>
+            <div class="fact-row"><span class="k">localisation</span><span class="v">Abidjan, Côte d'Ivoire 🇨🇮</span></div>
+            <div class="fact-row"><span class="k">disponibilité</span><span class="v" style="color:var(--ok)">● remote / hybride</span></div>
+            <div class="fact-row"><span class="k">langues</span><span class="v">FR (natif) · EN (pro.)</span></div>
+            <div class="fact-row"><span class="k">email</span><span class="v"><a href="mailto:danielguedegbe10027@gmail.com">danielguedegbe10027@gmail.com</a></span></div>
+            <div class="fact-row"><span class="k">tel</span><span class="v"><a href="https://wa.me/2250748733365">+225 07 48 73 33 65</a></span></div>
+            <div class="fact-row"><span class="k">github</span><span class="v"><a href="https://github.com/daniel10027" target="_blank">daniel10027</a></span></div>
+            <div class="fact-row"><span class="k">linkedin</span><span class="v"><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">daniel-guedegbe</a></span></div>
           </div>
         </div>
       </div>
-      <div class="mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4" style="border-top:1px solid var(--border)">
-        <p class="font-roboto text-sm" style="color:rgba(248,250,252,0.4)">© 2026 Jean Marie Daniel Vianney Guedegbe — Tous droits réservés</p>
-        <p class="font-fira text-xs" style="color:rgba(248,250,252,0.3)">Built with <span style="color:var(--primary)">HTML</span> & <span style="color:var(--accent)">💛</span> — Hosted on GitHub Pages</p>
+
+      <div class="principles">
+        <div class="principle reveal"><div class="pn">01</div><h3>Clean Architecture par défaut</h3><p>Séparer les règles métier de l'infrastructure dès le premier commit, pour que chaque évolution future coûte le minimum en temps et en risque.</p></div>
+        <div class="principle reveal"><div class="pn">02</div><h3>Le test avant la promesse</h3><p>Une fonctionnalité n'est terminée que lorsqu'elle est testée, documentée et reproductible. La rigueur n'est pas une option.</p></div>
+        <div class="principle reveal"><div class="pn">03</div><h3>Conçu pour l'Afrique, prêt pour le monde</h3><p>Connectivité variable, paiements mobiles, contraintes locales : je conçois pour le terrain, avec des standards internationaux.</p></div>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- Floating WhatsApp -->
-  <a href="https://wa.me/2250748733365?text=Bonjour Daniel%20!" target="_blank" rel="noopener" class="whatsapp-float" title="Écrire sur WhatsApp">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.714a.5.5 0 0 0 .61.638l6.044-1.567A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.513-5.213-1.408l-.374-.22-3.875 1.005 1.03-3.765-.242-.383A9.938 9.938 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
-  </a>
+  <!-- ═══ STACK ═══ -->
+  <section id="stack">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">02</span> — stack</div><h2>Le bilan technique</h2></div>
+        <p class="lead">Les briques que j'assemble au quotidien, du langage jusqu'au déploiement en production.</p>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-card reveal">
+          <div class="imp"><span class="kw">from</span> daniel <span class="kw">import</span> <span class="mod">langages</span></div>
+          <h3>Langages</h3>
+          <div class="pill-row"><span>Python</span><span>JavaScript (ES6+)</span><span>Dart</span><span>SQL</span><span>Bash</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <div class="imp"><span class="kw">from</span> daniel <span class="kw">import</span> <span class="mod">frameworks</span></div>
+          <h3>Frameworks &amp; Librairies</h3>
+          <div class="pill-row"><span>Django</span><span>DRF</span><span>FastAPI</span><span>Flask</span><span>Next.js</span><span>Angular</span><span>Flutter</span><span>Tailwind</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <div class="imp"><span class="kw">from</span> daniel <span class="kw">import</span> <span class="mod">donnees</span></div>
+          <h3>Données &amp; Stockage</h3>
+          <div class="pill-row"><span>PostgreSQL</span><span>MySQL</span><span>MongoDB</span><span>SQL Server</span><span>Redis</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <div class="imp"><span class="kw">from</span> daniel <span class="kw">import</span> <span class="mod">infra</span></div>
+          <h3>Infrastructure &amp; DevOps</h3>
+          <div class="pill-row"><span>Docker</span><span>Nginx</span><span>Gunicorn</span><span>Supervisor</span><span>GitHub Actions</span><span>GitLab CI/CD</span><span>Ansible</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <div class="imp"><span class="kw">from</span> daniel <span class="kw">import</span> <span class="mod">temps_reel</span></div>
+          <h3>Temps réel &amp; asynchrone</h3>
+          <div class="pill-row"><span>Celery</span><span>Redis</span><span>MQTT</span><span>WebSockets</span><span>Django Channels</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <div class="imp"><span class="kw">from</span> daniel <span class="kw">import</span> <span class="mod">paiements</span></div>
+          <h3>Paiements &amp; Fintech</h3>
+          <div class="pill-row"><span>Wave Checkout API</span><span>Webhooks HMAC</span><span>MTN MoMo API</span><span>Réconciliation</span><span>Multi-wallets</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <script>
-    // ── Typed text effect ──
-    const texts = ['Software Engineer', 'Backend Developer', 'Django Expert', 'Flutter Developer', 'Tech Leader'];
-    let textIndex = 0, charIndex = 0, isDeleting = false;
-    const el = document.getElementById('typed-text');
-    function type() {
-      const current = texts[textIndex];
-      el.textContent = isDeleting ? current.substring(0, charIndex--) : current.substring(0, charIndex++);
-      let delay = isDeleting ? 60 : 100;
-      if (!isDeleting && charIndex === current.length + 1) { isDeleting = true; delay = 1500; }
-      else if (isDeleting && charIndex === 0) { isDeleting = false; textIndex = (textIndex + 1) % texts.length; delay = 400; }
-      setTimeout(type, delay);
+  <!-- ═══ PARCOURS — GIT LOG ═══ -->
+  <section id="parcours">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">03</span> — parcours</div><h2>git log --author=daniel</h2></div>
+        <p class="lead">Cinq engagements, du conseil pour de grands groupes télécoms à la direction technique d'équipes produit.</p>
+      </div>
+      <div class="gitlog reveal">
+        <div class="commit current">
+          <div class="commit-head"><span class="commit-hash">#a1f92e0</span><span class="commit-date">sept. 2025 → présent</span><span class="commit-branch">HEAD</span></div>
+          <div class="commit-msg">Consultant Backend Developer</div>
+          <div class="commit-loc"><span class="commit-company">Orange Liberia</span> · Abidjan (remote)</div>
+          <ul>
+            <li>Conception et développement de microservices Python/Flask pour des systèmes critiques télécoms, haute disponibilité et sécurité.</li>
+            <li>Construction d'APIs REST robustes et scalables, interopérables avec des applications internes et inter-opérateurs.</li>
+            <li>Optimisation des bases de données SQL Server &amp; NoSQL : indexation, tuning de requêtes, monitoring.</li>
+            <li>Déploiement et automatisation de l'infrastructure via Docker et Ansible, pipelines CI/CD GitLab.</li>
+          </ul>
+          <div class="tech-row"><span>Python</span><span>Flask</span><span>Odoo</span><span>SQL Server</span><span>Docker</span><span>Ansible</span></div>
+        </div>
+        <div class="commit">
+          <div class="commit-head"><span class="commit-hash">#7c3ba21</span><span class="commit-date">mai 2025 → présent</span><span class="commit-branch">active</span></div>
+          <div class="commit-msg">Développeur Backend Mobilité Intelligente</div>
+          <div class="commit-loc"><span class="commit-company">Illigo</span> · Abidjan (hybride)</div>
+          <ul>
+            <li>Backend modulaire Python/Django/DRF structuré en Clean Architecture pour une plateforme de mobilité intelligente.</li>
+            <li>Intégration IoT complexe (stations, véhicules, badges, chargeurs) via MQTT, REST et WebSocket.</li>
+            <li>Tracking GPS temps réel, contrôle à distance des véhicules, télémétrie live via Firebase et WebSockets.</li>
+          </ul>
+          <div class="tech-row"><span>Django</span><span>DRF</span><span>MQTT</span><span>PostgreSQL</span><span>Celery</span><span>Firebase</span><span>Flutter</span></div>
+        </div>
+        <div class="commit">
+          <div class="commit-head"><span class="commit-hash">#4e88f10</span><span class="commit-date">juin 2020 → mai 2025</span><span class="commit-branch">merged</span></div>
+          <div class="commit-msg">Lead Développeur Full Stack &amp; Responsable IT</div>
+          <div class="commit-loc"><span class="commit-company">IIPEA</span> · Abidjan, Côte d'Ivoire</div>
+          <ul>
+            <li>Pilotage du cycle complet de développement — conception jusqu'à la production — pour plusieurs applications web institutionnelles en Django.</li>
+            <li>Management d'une équipe de développeurs : guidance technique, qualité du code, respect des délais.</li>
+            <li>Conception et livraison d'un ERP scolaire complet (SMS) — 1er Prix Moov Africa CI StartUp Challenge 2025.</li>
+          </ul>
+          <div class="tech-row"><span>Python</span><span>Django</span><span>DRF</span><span>PostgreSQL</span><span>Flutter</span><span>Firebase</span></div>
+        </div>
+        <div class="commit">
+          <div class="commit-head"><span class="commit-hash">#9d21ab6</span><span class="commit-date">mars 2022 → avr. 2023</span><span class="commit-branch">merged</span></div>
+          <div class="commit-msg">Développeur Backend Python / Django</div>
+          <div class="commit-loc"><span class="commit-company">Saas Group</span> · Côte d'Ivoire (remote)</div>
+          <ul>
+            <li>Plateforme RH Sentinelle : gestion des présences par RFID, QR codes, reconnaissance faciale et biométrie digitale.</li>
+            <li>Notifications push temps réel, géolocalisation, modules de reporting personnalisés.</li>
+            <li>Modélisation PostgreSQL scalable, cache Redis, Django Channels pour les données live.</li>
+          </ul>
+          <div class="tech-row"><span>Django</span><span>DRF</span><span>PostgreSQL</span><span>Redis</span><span>OpenCV</span><span>Docker</span></div>
+        </div>
+        <div class="commit">
+          <div class="commit-head"><span class="commit-hash">#2f56c88</span><span class="commit-date">mars 2021 → janv. 2022</span><span class="commit-branch">merged</span></div>
+          <div class="commit-msg">Développeur Mobile &amp; Backend</div>
+          <div class="commit-loc"><span class="commit-company">SIEFTP / Tropic BTP</span> · Côte d'Ivoire (remote)</div>
+          <ul>
+            <li>APIs backend Django/DRF et applications Flutter multiplateformes pour plusieurs projets clients.</li>
+            <li>Application de pointage chantier : géolocalisation, suivi du temps, rapports automatisés.</li>
+          </ul>
+          <div class="tech-row"><span>Django</span><span>DRF</span><span>Flutter</span><span>PostgreSQL</span><span>Firebase</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROJETS ═══ -->
+  <section id="travaux">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">04</span> — projets</div><h2>Réalisations sélectionnées</h2></div>
+        <p class="lead">Des plateformes fintech aux systèmes e-commerce en production, du cadrage au déploiement.</p>
+      </div>
+
+      <!-- PROJET SPORTIF AFRICA -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">SportifAfrica</span>(EcommercePlatform):</div>
+          <h3>SPORTIF Africa — Plateforme e-commerce sportive complète</h3>
+          <p class="desc">Une plateforme Django/PostgreSQL de bout en bout pour la vente d'équipements sportifs : site marchand, back-office multi-rôles et point de vente physique unifiés autour d'un seul système de gestion des stocks et des paiements.</p>
+          <ul class="feature-list">
+            <li>Paiement en ligne Wave (Checkout API + webhooks signés HMAC), réconciliation automatique et détection de fraude sur les paiements</li>
+            <li>Trois portefeuilles isolés (boutique / développeur / référence Wave) avec répartition automatique des frais et demandes de retrait validées manuellement</li>
+            <li>POS (caisse) interne pour les ventes en boutique, encaissement espèces, reçus PDF générés à la volée</li>
+            <li>Permissions granulaires du personnel (gérant, caissiers), notifications temps réel et back-office complet (stock, promotions, ventes flash)</li>
+          </ul>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django 5</span><span>PostgreSQL</span><span>Tailwind CSS</span><span>Wave API</span><span>CI/CD</span></div>
+        </div>
+        <div class="proj-visual wallet-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <div class="wm-row"><span>Wallet boutique</span><b>240 000 F</b></div>
+            <div class="wm-row"><span>Wallet développeur <span class="wm-tag">2%</span></span><b>4 800 F</b></div>
+            <div class="wm-row"><span>Réf. Wave <span class="wm-tag">1%</span></span><b>2 400 F</b></div>
+            <div class="wm-chart"><div style="height:40%"></div><div style="height:65%"></div><div style="height:50%"></div><div style="height:85%"></div><div style="height:60%"></div><div style="height:90%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJET SPAGHETTI D'ABIDJAN -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">SpaghettiDAbidjan</span>(FoodDeliveryPlatform):</div>
+          <h3>Spaghetti d'Abidjan — Livraison de plats locaux</h3>
+          <p class="desc">Plateforme de commande et de livraison de plats ivoiriens (attiéké, garba, alloco, sauces mijotées) avec un tunnel de commande pensé pour la rapidité et un paiement mobile intégré de bout en bout.</p>
+          <ul class="feature-list">
+            <li>Paiement en ligne via Wave, confirmation automatique de commande et suivi de livraison</li>
+            <li>Recherche et filtres avancés : budget max, plats épicés, options végétales, promotions en cours</li>
+            <li>Backend Django avec catalogue de plats par catégories et gestion des tickets de commande</li>
+          </ul>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>PostgreSQL</span><span>Wave API</span><span>Nginx</span><span>Gunicorn</span></div>
+          <a href="https://spaguettidabidjan.com/" target="_blank" class="proj-link">Voir le site →</a>
+        </div>
+        <div class="proj-visual food-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <div class="fm-hero"><div class="fm-tag">● OUVERT · LIVRAISON EN COURS</div><h4>Le goût d'Abidjan, livré chaud.</h4></div>
+            <div class="fm-cards"><div class="fm-card"></div><div class="fm-card"></div><div class="fm-card"></div><div class="fm-card"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FNE -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">FNEIvoire</span>(BillingCompliance):</div>
+          <h3>FNE Ivoire — Facturation Normalisée Électronique</h3>
+          <p class="desc">Plateforme SaaS répondant à l'obligation de Facturation Normalisée Électronique de la DGI ivoirienne (2025) : génération, signature et transmission des factures en temps réel à l'administration fiscale.</p>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>Celery</span><span>PostgreSQL</span><span>REST API</span><span>SaaS multi-tenant</span></div>
+          <a href="https://fne.myoctogone.com/" target="_blank" class="proj-link">Voir le projet →</a>
+        </div>
+        <div class="proj-visual api-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <div><span class="t-prompt">POST</span> /api/v1/factures/emettre</div>
+            <div>{ "montant_ttc": <span style="color:var(--py-gold)">2480000</span>, "devise": <span class="t-str">"XOF"</span> }</div>
+            <div><span class="t-ok">201 CREATED</span> facture signée DGI</div>
+            <div style="color:var(--text-dim)"># QR code fiscal généré · horodatage certifié</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BRVM -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">BRVMAnalytics</span>(MarketDataAPI):</div>
+          <h3>BRVM Analytics — Marchés boursiers en temps réel</h3>
+          <p class="desc">Plateforme d'analyse pour la Bourse Régionale des Valeurs Mobilières de l'UEMOA, agrégeant cours, volumes et indices de sociétés cotées dans huit pays d'Afrique de l'Ouest, avec cache Redis pour des réponses quasi temps réel.</p>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>PostgreSQL</span><span>REST API</span><span>Redis</span><span>Fintech</span></div>
+          <a href="https://brvm.myoctogone.com/" target="_blank" class="proj-link">Voir le projet →</a>
+        </div>
+        <div class="proj-visual wave-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <div class="wv-status">● indice BRVM composite +2.34%</div>
+            <div class="wv-line w1"></div><div class="wv-line w2"></div><div class="wv-line w3"></div>
+            <div class="wv-amount">14 250 F</div>
+            <div class="wv-sub">SONATEL CI · dernière clôture</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE SDK -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">WaveBusinessSDK</span>(OpenSourceLib):</div>
+          <h3>Wave Business API SDK</h3>
+          <p class="desc">Kit de développement Python publié sur PyPI pour intégrer paiements, payouts et webhooks Wave Business en quelques lignes de code, avec signature HMAC-SHA256 systématique et tests automatisés.</p>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Python</span><span>PyPI</span><span>REST API</span><span>HMAC-SHA256</span><span>Tests</span></div>
+          <a href="https://github.com/daniel10027/wave-business-api" target="_blank" class="proj-link">Voir le dépôt →</a>
+        </div>
+        <div class="proj-visual api-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <div><span class="t-prompt">$</span> pip install wave-business-sdk</div>
+            <div><span class="t-prompt">&gt;&gt;&gt;</span> client = Client(api_key=<span class="t-str">"sk_live_***"</span>)</div>
+            <div><span class="t-prompt">&gt;&gt;&gt;</span> client.payouts.create(...)</div>
+            <div><span class="t-ok">✓ 200 OK</span> signature vérifiée</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANDATREE -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">PandaTree</span>(GISPlatform):</div>
+          <h3>PandaTree — Patrimoine végétal national</h3>
+          <p class="desc">Développée avec le Centre National de Recherche Agronomique (CNRA), une plateforme de recensement du patrimoine arboricole ivoirien : backend Django/DRF, collecte terrain via Flutter, visualisation SIG.</p>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>DRF</span><span>Flutter</span><span>SIG</span><span>PostgreSQL</span></div>
+          <a href="https://github.com/daniel10027/PandaTree/" target="_blank" class="proj-link">Voir le dépôt →</a>
+        </div>
+        <div class="proj-visual map-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <svg viewBox="0 0 300 200" preserveAspectRatio="none">
+              <rect width="300" height="200" fill="#0D1220" />
+              <g stroke="#1a2236" stroke-width="1"><line x1="0" y1="40" x2="300" y2="40"/><line x1="0" y1="80" x2="300" y2="80"/><line x1="0" y1="120" x2="300" y2="120"/><line x1="0" y1="160" x2="300" y2="160"/><line x1="50" y1="0" x2="50" y2="200"/><line x1="100" y1="0" x2="100" y2="200"/><line x1="150" y1="0" x2="150" y2="200"/><line x1="200" y1="0" x2="200" y2="200"/><line x1="250" y1="0" x2="250" y2="200"/></g>
+              <path d="M30,150 L90,40 L180,30 L260,90 L230,170 L100,180 Z" fill="rgba(75,139,190,.25)" stroke="#4B8BBE" stroke-width="1.5"/>
+              <path d="M120,60 L200,55 L230,110 L160,140 Z" fill="rgba(255,212,59,.2)" stroke="#FFD43B" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMS ERP -->
+      <div class="proj reveal">
+        <div>
+          <div class="proj-class"><span class="kw">class</span> <span class="name">SMSSchoolERP</span>(EducationSuite):</div>
+          <h3>SMS — School Management System</h3>
+          <p class="desc">Système de gestion scolaire couvrant l'intégralité du cycle académique, administratif et financier : inscriptions, emplois du temps, notes, facturation. Déployé en pilote dans quatre établissements — <strong>1er Prix Moov Africa CI StartUp Challenge 2025</strong>.</p>
+          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>DRF</span><span>Flutter</span><span>PostgreSQL</span><span>Web/Android/iOS</span></div>
+          <a href="https://github.com/daniel10027" target="_blank" class="proj-link">Voir le profil GitHub →</a>
+        </div>
+        <div class="proj-visual pos-mock">
+          <div class="pv-bar"><i></i><i></i><i></i></div>
+          <div class="pv-body">
+            <div class="pos-grid"><div class="pos-item">1 248<br>élèves</div><div class="pos-item">96%<br>paiement</div><div class="pos-item">4<br>écoles</div></div>
+            <div class="pos-total"><span>ENCAISSÉ CE MOIS</span><b>18.4M F</b></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ AUTRES ═══ -->
+  <section id="autres">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">05</span> — portefeuille</div><h2>Autres réalisations</h2></div>
+        <p class="lead">Une sélection de projets complémentaires, livrés pour des clients en Côte d'Ivoire et à l'international.</p>
+      </div>
+      <div class="grid-others reveal">
+        <div class="other-card"><span class="oc-tag">ERP / GESTION</span><h3>OS-IRIS</h3><p>ERP complet pour la gestion des stocks, des ventes et de la comptabilité commerciale, conçu pour des PME ivoiriennes.</p></div>
+        <div class="other-card"><span class="oc-tag">RH / BIOMÉTRIE</span><h3>Sentinelle RH</h3><p>Système de gestion des présences par RFID, QR codes et reconnaissance faciale, données live via Django Channels.</p></div>
+        <div class="other-card"><span class="oc-tag">FINTECH / MOBILE</span><h3>MomoFund</h3><p>Plateforme de crowdfunding via l'API MTN Mobile Money — 2ᵉ place au Hackathon MTN MTS Côte d'Ivoire 2024.</p></div>
+        <div class="other-card"><span class="oc-tag">PRODUCTIVITÉ</span><h3>TimesTrackers</h3><p>Suivi du temps de travail et gestion de projets pour équipes distribuées, avec rapports automatisés.</p></div>
+        <div class="other-card"><span class="oc-tag">IMMOBILIER</span><h3>Ma Resie</h3><p>Plateforme de mise en relation immobilière, interface Next.js connectée à une API Django.</p></div>
+        <div class="other-card"><span class="oc-tag">AGRITECH / SPATIAL</span><h3>TraceAgriChain</h3><p>Traçabilité agricole combinant blockchain, imagerie satellite et cartographie 3D — Finaliste MASS / ICESCO 2025.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ DISTINCTIONS ═══ -->
+  <section id="distinctions">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">06</span> — distinctions</div><h2>Reconnaissance &amp; récompenses</h2></div>
+        <p class="lead">Trois compétitions, trois finalités différentes — éducation, espace &amp; agriculture, finance mobile.</p>
+      </div>
+      <div class="awards reveal">
+        <div class="award-row"><div class="ar-date">déc. 2025</div><div><h3>1er Prix Moov Africa CI StartUp Challenge 2025</h3><p>Remporté avec SMS (School Management System) — ERP éducatif multiplateforme validé par une phase pilote sur quatre établissements.</p></div><div class="ar-rank">VAINQUEUR</div></div>
+        <div class="award-row"><div class="ar-date">mai 2025</div><div><h3>Finaliste MASS Solutions Spatiales Africaines (ICESCO)</h3><p>Présentation de TraceAgriChain — blockchain, imagerie satellite et cartographie 3D pour la traçabilité agricole de la production à l'exportation.</p></div><div class="ar-rank">FINALISTE</div></div>
+        <div class="award-row"><div class="ar-date">janv. 2024</div><div><h3>2ᵉ Place Hackathon MTN MTS Côte d'Ivoire</h3><p>Développement de MomoFund — plateforme de crowdfunding Mobile Money via l'API MTN MoMo.</p></div><div class="ar-rank">2ᵉ PLACE</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FORMATION ═══ -->
+  <section id="formation">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">07</span> — formation</div><h2>Formation &amp; certifications</h2></div>
+        <p class="lead">Un socle académique en génie logiciel et big data, complété par des certifications professionnelles ciblées.</p>
+      </div>
+      <div class="edu-grid reveal">
+        <div>
+          <div class="eyebrow" style="margin-bottom:1rem"># diplômes</div>
+          <ul class="edu-list">
+            <li><div><span class="e-title">MSc en Génie Logiciel</span><span class="e-sub">Wolf University / GoMyCode</span></div><span class="e-year">2025</span></li>
+            <li><div><span class="e-title">Master en Informatique — Génie Logiciel</span><span class="e-sub">IIPEA — Institut International Polytechnique des Élites d'Abidjan</span></div><span class="e-year">2023</span></li>
+            <li><div><span class="e-title">Master en Big Data Analytics</span><span class="e-sub">Université Virtuelle de Côte d'Ivoire — soutenance en cours</span></div><span class="e-year">2023</span></li>
+            <li><div><span class="e-title">Licence en Bases de Données</span><span class="e-sub">Université Virtuelle de Côte d'Ivoire</span></div><span class="e-year">2020</span></li>
+            <li><div><span class="e-title">Baccalauréat Scientifique Série C</span><span class="e-sub">Lycée Municipal de Port-Bouët</span></div><span class="e-year">2017</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:1rem"># certifications</div>
+          <ul class="edu-list">
+            <li><div><span class="e-title">Python for Data Science</span><span class="e-sub">IBM</span></div></li>
+            <li><div><span class="e-title">Big Data Analysis</span><span class="e-sub">IBM</span></div></li>
+            <li><div><span class="e-title">Machine Learning &amp; Data Visualization with Python</span><span class="e-sub">IBM</span></div></li>
+            <li><div><span class="e-title">Microsoft Technologies Association Programming</span><span class="e-sub">Microsoft</span></div></li>
+            <li><div><span class="e-title">ITIL® Foundation in IT Service Management</span><span class="e-sub">AXELOS</span></div></li>
+            <li><div><span class="e-title">Administrateur de Bases de Données</span><span class="e-sub">NaN — Not A Number CI</span></div></li>
+            <li><div><span class="e-title">Planification de projet informatisé &amp; suivi opérationnel</span><span class="e-sub">MDS Canada</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TÉMOIGNAGES ═══ -->
+  <section id="temoignages">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">08</span> — témoignages</div><h2>Ce qu'en disent les clients</h2></div>
+        <p class="lead">Quelques retours de directions techniques et de chefs de projet ayant collaboré sur ces réalisations.</p>
+      </div>
+      <div class="testi-grid reveal">
+        <div class="testi-card"><div class="tq">"</div><p>Daniel a conçu pour nous une plateforme académique sur mesure, fiable et facile à utiliser. Son expertise backend a permis d'automatiser des processus complexes.</p><div class="testi-author"><div class="testi-avatar">JK</div><div><div class="testi-name">Jean Kouassi</div><div class="testi-role">Directeur IT, Groupe École Sup</div></div></div></div>
+        <div class="testi-card"><div class="tq">"</div><p>Sa capacité à comprendre nos besoins et à livrer dans les délais a été remarquable. Le projet a été mené avec un haut niveau d'exigence, de la spécification au déploiement.</p><div class="testi-author"><div class="testi-avatar">YN</div><div><div class="testi-name">Yao N'Dri</div><div class="testi-role">CTO, Saas Group Côte d'Ivoire</div></div></div></div>
+        <div class="testi-card"><div class="tq">"</div><p>Professionnel, réactif et force de proposition. Il a transformé notre idée en une application performante, sécurisée et évolutive.</p><div class="testi-author"><div class="testi-avatar">NK</div><div><div class="testi-name">Nadine Koné</div><div class="testi-role">Cheffe de projet, ONASUR</div></div></div></div>
+        <div class="testi-card"><div class="tq">"</div><p>L'architecture mise en place est solide : elle supporte aujourd'hui des centaines d'utilisateurs sur notre marketplace agricole, sans incident majeur depuis le lancement.</p><div class="testi-author"><div class="testi-avatar">KA</div><div><div class="testi-name">Kouadio Alain</div><div class="testi-role">Responsable Digital, MINADER</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section id="cta">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow" style="justify-content:center"><span class="hash">#</span> prochaine étape</div>
+        <h2>Prêt à construire la prochaine étape de votre produit numérique ?</h2>
+        <p>Que vous ayez besoin d'une architecture backend solide, d'une intégration de paiement mobile ou d'un audit technique, je réponds généralement sous 24 heures.</p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-gold">Planifier un appel</a>
+          <a href="https://wa.me/2250748733365" target="_blank" class="btn btn-ghost">Écrire sur WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div><div class="eyebrow"><span class="hash">#</span> <span class="kw">09</span> — contact</div><h2>Discutons de votre projet</h2></div>
+        <p class="lead">Toutes les coordonnées utiles, et un calendrier pour réserver un créneau directement.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="reveal">
+          <ul class="contact-list">
+            <li><span class="cl-label">WhatsApp</span><span class="cl-value"><a href="https://wa.me/2250748733365" target="_blank">+225 07 48 73 33 65</a></span></li>
+            <li><span class="cl-label">Email</span><span class="cl-value"><a href="mailto:danielguedegbe10027@gmail.com">danielguedegbe10027@gmail.com</a></span></li>
+            <li><span class="cl-label">LinkedIn</span><span class="cl-value"><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">daniel-guedegbe</a></span></li>
+            <li><span class="cl-label">GitHub</span><span class="cl-value"><a href="https://github.com/daniel10027" target="_blank">daniel10027</a></span></li>
+            <li><span class="cl-label">Localisation</span><span class="cl-value">Abidjan, Côte d'Ivoire 🇨🇮</span></li>
+            <li><span class="cl-label">Disponibilité</span><span class="cl-value available-tag">● remote / hybride / relocalisation</span></li>
+          </ul>
+          <div class="hero-ctas" style="margin-top:2.4rem">
+            <a href="https://wa.me/2250748733365" target="_blank" class="btn btn-gold">Écrire sur WhatsApp</a>
+            <a href="mailto:danielguedegbe10027@gmail.com" class="btn btn-ghost">Envoyer un email</a>
+          </div>
+        </div>
+        <div class="cal-card reveal">
+          <h4># planifier un rendez-vous</h4>
+          <div style="width:100%;height:480px;overflow:auto" id="my-cal-inline"></div>
+          <script type="text/javascript">
+            (function (C, A, L) {
+              let p = function (a, ar) { a.q.push(ar); };
+              let d = C.document;
+              C.Cal = C.Cal || function () {
+                let cal = C.Cal; let ar = arguments;
+                if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
+                if (ar[0] === L) {
+                  const api = function () { p(api, arguments); };
+                  const namespace = ar[1]; api.q = api.q || [];
+                  if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar);
+                  return;
+                }
+                p(cal, ar);
+              };
+            })(window, "https://app.cal.com/embed/embed.js", "init");
+            Cal("init", "30min", { origin: "https://app.cal.com" });
+            Cal.ns["30min"]("inline", { elementOrSelector: "#my-cal-inline", config: { layout: "month_view", theme: "dark" }, calLink: "jean-marie-daniel-vianney-guedegbe-qfjxgu/30min" });
+            Cal.ns["30min"]("ui", { theme: "dark", cssVarsPerTheme: { dark: { "cal-brand": "#FFD43B" } }, hideEventTypeDetails: false, layout: "month_view" });
+          </script>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="wrap footer-grid">
+    <a href="#hero" class="brand"><span class="prompt-sym">&gt;_</span> daniel@backend</a>
+    <ul class="footer-links">
+      <li><a href="https://github.com/daniel10027" target="_blank">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">LinkedIn</a></li>
+      <li><a href="https://wa.me/2250748733365" target="_blank">WhatsApp</a></li>
+      <li><a href="mailto:danielguedegbe10027@gmail.com">Email</a></li>
+    </ul>
+    <div class="footer-copy"># © 2026 Daniel Guedegbe — Abidjan, Côte d'Ivoire</div>
+  </div>
+</footer>
+
+<script>
+// BOOT SEQUENCE
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('boot').classList.add('hide'), 1550);
+});
+
+// PROGRESS BAR
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+});
+
+// MOBILE MENU
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+// REVEAL ON SCROLL
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ACTIVE NAV LINK
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+});
+
+// COUNT UP STATS
+const counted = new Set();
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !counted.has(e.target)) {
+      counted.add(e.target);
+      const target = parseInt(e.target.dataset.target, 10);
+      let c = 0;
+      const step = Math.max(target / 40, 0.1);
+      const tick = () => {
+        c += step;
+        if (c >= target) { e.target.textContent = target; }
+        else { e.target.textContent = Math.floor(c); requestAnimationFrame(tick); }
+      };
+      tick();
     }
-    type();
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.count').forEach(el => countObserver.observe(el));
 
-    // ── Skill bars ──
-    function animateSkills() {
-      document.querySelectorAll('.skill-bar-fill').forEach(bar => { bar.style.width = bar.getAttribute('data-width') + '%'; });
-    }
-    const skillsObserver = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) { animateSkills(); skillsObserver.disconnect(); }
-    }, { threshold: 0.2 });
-    const skillsTab = document.getElementById('tab-skills');
-    if (skillsTab) skillsObserver.observe(skillsTab);
+// TYPED CODE IN HERO TERMINAL
+const codeLines = [
+  { t: 'com', v: '# daniel_guedegbe.py' },
+  { t: 'kw',  v: 'class ', v2: 'BackendEngineer', v3: '(Developer):' },
+  { t: 'plain', v: '' },
+  { t: 'indent', v: 'def ', v2: '__init__', v3: '(self):' },
+  { t: 'indent2', v: 'self.stack = [', v2: '"Python"', v3: ', ', v4: '"Django"', v5: ', ', v6: '"DRF"', v7: ', ', v8: '"Wave API"]' },
+  { t: 'indent2', v: 'self.location = ', v2: '"Abidjan, CI"' },
+  { t: 'indent2', v: 'self.experience_years = ', v9: '6' },
+  { t: 'indent2', v: 'self.available = ', v10: 'True' },
+  { t: 'plain', v: '' },
+  { t: 'indent', v: 'def ', v2: 'ship', v3: '(self, idea):' },
+  { t: 'indent2', v: 'return ', v2: 'production_ready(idea)' },
+];
 
-    // ── Tab switching ──
-    function switchTab(name, btn) {
-      document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
-      document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
-      document.getElementById('tab-' + name).style.display = 'block';
-      btn.classList.add('active');
-      if (name === 'skills') setTimeout(animateSkills, 100);
-    }
+async function typeTerminal() {
+  const el = document.getElementById('typed-code');
+  const build = (line) => {
+    if (line.t === 'com') return `<span class="c-com">${line.v}</span>`;
+    if (line.t === 'kw') return `<span class="c-kw">${line.v}</span><span class="c-fn">${line.v2}</span><span class="c-plain">${line.v3}</span>`;
+    if (line.t === 'indent') return `  <span class="c-kw">${line.v}</span><span class="c-fn">${line.v2}</span><span class="c-plain">${line.v3}</span>`;
+    if (line.t === 'indent2' && line.v9) return `    <span class="c-plain">${line.v}</span><span class="c-num">${line.v9}</span>`;
+    if (line.t === 'indent2' && line.v10) return `    <span class="c-plain">${line.v}</span><span class="c-kw">${line.v10}</span>`;
+    if (line.t === 'indent2' && line.v8) return `    <span class="c-plain">${line.v}</span><span class="c-str">${line.v2}</span><span class="c-plain">${line.v3}</span><span class="c-str">${line.v4}</span><span class="c-plain">${line.v5}</span><span class="c-str">${line.v6}</span><span class="c-plain">${line.v7}</span><span class="c-str">${line.v8}</span>`;
+    if (line.t === 'indent2' && line.v2) return `    <span class="c-plain">${line.v}</span><span class="c-str">${line.v2}</span>`;
+    if (line.t === 'indent2') return `    <span class="c-plain">${line.v}</span>`;
+    return '';
+  };
 
-    // ── Project filtering ──
-    function filterProjects(cat, btn) {
-      document.querySelectorAll('.tab-btn[onclick*="filterProjects"]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.project-card').forEach(card => {
-        const cats = card.getAttribute('data-cats') || '';
-        card.style.display = (cat === 'all' || cats.includes(cat)) ? 'block' : 'none';
-      });
-    }
-
-    // ── Card hover effects ──
-    document.querySelectorAll('.project-card').forEach(card => {
-      const img = card.querySelector('.project-img');
-      const overlay = card.querySelector('.card-overlay');
-      card.addEventListener('mouseenter', () => { if (img) img.style.transform = 'scale(1.05)'; if (overlay) overlay.style.opacity = '1'; });
-      card.addEventListener('mouseleave', () => { if (img) img.style.transform = 'scale(1)'; if (overlay) overlay.style.opacity = '0'; });
-    });
-
-    // ── Theme toggle ──
-    const html = document.documentElement;
-    const themeToggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('theme') || 'dark';
-    html.setAttribute('data-theme', saved);
-    themeToggle.addEventListener('click', () => {
-      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
-
-    // ── Mobile menu ──
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const closeMobileBtn = document.getElementById('closeMobile');
-    hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
-    closeMobileBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
-    function closeMobileMenu() { mobileMenu.classList.remove('open'); }
-
-    // ── Cursor glow ──
-    const glow = document.getElementById('cursorGlow');
-    document.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
-
-    // ── Intersection observer reveals ──
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // ── Active nav on scroll ──
-    const sections = document.querySelectorAll('section[id]');
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id'); });
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-      });
-    });
-  </script>
+  for (const line of codeLines) {
+    el.innerHTML += (el.innerHTML ? '\n' : '') + build(line);
+    await new Promise(r => setTimeout(r, 90 + Math.random() * 60));
+  }
+}
+window.addEventListener('load', () => setTimeout(typeTerminal, 1700));
+</script>
 </body>
 </html>
