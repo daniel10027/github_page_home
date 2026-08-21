@@ -2,1106 +2,685 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Daniel Guedegbe — Ingénieur Logiciel Backend, Abidjan</title>
-<meta name="description" content="Daniel Guedegbe — Ingénieur Logiciel Backend Senior, Python/Django, Abidjan. Architectures fintech, paiements mobiles, plateformes e-commerce en production." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>DANIEL.EXE — Exploration du système Daniel Guedegbe</title>
+<meta name="description" content="Portfolio jouable de Daniel Guedegbe, Ingénieur Backend Python/Django — pilotez un vaisseau à travers un monde 3D pour découvrir son parcours." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --bg:#030308;
-  --bg-2:#07070F;
-  --glass:rgba(255,255,255,.045);
-  --glass-hover:rgba(255,255,255,.075);
-  --line:rgba(255,255,255,.09);
-  --line-strong:rgba(255,255,255,.18);
-  --text:#F4F4FA;
-  --text-soft:#9C9CB5;
-  --text-dim:#57576E;
+  --bg:#04030A;
+  --cyan:#00F0FF;
+  --magenta:#FF2E9A;
+  --yellow:#FFE93E;
   --violet:#8B5CF6;
-  --cyan:#22D3EE;
-  --pink:#F472B6;
-  --gold:#FBBF24;
-  --grad: linear-gradient(115deg, var(--violet), var(--cyan) 45%, var(--pink) 80%, var(--gold));
-  --grad-2: linear-gradient(115deg, var(--cyan), var(--violet));
+  --glass:rgba(10,8,24,.72);
+  --line:rgba(0,240,255,.25);
   --ok:#34E4A6;
-  --shadow: 0 50px 100px -30px rgba(0,0,0,.75);
-  --ease: cubic-bezier(.16,1,.3,1);
-  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --text:#EAF6FF;
+  --text-soft:#8E9BC2;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.65;
-  font-size:16px;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-  cursor:none;
-}
-@media(hover:none){body{cursor:auto;}}
-img{max-width:100%;display:block;}
-a{color:inherit;text-decoration:none;}
-::selection{background:var(--violet);color:#fff;}
-.wrap{max-width:1280px;margin:0 auto;padding:0 2.5rem;position:relative;z-index:2;}
-section{padding:9rem 0;position:relative;z-index:2;}
-@media(max-width:768px){section{padding:5.5rem 0;} .wrap{padding:0 1.35rem;}}
-h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.015em;color:var(--text);}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:'Inter',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;user-select:none;}
+.hud-font{font-family:'Orbitron',sans-serif;}
 .mono{font-family:'JetBrains Mono',monospace;}
-.grad-text{background:var(--grad);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradmove 8s ease-in-out infinite;}
+canvas#scene{position:fixed;inset:0;display:block;}
+
+/* ============ SCANLINES / VIGNETTE ============ */
+#crt{position:fixed;inset:0;z-index:5;pointer-events:none;background:
+  repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.14) 3px),
+  radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.55) 100%);
+  mix-blend-mode:normal;
+}
+#chroma{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at 50% 50%, rgba(0,240,255,.03), rgba(255,46,154,.03) 70%);}
+
+/* ============ START SCREEN ============ */
+#start-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#0B0A22 0%,#04030A 70%);transition:opacity .8s ease,visibility .8s ease;}
+#start-screen.hide{opacity:0;visibility:hidden;pointer-events:none;}
+.start-inner{text-align:center;max-width:640px;padding:2rem;}
+.start-badge{display:inline-flex;align-items:center;gap:.6rem;padding:.5rem 1.1rem;border:1px solid var(--line);border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan);margin-bottom:2rem;letter-spacing:.08em;}
+.start-badge .d{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:blinkdot 1.4s infinite;}
+@keyframes blinkdot{50%{opacity:.2;}}
+.start-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.2rem,7vw,4.2rem);line-height:1.05;letter-spacing:.02em;
+  background:linear-gradient(100deg,var(--cyan),var(--violet) 40%,var(--magenta) 75%,var(--yellow));
+  -webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 220%;animation:gradmove 6s ease-in-out infinite;
+  text-shadow:0 0 60px rgba(0,240,255,.25);
+}
 @keyframes gradmove{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.start-sub{color:var(--text-soft);font-size:1rem;font-weight:300;margin:1.4rem auto 2.4rem;max-width:46ch;}
+.start-sub b{color:var(--text);font-weight:600;}
+#start-btn{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.06em;padding:1.05rem 2.6rem;border-radius:14px;border:1px solid var(--cyan);background:rgba(0,240,255,.08);color:var(--cyan);cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden;}
+#start-btn:hover{background:rgba(0,240,255,.18);box-shadow:0 0 40px rgba(0,240,255,.35);transform:translateY(-2px);}
+#start-btn::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);animation:sheen 3s ease-in-out infinite;}
+@keyframes sheen{0%{left:-60%;}100%{left:130%;}}
+.start-controls{display:flex;justify-content:center;gap:2.2rem;margin-top:2.6rem;flex-wrap:wrap;}
+.ctrl-hint{display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.key{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-soft);border:1px solid var(--line);border-radius:6px;padding:.35rem .6rem;background:rgba(0,240,255,.04);}
+.ctrl-hint span{font-size:.66rem;color:var(--text-soft);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;}
+.skip-link{display:block;margin-top:2.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-dim,#55597a);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+.skip-link:hover{color:var(--cyan);}
 
-/* ============ CUSTOM CURSOR ============ */
-#cursor-dot,#cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9998;border-radius:50%;transform:translate(-50%,-50%);}
-#cursor-dot{width:6px;height:6px;background:#fff;}
-#cursor-ring{width:34px;height:34px;border:1px solid rgba(255,255,255,.35);transition:width .25s var(--ease),height .25s var(--ease),border-color .25s,background .25s;}
-#cursor-ring.hover{width:64px;height:64px;background:rgba(139,92,246,.12);border-color:var(--violet);}
-@media(hover:none){#cursor-dot,#cursor-ring{display:none;}}
+/* ============ HUD ============ */
+#hud{position:fixed;inset:0;z-index:20;pointer-events:none;}
+.hud-topbar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:1.3rem 1.6rem;}
+.hud-panel{background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(14px);padding:.85rem 1.2rem;pointer-events:auto;}
+.hud-id{display:flex;align-items:center;gap:.7rem;}
+.hud-id .avatar{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),var(--magenta));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:.85rem;color:#04030A;}
+.hud-id-text .name{font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.03em;}
+.hud-id-text .sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-soft);}
 
-/* ============ CANVAS BG (particules hero) ============ */
-#particles{position:absolute;inset:0;width:100%;height:100%;}
+.hud-score{display:flex;align-items:center;gap:.9rem;}
+.hud-score .label{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-soft);letter-spacing:.1em;}
+.hud-score .bar{width:130px;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;}
+.hud-score .bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--magenta));transition:width .5s ease;}
+.hud-score .num{font-family:'Orbitron',sans-serif;font-weight:700;font-size:.8rem;color:var(--cyan);}
 
-/* ============ AMBIENT ============ */
-.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-.spotlight{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(139,92,246,.08),transparent 60%);}
-.mesh-blob{position:fixed;border-radius:50%;filter:blur(140px);pointer-events:none;z-index:0;opacity:.28;}
-.mesh-blob.m1{width:560px;height:560px;background:var(--violet);top:-15%;left:-10%;animation:drift 24s ease-in-out infinite;}
-.mesh-blob.m2{width:500px;height:500px;background:var(--cyan);bottom:-10%;right:-8%;animation:drift 28s ease-in-out infinite reverse;}
-.mesh-blob.m3{width:400px;height:400px;background:var(--pink);top:40%;left:45%;opacity:.14;animation:drift 20s ease-in-out infinite;}
-@keyframes drift{0%,100%{transform:translate(0,0);}50%{transform:translate(70px,-50px);}}
+.hud-mute{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;}
 
-/* ============ REVEAL ============ */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
-.reveal.visible{opacity:1;transform:none;}
-.stagger.visible > *{opacity:1;transform:none;}
-.stagger > *{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
-.stagger.visible > *:nth-child(1){transition-delay:.05s;}
-.stagger.visible > *:nth-child(2){transition-delay:.12s;}
-.stagger.visible > *:nth-child(3){transition-delay:.19s;}
-.stagger.visible > *:nth-child(4){transition-delay:.26s;}
-.stagger.visible > *:nth-child(5){transition-delay:.33s;}
-.stagger.visible > *:nth-child(6){transition-delay:.4s;}
+.hud-bottombar{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:1.3rem 1.6rem;}
+#minimap{border-radius:14px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);}
+.hud-legend{display:flex;gap:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--text-soft);}
+.hud-legend .lk{border:1px solid var(--line);border-radius:5px;padding:.25rem .5rem;margin-right:.3rem;color:var(--cyan);}
 
-/* ============ PROGRESS ============ */
-#progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--grad);z-index:1000;}
+#crosshair{position:absolute;top:50%;left:50%;width:22px;height:22px;transform:translate(-50%,-50%);pointer-events:none;}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(0,240,255,.55);}
+#crosshair::before{left:50%;top:0;width:1px;height:100%;transform:translateX(-50%);}
+#crosshair::after{top:50%;left:0;height:1px;width:100%;transform:translateY(-50%);}
 
-/* ============ NAV ============ */
-header{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(3,3,8,.6);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);}
-nav.wrap{display:flex;align-items:center;justify-content:space-between;height:76px;}
-.brand{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;display:flex;align-items:center;gap:.6rem;}
-.brand-mark{width:30px;height:30px;border-radius:9px;background:var(--grad);background-size:200% 200%;animation:gradmove 6s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:#08080f;}
-.nav-links{display:flex;gap:2.3rem;list-style:none;}
-.nav-links a{font-size:.83rem;font-weight:500;color:var(--text-soft);position:relative;padding-bottom:4px;transition:color .3s;}
-.nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);}
-.nav-links a:hover,.nav-links a.active{color:var(--text);}
-.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
-.nav-right{display:flex;align-items:center;gap:1rem;}
+.prompt-pill{position:absolute;top:64%;left:50%;transform:translate(-50%,0) scale(.9);padding:.6rem 1.1rem;border-radius:999px;background:var(--glass);border:1px solid var(--cyan);font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan);opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;}
+.prompt-pill.show{opacity:1;transform:translate(-50%,0) scale(1);}
 
-.btn{font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;padding:.75rem 1.5rem;border-radius:999px;display:inline-flex;align-items:center;gap:.55rem;transition:transform .3s var(--ease-spring);border:1px solid var(--line-strong);white-space:nowrap;position:relative;}
-.btn-ghost{background:var(--glass);color:var(--text);backdrop-filter:blur(10px);}
-.btn-ghost:hover{background:var(--glass-hover);border-color:var(--text-soft);}
-.btn-grad{position:relative;background:var(--bg);color:#fff;border:none;z-index:0;}
-.btn-grad::before{content:'';position:absolute;inset:0;border-radius:999px;padding:1.5px;background:var(--grad);background-size:200% 200%;animation:gradmove 5s ease-in-out infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;z-index:-1;}
-.btn-grad::after{content:'';position:absolute;inset:1.5px;border-radius:999px;background:var(--bg);z-index:-1;}
-.btn-grad:hover{transform:translateY(-2px) scale(1.02);}
-.btn-solid{background:var(--grad);background-size:200% 200%;color:#08080f;font-weight:700;border:none;animation:gradmove 6s ease-in-out infinite;}
-.btn-solid:hover{transform:translateY(-2px) scale(1.02);}
-.magnetic{will-change:transform;}
-
-.menu-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;}
-.menu-toggle span{width:22px;height:1px;background:var(--text);}
-.mobile-menu{display:none;flex-direction:column;gap:1.3rem;padding:1.4rem 1.4rem 1.8rem;border-top:1px solid var(--line);background:var(--bg-2);}
-.mobile-menu.open{display:flex;}
-.mobile-menu a{font-size:1rem;color:var(--text);font-weight:500;}
-
-/* ============ GLASS CARD ============ */
-.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(20px);}
-
-/* ============ EYEBROW ============ */
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;gap:.7rem;margin-bottom:1.3rem;}
-.eyebrow::before{content:'';width:24px;height:1px;background:var(--grad);}
-.eyebrow b{color:var(--cyan);font-weight:600;}
-
-/* ============ HERO ============ */
-#hero{padding-top:11.5rem;padding-bottom:6rem;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:4rem;align-items:center;width:100%;}
-.status-pill{display:inline-flex;align-items:center;gap:.65rem;padding:.5rem 1.1rem;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-soft);margin-bottom:2rem;}
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);position:relative;}
-.status-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--ok);animation:pulse 2.2s ease-out infinite;}
-@keyframes pulse{0%{transform:scale(.7);opacity:.8;}100%{transform:scale(2.6);opacity:0;}}
-.hero-title{font-size:clamp(2.7rem,5.6vw,4.6rem);line-height:1.04;font-weight:800;max-width:15ch;}
-.hero-sub{font-size:1.08rem;color:var(--text-soft);max-width:48ch;margin:1.8rem 0 2.5rem;font-weight:300;}
-.hero-sub strong{color:var(--text);font-weight:600;}
-.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.4rem;}
-.bento-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;}
-.bento-stat{padding:1.3rem 1.1rem;border-radius:16px;position:relative;overflow:hidden;}
-.bento-stat .bs-num{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:800;display:flex;align-items:baseline;gap:.15rem;}
-.bento-stat .bs-num .plus{font-size:.9rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.bento-stat .bs-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-top:.4rem;}
-
-/* HERO VISUAL — glass HUD stack */
-.hud{position:relative;aspect-ratio:1/1.02;}
-.hud-card{position:absolute;border-radius:18px;padding:1.3rem;box-shadow:var(--shadow);}
-.hud-main{inset:8% 6% 8% 6%;display:flex;flex-direction:column;justify-content:space-between;}
-.hud-top{display:flex;justify-content:space-between;align-items:center;}
-.hud-avatar-ring{width:64px;height:64px;border-radius:50%;padding:2.5px;background:var(--grad);background-size:200% 200%;animation:gradmove 6s ease-in-out infinite;}
-.hud-avatar-ring .inner{width:100%;height:100%;border-radius:50%;overflow:hidden;background:var(--bg-2);display:flex;align-items:center;justify-content:center;}
-.hud-avatar-ring img{width:100%;height:100%;object-fit:cover;}
-.hud-avatar-ring .initials{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.3rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.hud-live{display:flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--ok);}
-.hud-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;margin-top:1rem;}
-.hud-role{font-size:.8rem;color:var(--text-soft);margin-top:.2rem;}
-.hud-metrics{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.4rem;}
-.hud-metric{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:.75rem .85rem;}
-.hud-metric b{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.15rem;}
-.hud-metric span{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text-dim);letter-spacing:.05em;}
-.hud-wave{margin-top:1.2rem;height:44px;}
-.hud-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.2rem;}
-.hud-tags span{font-family:'JetBrains Mono',monospace;font-size:.6rem;border:1px solid var(--line-strong);padding:.28rem .6rem;border-radius:999px;color:var(--text-soft);}
-.hud-float{width:38%;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;animation:floaty 5s ease-in-out infinite;}
-.hud-float.f1{top:-6%;right:-8%;animation-delay:0s;}
-.hud-float.f2{bottom:-4%;left:-10%;animation-delay:-2.5s;}
-.hud-float .hf-status{display:flex;align-items:center;gap:.4rem;color:var(--ok);margin-bottom:.5rem;}
-.hud-float .hf-bar{height:4px;border-radius:3px;background:rgba(255,255,255,.08);margin-bottom:.4rem;overflow:hidden;}
-.hud-float .hf-bar i{display:block;height:100%;background:var(--grad);}
-@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
-
-@media(max-width:900px){.bento-stats{grid-template-columns:repeat(2,1fr);}}
-
-/* ============ MARQUEE ============ */
-.marquee-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.6rem 0;overflow:hidden;position:relative;z-index:2;}
-.marquee-track{display:flex;width:max-content;gap:3.5rem;animation:marquee 26s linear infinite;}
-@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.marquee-track span{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--text-dim);white-space:nowrap;display:flex;align-items:center;gap:.6rem;}
-.marquee-track span::before{content:'◆';color:var(--violet);font-size:.6rem;}
-
-/* ============ SECTION HEAD ============ */
-.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;margin-bottom:3.6rem;}
-.section-head h2{font-size:clamp(2rem,3.8vw,2.9rem);max-width:18ch;}
-.section-head .lead{max-width:38ch;color:var(--text-soft);font-size:.95rem;font-weight:300;padding-bottom:.35rem;}
-@media(max-width:800px){.section-head{flex-direction:column;align-items:flex-start;gap:1.1rem;}}
-
-/* ============ PROFIL ============ */
-.profil-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:4rem;}
-.profil-grid p{color:var(--text-soft);font-weight:300;font-size:1rem;margin-bottom:1.35rem;max-width:58ch;}
-.profil-grid strong{color:var(--text);font-weight:600;}
-.facts{padding:1.8rem;}
-.fact-row{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 0;border-bottom:1px solid var(--line);font-size:.86rem;}
-.fact-row:last-child{border-bottom:none;}
-.fact-row .k{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);padding-top:.15rem;}
-.fact-row .v{text-align:right;font-weight:500;}
-.fact-row a{border-bottom:1px solid transparent;transition:border-color .3s,color .3s;}
-.fact-row a:hover{border-color:var(--cyan);color:var(--cyan);}
-
-.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem;}
-.principle{padding:1.7rem;border-radius:18px;position:relative;overflow:hidden;transition:transform .4s var(--ease);}
-.principle:hover{transform:translateY(-5px);}
-.principle::before{content:'';position:absolute;top:0;left:1.7rem;right:1.7rem;height:1px;background:var(--grad);}
-.principle .pn{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--cyan);margin:1rem 0 .9rem;}
-.principle h3{font-size:1.08rem;margin-bottom:.6rem;font-weight:600;}
-.principle p{color:var(--text-soft);font-size:.86rem;font-weight:300;max-width:32ch;}
-@media(max-width:900px){.profil-grid,.principles{grid-template-columns:1fr;}}
-
-/* ============ ORBIT SKILLS ============ */
-#stack{position:relative;}
-.orbit-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:4rem;align-items:center;}
-.orbit-stage{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
-.orbit-core{width:110px;height:110px;border-radius:50%;background:var(--grad);background-size:200% 200%;animation:gradmove 6s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.5rem;color:#08080f;box-shadow:0 0 70px rgba(139,92,246,.5);z-index:3;position:relative;}
-.orbit-ring{position:absolute;border:1px solid var(--line-strong);border-radius:50%;}
-.orbit-ring.r1{width:56%;height:56%;animation:spin 26s linear infinite;}
-.orbit-ring.r2{width:80%;height:80%;animation:spin 40s linear infinite reverse;}
-.orbit-ring.r3{width:100%;height:100%;animation:spin 55s linear infinite;}
-@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.orbit-badge{position:absolute;top:50%;left:50%;width:0;height:0;animation:spin var(--dur) linear infinite;}
-.orbit-badge .badge-inner{position:absolute;background:var(--glass);border:1px solid var(--line-strong);backdrop-filter:blur(10px);padding:.5rem .85rem;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:.68rem;white-space:nowrap;transform:translate(-50%,-50%) translateY(-100px);}
-.orbit-badge.ring2{animation-duration:var(--dur);}
-.orbit-badge.ring2 .badge-inner{transform:translate(-50%,-50%) translateY(-142px);}
-.orbit-badge.ring3 .badge-inner{transform:translate(-50%,-50%) translateY(-178px);}
-@media(max-width:900px){
-  .orbit-badge .badge-inner{transform:translate(-50%,-50%) translateY(-72px);}
-  .orbit-badge.ring2 .badge-inner{transform:translate(-50%,-50%) translateY(-102px);}
-  .orbit-badge.ring3 .badge-inner{transform:translate(-50%,-50%) translateY(-128px);}
+/* Mobile virtual controls */
+#touch-controls{position:fixed;inset:0;z-index:22;pointer-events:none;display:none;}
+#touch-joystick{position:absolute;bottom:2rem;left:2rem;width:120px;height:120px;border-radius:50%;border:1px solid var(--line);background:rgba(0,240,255,.05);pointer-events:auto;}
+#touch-joystick .nub{position:absolute;top:50%;left:50%;width:50px;height:50px;border-radius:50%;background:rgba(0,240,255,.25);border:1px solid var(--cyan);transform:translate(-50%,-50%);}
+#touch-boost{position:absolute;bottom:2.4rem;right:2rem;width:78px;height:78px;border-radius:50%;border:1px solid var(--magenta);background:rgba(255,46,154,.1);pointer-events:auto;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--magenta);text-align:center;}
+@media(max-width:820px), (pointer:coarse){
+  #touch-controls{display:block;}
+  .hud-legend{display:none;}
 }
 
-.stack-bento{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
-.stack-card{padding:1.5rem;border-radius:16px;transition:transform .4s var(--ease),border-color .4s;}
-.stack-card:hover{transform:translateY(-4px);border-color:var(--violet);}
-.stack-card h3{font-size:.98rem;margin-bottom:.9rem;font-weight:600;display:flex;align-items:center;gap:.5rem;}
-.stack-card h3::before{content:'';width:8px;height:8px;border-radius:2px;background:var(--grad);}
-.pill-row{display:flex;flex-wrap:wrap;gap:.4rem;}
-.pill-row span{font-family:'JetBrains Mono',monospace;font-size:.65rem;border:1px solid var(--line-strong);padding:.28rem .62rem;border-radius:999px;color:var(--text-soft);transition:all .3s;}
-.pill-row span:hover{border-color:var(--cyan);color:var(--cyan);}
-@media(max-width:900px){.orbit-wrap{grid-template-columns:1fr;}.orbit-stage{max-width:340px;margin:0 auto;}}
+/* ============ SECTION MODAL ============ */
+#modal-overlay{position:fixed;inset:0;z-index:60;background:rgba(2,2,8,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s ease;}
+#modal-overlay.show{opacity:1;visibility:visible;}
+#modal-panel{width:min(560px,100%);max-height:82vh;overflow-y:auto;background:linear-gradient(160deg,rgba(15,12,34,.92),rgba(6,5,16,.96));border:1px solid var(--line);border-radius:22px;padding:2.2rem;transform:translateY(30px) scale(.96);transition:transform .45s cubic-bezier(.2,1,.3,1);box-shadow:0 60px 120px -40px rgba(0,0,0,.8);}
+#modal-overlay.show #modal-panel{transform:translateY(0) scale(1);}
+.modal-tag{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.14em;color:var(--ok);margin-bottom:1rem;}
+.modal-tag .d{width:6px;height:6px;border-radius:50%;background:var(--ok);}
+#modal-title{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:1.2rem;letter-spacing:.01em;
+  background:linear-gradient(100deg,var(--cyan),var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent;}
+#modal-body{font-size:.92rem;color:var(--text-soft);font-weight:300;line-height:1.75;}
+#modal-body p{margin-bottom:1rem;}
+#modal-body strong{color:var(--text);font-weight:600;}
+#modal-body ul{list-style:none;margin:.8rem 0 1.2rem;}
+#modal-body li{position:relative;padding-left:1.3rem;margin-bottom:.55rem;}
+#modal-body li::before{content:'▸';position:absolute;left:0;color:var(--cyan);}
+#modal-body .tag-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem;}
+#modal-body .tag-row span{font-family:'JetBrains Mono',monospace;font-size:.62rem;border:1px solid var(--line);padding:.25rem .6rem;border-radius:999px;color:var(--cyan);}
+#modal-body .entry{margin-bottom:1.3rem;padding-bottom:1.3rem;border-bottom:1px solid rgba(255,255,255,.06);}
+#modal-body .entry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+#modal-body .entry .e-head{display:flex;justify-content:space-between;gap:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--yellow);margin-bottom:.3rem;}
+#modal-body .entry h4{font-family:'Orbitron',sans-serif;font-size:.98rem;color:var(--text);margin-bottom:.15rem;}
+#modal-body .cta-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.2rem;}
+#modal-body .cta-links a{font-family:'JetBrains Mono',monospace;font-size:.76rem;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--cyan);color:var(--cyan);transition:all .3s;}
+#modal-body .cta-links a:hover{background:rgba(0,240,255,.12);}
+#modal-close{margin-top:1.6rem;width:100%;padding:.95rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);font-family:'Orbitron',sans-serif;font-size:.78rem;letter-spacing:.05em;cursor:pointer;transition:all .3s;}
+#modal-close:hover{border-color:var(--cyan);color:var(--cyan);}
 
-/* ============ EXPÉRIENCE — TIMELINE LUMINEUSE ============ */
-.timeline{position:relative;padding-left:2.6rem;}
-.timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:linear-gradient(180deg,var(--violet),var(--cyan),var(--pink),transparent);}
-.tl-item{position:relative;padding-bottom:3.2rem;}
-.tl-item:last-child{padding-bottom:0;}
-.tl-item::before{content:'';position:absolute;left:-2.6rem;top:6px;width:13px;height:13px;border-radius:50%;background:var(--bg);border:2px solid var(--violet);box-shadow:0 0 0 4px rgba(139,92,246,.12);}
-.tl-item.current::before{border-color:var(--ok);box-shadow:0 0 0 4px rgba(52,228,166,.15);}
-.tl-card{padding:1.8rem 2rem;border-radius:18px;}
-.tl-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.9rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
-.tl-date{color:var(--cyan);}
-.tl-badge{color:var(--ok);background:rgba(52,228,166,.1);padding:.15rem .55rem;border-radius:999px;}
-.tl-role{font-size:1.3rem;font-weight:700;margin:.5rem 0 .3rem;}
-.tl-company{color:var(--pink);font-weight:600;}
-.tl-loc{font-size:.78rem;color:var(--text-dim);margin-bottom:1.1rem;}
-.tl-card ul{list-style:none;margin-bottom:1.2rem;}
-.tl-card li{position:relative;padding-left:1.4rem;margin-bottom:.55rem;font-size:.92rem;color:var(--text-soft);font-weight:300;max-width:70ch;}
-.tl-card li::before{content:'';position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:1px;background:var(--grad);}
-.tech-row{display:flex;flex-wrap:wrap;gap:.5rem;}
-.tech-row span{font-family:'JetBrains Mono',monospace;font-size:.66rem;border:1px solid var(--line-strong);padding:.28rem .65rem;border-radius:999px;color:var(--text-soft);}
+/* ============ VICTORY SCREEN ============ */
+#victory-overlay{position:fixed;inset:0;z-index:80;background:radial-gradient(ellipse at 50% 40%,rgba(0,240,255,.08),rgba(2,2,8,.92) 65%);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .8s ease,visibility .8s ease;padding:1.5rem;}
+#victory-overlay.show{opacity:1;visibility:visible;}
+.victory-inner{max-width:560px;text-align:center;}
+.victory-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:1rem;
+  background:linear-gradient(100deg,var(--yellow),var(--magenta),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 220%;animation:gradmove 5s ease-in-out infinite;}
+.victory-sub{color:var(--text-soft);font-size:.95rem;font-weight:300;margin-bottom:2.2rem;max-width:44ch;margin-left:auto;margin-right:auto;}
+.victory-ctas{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;}
+.v-btn{font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;padding:.9rem 1.6rem;border-radius:12px;letter-spacing:.03em;transition:all .3s;}
+.v-btn-primary{background:linear-gradient(100deg,var(--cyan),var(--magenta));color:#04030A;}
+.v-btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px -12px rgba(0,240,255,.45);}
+.v-btn-ghost{border:1px solid var(--line);color:var(--text);}
+.v-btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+.victory-replay{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+.victory-replay:hover{color:var(--cyan);}
 
-/* ============ PROJETS — 3D TILT ============ */
-.proj{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;padding:4.5rem 0;border-bottom:1px solid var(--line);}
-.proj:first-of-type{padding-top:0;}
-.proj:last-of-type{border-bottom:none;padding-bottom:0;}
-.proj:nth-of-type(even) .tilt-wrap{order:2;}
-.proj-class{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--text-dim);margin-bottom:1rem;}
-.proj-class b{color:var(--cyan);font-weight:500;}
-.proj h3{font-size:clamp(1.5rem,2.6vw,1.95rem);margin-bottom:.9rem;max-width:22ch;}
-.proj p.desc{color:var(--text-soft);font-weight:300;font-size:.95rem;margin-bottom:1.4rem;max-width:52ch;}
-.proj .feature-list{list-style:none;margin-bottom:1.4rem;}
-.proj .feature-list li{position:relative;padding-left:1.3rem;margin-bottom:.5rem;font-size:.87rem;color:var(--text-soft);font-weight:300;}
-.proj .feature-list li::before{content:'▸';position:absolute;left:0;color:var(--violet);}
-.proj-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;border-bottom:1px solid var(--text);padding-bottom:.3rem;transition:gap .3s var(--ease),color .3s,border-color .3s;}
-.proj-link:hover{gap:.9rem;color:var(--cyan);border-color:var(--cyan);}
-
-.tilt-wrap{perspective:1400px;}
-.tilt-card{aspect-ratio:4/3.1;border-radius:20px;position:relative;overflow:hidden;box-shadow:var(--shadow);transition:transform .1s linear;transform-style:preserve-3d;}
-.tilt-sheen{position:absolute;inset:0;background:radial-gradient(circle at var(--sx,50%) var(--sy,50%),rgba(255,255,255,.12),transparent 55%);pointer-events:none;}
-.tilt-bar{display:flex;gap:6px;padding:.9rem 1.1rem;border-bottom:1px solid var(--line);position:relative;z-index:1;}
-.tilt-bar i{width:8px;height:8px;border-radius:50%;background:var(--line-strong);}
-.tilt-body{padding:1.4rem;height:calc(100% - 38px);position:relative;z-index:1;}
-
-.wallet-mock .wm-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem;margin-bottom:.6rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;}
-.wallet-mock .wm-row b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:.9rem;}
-.wallet-mock .wm-tag{font-size:.6rem;color:var(--ok);background:rgba(52,228,166,.1);padding:.15rem .5rem;border-radius:999px;}
-.wallet-mock .wm-chart{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:1rem;}
-.wallet-mock .wm-chart div{flex:1;border-radius:3px 3px 0 0;background:var(--grad);opacity:.85;}
-
-.food-mock .fm-hero{border-radius:12px;padding:1rem;margin-bottom:.8rem;background:rgba(255,255,255,.03);border:1px solid var(--line);}
-.food-mock .fm-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--gold);margin-bottom:.4rem;}
-.food-mock .fm-hero h4{font-family:'Space Grotesk',sans-serif;font-size:1rem;}
-.food-mock .fm-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;}
-.food-mock .fm-card{aspect-ratio:1/1;border-radius:10px;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(34,211,238,.12));border:1px solid var(--line);}
-
-.wave-mock .wv-status{display:flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ok);margin-bottom:1rem;}
-.wave-mock .wv-line{height:6px;border-radius:4px;background:rgba(255,255,255,.06);margin-bottom:.6rem;}
-.wave-mock .wv-line.w1{width:80%;} .wave-mock .wv-line.w2{width:55%;} .wave-mock .wv-line.w3{width:65%;background:var(--grad);}
-.wave-mock .wv-amount{margin-top:1.1rem;font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.wave-mock .wv-sub{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-dim);}
-
-.api-mock .mock-body{font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.9;color:var(--text-soft);}
-.api-mock .t-prompt{color:var(--gold);}
-.api-mock .t-str{color:var(--ok);}
-.api-mock .t-ok{color:#08080f;background:var(--ok);padding:.1rem .4rem;border-radius:4px;font-weight:600;}
-
-.pos-mock .pos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem;}
-.pos-mock .pos-item{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-soft);}
-.pos-mock .pos-total{border-top:1px dashed var(--line-strong);padding-top:.8rem;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.8rem;}
-.pos-mock .pos-total b{color:var(--ok);font-size:1.05rem;}
-
-.map-mock svg{width:100%;height:100%;display:block;}
-
-@media(max-width:900px){.proj,.proj:nth-of-type(even) .tilt-wrap{grid-template-columns:1fr;order:initial;}.proj{gap:2rem;}}
-
-/* ============ AUTRES ============ */
-.grid-others{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
-.other-card{padding:1.7rem;border-radius:16px;transition:transform .4s var(--ease),border-color .4s;}
-.other-card:hover{transform:translateY(-5px);border-color:var(--pink);}
-.other-card .oc-tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;color:var(--pink);margin-bottom:.9rem;display:block;}
-.other-card h3{font-size:1.05rem;margin-bottom:.6rem;font-weight:600;}
-.other-card p{font-size:.83rem;color:var(--text-soft);font-weight:300;}
-@media(max-width:900px){.grid-others{grid-template-columns:1fr;}}
-
-/* ============ DISTINCTIONS ============ */
-.award-row{display:grid;grid-template-columns:130px 1fr 170px;gap:2rem;align-items:start;padding:1.9rem 2rem;border-radius:16px;margin-bottom:1rem;}
-.award-row .ar-date{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);padding-top:.3rem;}
-.award-row h3{font-size:1.1rem;margin-bottom:.5rem;font-weight:600;}
-.award-row p{font-size:.87rem;color:var(--text-soft);font-weight:300;max-width:56ch;}
-.award-row .ar-rank{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-align:right;color:var(--ok);padding-top:.3rem;}
-@media(max-width:800px){.award-row{grid-template-columns:1fr;gap:.5rem;}.award-row .ar-rank{text-align:left;}}
-
-/* ============ ÉDUCATION ============ */
-.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;}
-.edu-list{list-style:none;}
-.edu-list li{padding:1rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1.4rem;font-size:.9rem;}
-.edu-list li:last-child{border-bottom:none;}
-.edu-list .e-title{font-weight:600;max-width:34ch;}
-.edu-list .e-sub{display:block;font-size:.78rem;color:var(--text-dim);font-weight:300;margin-top:.2rem;}
-.edu-list .e-year{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--gold);white-space:nowrap;padding-top:.15rem;}
-@media(max-width:800px){.edu-grid{grid-template-columns:1fr;gap:.5rem;}}
-
-/* ============ TÉMOIGNAGES ============ */
-.testi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;}
-.testi-card{padding:2.1rem;border-radius:18px;}
-.testi-card .tq{font-family:'Space Grotesk',sans-serif;font-size:2.3rem;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:.4;margin-bottom:.7rem;display:block;}
-.testi-card p{font-size:.94rem;color:var(--text-soft);font-weight:300;font-style:italic;margin-bottom:1.5rem;max-width:48ch;}
-.testi-author{display:flex;align-items:center;gap:.85rem;}
-.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.8rem;color:#08080f;}
-.testi-name{font-weight:600;font-size:.88rem;}
-.testi-role{font-size:.72rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
-@media(max-width:800px){.testi-grid{grid-template-columns:1fr;}}
-
-/* ============ CTA ============ */
-#cta{text-align:center;}
-#cta h2{font-size:clamp(2.1rem,4.8vw,3.8rem);max-width:22ch;margin:0 auto 1.5rem;line-height:1.14;}
-#cta p{color:var(--text-soft);font-weight:300;max-width:50ch;margin:0 auto 2.4rem;}
-#cta .hero-ctas{justify-content:center;margin-bottom:0;}
-
-/* ============ CONTACT ============ */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
-.contact-list{list-style:none;}
-.contact-list li{display:flex;justify-content:space-between;gap:1.4rem;padding:1.3rem 0;border-bottom:1px solid var(--line);align-items:baseline;}
-.contact-list li:first-child{border-top:1px solid var(--line-strong);}
-.contact-list .cl-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);}
-.contact-list .cl-value{font-size:1rem;font-weight:600;text-align:right;}
-.contact-list a{border-bottom:1px solid transparent;transition:border-color .3s,color .3s;}
-.contact-list a:hover{border-color:var(--cyan);color:var(--cyan);}
-.available-tag{color:var(--ok);}
-.cal-card{padding:1.5rem;border-radius:18px;}
-.cal-card h4{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1.3rem;font-weight:500;}
-@media(max-width:900px){.contact-grid{grid-template-columns:1fr;}.contact-list .cl-value{text-align:left;}.contact-list li{flex-direction:column;gap:.3rem;}}
-
-/* ============ FOOTER ============ */
-footer{border-top:1px solid var(--line);padding:2.6rem 0;position:relative;z-index:2;}
-.footer-grid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.4rem;}
-.footer-links{display:flex;gap:1.8rem;list-style:none;}
-.footer-links a{font-size:.78rem;color:var(--text-soft);transition:color .3s;}
-.footer-links a:hover{color:var(--cyan);}
-.footer-copy{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-dim);}
-
-@media(max-width:900px){
-  .nav-links{display:none;}
-  .menu-toggle{display:flex;}
-  .nav-right .btn-solid{display:none;}
-  .hero-grid{grid-template-columns:1fr;}
-  .hud{order:-1;max-width:440px;margin:0 auto 1rem;}
-}
-@media(prefers-reduced-motion:reduce){
-  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
-  body{cursor:auto;}
-  #cursor-dot,#cursor-ring{display:none;}
-}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;}}
 </style>
 </head>
 <body>
 
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
-<div id="progress"></div>
-<div class="grain"></div>
-<div class="spotlight" id="spotlight"></div>
-<div class="mesh-blob m1"></div>
-<div class="mesh-blob m2"></div>
-<div class="mesh-blob m3"></div>
+<canvas id="scene"></canvas>
+<div id="chroma"></div>
+<div id="crt"></div>
 
-<!-- ═══ HEADER ═══ -->
-<header>
-  <nav class="wrap">
-    <a href="#hero" class="brand"><span class="brand-mark">DG</span> Daniel Guedegbe</a>
-    <ul class="nav-links">
-      <li><a href="#profil">Profil</a></li>
-      <li><a href="#stack">Stack</a></li>
-      <li><a href="#parcours">Parcours</a></li>
-      <li><a href="#travaux">Projets</a></li>
-      <li><a href="#distinctions">Distinctions</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="https://wa.me/2250748733365" target="_blank" class="btn btn-ghost magnetic">WhatsApp</a>
-      <a href="#contact" class="btn btn-solid magnetic">Planifier un échange</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+<!-- ═══ ÉCRAN DE DÉMARRAGE ═══ -->
+<div id="start-screen">
+  <div class="start-inner">
+    <div class="start-badge"><span class="d"></span> SYSTEM://DANIEL_GUEDEGBE — EN LIGNE</div>
+    <h1 class="start-title hud-font">EXPLORE<br>LE SYSTÈME</h1>
+    <p class="start-sub">Pilotez un vaisseau à travers l'univers numérique de <b>Daniel Guedegbe</b>, Ingénieur Backend Python/Django. Traversez les 7 nœuds de données pour révéler profil, stack, parcours, projets et contact.</p>
+    <button id="start-btn" class="hud-font">▶ COMMENCER LA MISSION</button>
+    <div class="start-controls">
+      <div class="ctrl-hint"><span class="key">Z Q S D</span><span>ou flèches — déplacer</span></div>
+      <div class="ctrl-hint"><span class="key">MAJ</span><span>boost</span></div>
+      <div class="ctrl-hint"><span class="key">ESPACE / CTRL</span><span>monter / descendre</span></div>
     </div>
-  </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#profil">Profil</a>
-    <a href="#stack">Stack</a>
-    <a href="#parcours">Parcours</a>
-    <a href="#travaux">Projets</a>
-    <a href="#distinctions">Distinctions</a>
-    <a href="#contact">Contact</a>
-    <a href="https://wa.me/2250748733365" target="_blank">WhatsApp →</a>
+    <span class="skip-link" id="skip-link">Ignorer le jeu — voir le CV en texte simple →</span>
   </div>
-</header>
+</div>
 
-<main>
-  <!-- ═══ HERO ═══ -->
-  <section id="hero">
-    <canvas id="particles"></canvas>
-    <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <div class="status-pill glass reveal visible"><span class="status-dot"></span> Disponible remote / hybride · Abidjan, Côte d'Ivoire</div>
-          <h1 class="hero-title reveal visible">Ingénieur backend, <span class="grad-text">obsédé de Python</span> et d'architectures qui tiennent.</h1>
-          <p class="hero-sub reveal visible">Je m'appelle <strong>Daniel Guedegbe</strong>. Depuis plus de six ans je conçois des systèmes backend Django/DRF, des plateformes de paiement mobile et des architectures cloud pensées pour l'échelle — pas pour la démo.</p>
-          <div class="hero-ctas reveal visible">
-            <a href="#travaux" class="btn btn-solid magnetic">Voir les projets shippés</a>
-            <a href="https://drive.google.com/file/d/1WobBU8LyFQWqRjznG0AHsm00Cpl_dJgs/view?usp=sharing" target="_blank" class="btn btn-grad magnetic">Télécharger le CV</a>
-          </div>
-          <div class="bento-stats reveal visible">
-            <div class="bento-stat glass"><div class="bs-num"><span class="count" data-target="6">0</span><span class="plus">+</span></div><div class="bs-label">Années Python/Django</div></div>
-            <div class="bento-stat glass"><div class="bs-num"><span class="count" data-target="14">0</span><span class="plus">+</span></div><div class="bs-label">Projets livrés</div></div>
-            <div class="bento-stat glass"><div class="bs-num"><span class="count" data-target="3">0</span><span class="plus">+</span></div><div class="bs-label">Intégrations Wave</div></div>
-            <div class="bento-stat glass"><div class="bs-num"><span class="count" data-target="3">0</span></div><div class="bs-label">Distinctions</div></div>
-          </div>
-        </div>
-
-        <!-- HUD -->
-        <div class="hud reveal visible">
-          <div class="hud-card hud-main glass">
-            <div>
-              <div class="hud-top">
-                <div class="hud-avatar-ring"><div class="inner"><span class="initials">DG</span></div></div>
-                <div class="hud-live"><span class="status-dot" style="animation:none"></span> ONLINE</div>
-              </div>
-              <div class="hud-name">Daniel Guedegbe</div>
-              <div class="hud-role">Backend Engineer · Python / Django</div>
-            </div>
-            <div>
-              <div class="hud-metrics">
-                <div class="hud-metric"><b class="grad-text">99.9%</b><span>UPTIME MOYEN</span></div>
-                <div class="hud-metric"><b class="grad-text">&lt;120ms</b><span>LATENCE API</span></div>
-              </div>
-              <svg class="hud-wave" viewBox="0 0 300 44" preserveAspectRatio="none">
-                <path d="M0,30 L20,25 L40,32 L60,15 L80,22 L100,10 L120,20 L140,8 L160,18 L180,12 L200,24 L220,14 L240,20 L260,9 L280,16 L300,11" fill="none" stroke="url(#hgrad)" stroke-width="2"/>
-                <defs><linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="50%" stop-color="#22D3EE"/><stop offset="100%" stop-color="#F472B6"/></linearGradient></defs>
-              </svg>
-              <div class="hud-tags"><span>Django</span><span>DRF</span><span>Wave API</span><span>PostgreSQL</span></div>
-            </div>
-          </div>
-          <div class="hud-card hud-float f1 glass">
-            <div class="hf-status">● wave.checkout</div>
-            <div class="hf-bar"><i style="width:82%"></i></div>
-            <div style="color:var(--text-dim)">succeeded · 206 FCFA</div>
-          </div>
-          <div class="hud-card hud-float f2 glass">
-            <div class="hf-status">● deploy.production</div>
-            <div class="hf-bar"><i style="width:100%"></i></div>
-            <div style="color:var(--text-dim)">gunicorn ⟶ nginx ✓</div>
-          </div>
-        </div>
-      </div>
+<!-- ═══ HUD ═══ -->
+<div id="hud">
+  <div class="hud-topbar">
+    <div class="hud-panel hud-id">
+      <div class="avatar">DG</div>
+      <div class="hud-id-text"><div class="name hud-font">DANIEL GUEDEGBE</div><div class="sub">BACKEND ENGINEER · PYTHON/DJANGO</div></div>
     </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-wrap">
-    <div class="marquee-track">
-      <span>Python</span><span>Django</span><span>DRF</span><span>FastAPI</span><span>PostgreSQL</span><span>Redis</span><span>Celery</span><span>Docker</span><span>Wave API</span><span>Flutter</span><span>Clean Architecture</span>
-      <span>Python</span><span>Django</span><span>DRF</span><span>FastAPI</span><span>PostgreSQL</span><span>Redis</span><span>Celery</span><span>Docker</span><span>Wave API</span><span>Flutter</span><span>Clean Architecture</span>
+    <div class="hud-panel hud-score">
+      <div><div class="label">MODULES DÉCOUVERTS</div><div class="bar"><i id="score-bar"></i></div></div>
+      <div class="num hud-font" id="score-num">0/7</div>
+      <div class="hud-mute hud-panel" id="mute-btn" title="Couper le son">🔊</div>
     </div>
   </div>
-
-  <!-- ═══ PROFIL ═══ -->
-  <section id="profil">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>01</b> — profil</div><h2>Six années de rigueur, un langage.</h2></div>
-        <p class="lead">Un parcours construit autour d'une conviction : la valeur d'un logiciel se mesure à sa capacité à tourner sans interruption, longtemps après sa livraison.</p>
-      </div>
-      <div class="profil-grid">
-        <div class="reveal">
-          <p>Depuis plus de six ans, je conçois et je livre des plateformes logicielles qui tiennent leurs promesses <strong>en production</strong> — pas seulement en démonstration. Basé à Abidjan, au cœur de l'écosystème technologique ouest-africain, j'interviens aujourd'hui comme consultant backend pour <strong>Orange Liberia</strong> et comme développeur full stack pour <strong>Illigo</strong>, une plateforme de mobilité intelligente reposant sur une infrastructure IoT complexe.</p>
-          <p>Mon terrain de jeu, c'est l'architecture : Python, Django et FastAPI côté serveur, Flutter côté mobile, et une attention particulière portée à la Clean Architecture, au Domain-Driven Design et aux principes SOLID. J'aime les systèmes qui survivent à leur créateur — un code lisible, testé, documenté, pensé pour être repris par d'autres équipes.</p>
-          <p>Avant cela, j'ai dirigé pendant cinq ans le département IT de <strong>IIPEA</strong>, où j'ai piloté la conception d'un ERP scolaire complet, primé lors du Moov Africa CI StartUp Challenge 2025. J'ai également construit des systèmes de présence biométrique, des plateformes de paiement mobile s'appuyant sur l'API MTN Mobile Money, et plus récemment des plateformes e-commerce complètes intégrant le paiement <strong>Wave</strong> de bout en bout.</p>
-          <p>Ce qui me motive : transformer des besoins métiers complexes — paiements, logistique, conformité fiscale, gestion d'actifs — en produits numériques fiables, élégants et faciles à maintenir.</p>
-        </div>
-        <div class="facts glass reveal">
-          <div class="fact-row"><span class="k">nom</span><span class="v">Jean Marie Daniel Vianney Guedegbe</span></div>
-          <div class="fact-row"><span class="k">localisation</span><span class="v">Abidjan, Côte d'Ivoire 🇨🇮</span></div>
-          <div class="fact-row"><span class="k">disponibilité</span><span class="v" style="color:var(--ok)">● remote / hybride</span></div>
-          <div class="fact-row"><span class="k">langues</span><span class="v">FR (natif) · EN (pro.)</span></div>
-          <div class="fact-row"><span class="k">email</span><span class="v"><a href="mailto:danielguedegbe10027@gmail.com">danielguedegbe10027@gmail.com</a></span></div>
-          <div class="fact-row"><span class="k">tel</span><span class="v"><a href="https://wa.me/2250748733365">+225 07 48 73 33 65</a></span></div>
-          <div class="fact-row"><span class="k">github</span><span class="v"><a href="https://github.com/daniel10027" target="_blank">daniel10027</a></span></div>
-          <div class="fact-row"><span class="k">linkedin</span><span class="v"><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">daniel-guedegbe</a></span></div>
-        </div>
-      </div>
-
-      <div class="principles">
-        <div class="principle glass reveal"><div class="pn">PRINCIPE 01</div><h3>Clean Architecture par défaut</h3><p>Séparer les règles métier de l'infrastructure dès le premier commit.</p></div>
-        <div class="principle glass reveal"><div class="pn">PRINCIPE 02</div><h3>Le test avant la promesse</h3><p>Une fonctionnalité n'est terminée que lorsqu'elle est testée et documentée.</p></div>
-        <div class="principle glass reveal"><div class="pn">PRINCIPE 03</div><h3>Conçu pour l'Afrique, prêt pour le monde</h3><p>Connectivité variable, paiements mobiles : je conçois pour le terrain.</p></div>
-      </div>
+  <div id="crosshair"></div>
+  <div class="prompt-pill hud-font" id="prompt-pill">◉ APPROCHEZ POUR SCANNER</div>
+  <div class="hud-bottombar">
+    <canvas id="minimap" width="150" height="150"></canvas>
+    <div class="hud-legend">
+      <span><span class="lk">ZQSD</span>déplacer</span>
+      <span><span class="lk">MAJ</span>boost</span>
+      <span><span class="lk">ESPACE</span>monter</span>
+      <span><span class="lk">CTRL</span>descendre</span>
     </div>
-  </section>
-
-  <!-- ═══ STACK — ORBITE ═══ -->
-  <section id="stack">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>02</b> — stack</div><h2>Le bilan technique</h2></div>
-        <p class="lead">Les briques que j'assemble au quotidien, du langage jusqu'au déploiement en production.</p>
-      </div>
-      <div class="orbit-wrap reveal">
-        <div class="orbit-stage">
-          <div class="orbit-ring r1"></div>
-          <div class="orbit-ring r2"></div>
-          <div class="orbit-ring r3"></div>
-          <div class="orbit-core">DG</div>
-          <div class="orbit-badge" style="--dur:26s"><div class="badge-inner">Python</div></div>
-          <div class="orbit-badge" style="--dur:26s;animation-delay:-8.6s"><div class="badge-inner">Django</div></div>
-          <div class="orbit-badge" style="--dur:26s;animation-delay:-17.3s"><div class="badge-inner">DRF</div></div>
-          <div class="orbit-badge ring2" style="--dur:40s;animation-direction:reverse"><div class="badge-inner">Wave API</div></div>
-          <div class="orbit-badge ring2" style="--dur:40s;animation-direction:reverse;animation-delay:-13.3s"><div class="badge-inner">PostgreSQL</div></div>
-          <div class="orbit-badge ring2" style="--dur:40s;animation-direction:reverse;animation-delay:-26.6s"><div class="badge-inner">Docker</div></div>
-          <div class="orbit-badge ring3" style="--dur:55s"><div class="badge-inner">Flutter</div></div>
-          <div class="orbit-badge ring3" style="--dur:55s;animation-delay:-27.5s"><div class="badge-inner">Redis</div></div>
-        </div>
-        <div class="stack-bento">
-          <div class="stack-card glass"><h3>Langages</h3><div class="pill-row"><span>Python</span><span>JavaScript</span><span>Dart</span><span>SQL</span><span>Bash</span></div></div>
-          <div class="stack-card glass"><h3>Frameworks</h3><div class="pill-row"><span>Django</span><span>DRF</span><span>FastAPI</span><span>Flask</span><span>Next.js</span><span>Flutter</span></div></div>
-          <div class="stack-card glass"><h3>Données</h3><div class="pill-row"><span>PostgreSQL</span><span>MySQL</span><span>MongoDB</span><span>Redis</span></div></div>
-          <div class="stack-card glass"><h3>Infra &amp; DevOps</h3><div class="pill-row"><span>Docker</span><span>Nginx</span><span>Gunicorn</span><span>GitHub Actions</span><span>Ansible</span></div></div>
-          <div class="stack-card glass"><h3>Temps réel</h3><div class="pill-row"><span>Celery</span><span>MQTT</span><span>WebSockets</span><span>Channels</span></div></div>
-          <div class="stack-card glass"><h3>Paiements</h3><div class="pill-row"><span>Wave API</span><span>Webhooks HMAC</span><span>MTN MoMo</span><span>Multi-wallets</span></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ PARCOURS ═══ -->
-  <section id="parcours">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>03</b> — parcours</div><h2>Cinq engagements, une trajectoire</h2></div>
-        <p class="lead">Du conseil pour de grands groupes télécoms à la direction technique d'équipes produit.</p>
-      </div>
-      <div class="timeline reveal">
-        <div class="tl-item current">
-          <div class="tl-card glass">
-            <div class="tl-head"><span class="tl-date">SEPT. 2025 → PRÉSENT</span><span class="tl-badge">ACTUEL</span></div>
-            <div class="tl-role">Consultant Backend Developer</div>
-            <div class="tl-company">Orange Liberia</div>
-            <div class="tl-loc">Abidjan (remote)</div>
-            <ul>
-              <li>Microservices Python/Flask pour des systèmes critiques télécoms, haute disponibilité.</li>
-              <li>APIs REST robustes, interopérables avec des applications internes et inter-opérateurs.</li>
-              <li>Optimisation SQL Server &amp; NoSQL, déploiement automatisé via Docker/Ansible.</li>
-            </ul>
-            <div class="tech-row"><span>Python</span><span>Flask</span><span>Odoo</span><span>SQL Server</span><span>Docker</span></div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-card glass">
-            <div class="tl-head"><span class="tl-date">MAI 2025 → PRÉSENT</span></div>
-            <div class="tl-role">Développeur Backend Mobilité Intelligente</div>
-            <div class="tl-company">Illigo</div>
-            <div class="tl-loc">Abidjan (hybride)</div>
-            <ul>
-              <li>Backend modulaire Django/DRF en Clean Architecture pour une plateforme de mobilité.</li>
-              <li>Intégration IoT (stations, véhicules, badges) via MQTT, REST et WebSocket.</li>
-              <li>Tracking GPS temps réel et télémétrie live via Firebase et WebSockets.</li>
-            </ul>
-            <div class="tech-row"><span>Django</span><span>DRF</span><span>MQTT</span><span>Firebase</span><span>Flutter</span></div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-card glass">
-            <div class="tl-head"><span class="tl-date">JUIN 2020 → MAI 2025</span></div>
-            <div class="tl-role">Lead Développeur Full Stack &amp; Responsable IT</div>
-            <div class="tl-company">IIPEA</div>
-            <div class="tl-loc">Abidjan, Côte d'Ivoire</div>
-            <ul>
-              <li>Pilotage du cycle complet de développement pour plusieurs applications institutionnelles.</li>
-              <li>Management d'une équipe de développeurs, guidance technique et qualité du code.</li>
-              <li>ERP scolaire complet — 1er Prix Moov Africa CI StartUp Challenge 2025.</li>
-            </ul>
-            <div class="tech-row"><span>Python</span><span>Django</span><span>PostgreSQL</span><span>Flutter</span></div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-card glass">
-            <div class="tl-head"><span class="tl-date">MARS 2022 → AVR. 2023</span></div>
-            <div class="tl-role">Développeur Backend Python / Django</div>
-            <div class="tl-company">Saas Group</div>
-            <div class="tl-loc">Côte d'Ivoire (remote)</div>
-            <ul>
-              <li>Plateforme RH Sentinelle : présences par RFID, QR codes, reconnaissance faciale.</li>
-              <li>Notifications push temps réel, cache Redis, Django Channels pour les données live.</li>
-            </ul>
-            <div class="tech-row"><span>Django</span><span>PostgreSQL</span><span>Redis</span><span>OpenCV</span></div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-card glass">
-            <div class="tl-head"><span class="tl-date">MARS 2021 → JANV. 2022</span></div>
-            <div class="tl-role">Développeur Mobile &amp; Backend</div>
-            <div class="tl-company">SIEFTP / Tropic BTP</div>
-            <div class="tl-loc">Côte d'Ivoire (remote)</div>
-            <ul>
-              <li>APIs Django/DRF et applications Flutter multiplateformes pour plusieurs clients.</li>
-              <li>Application de pointage chantier : géolocalisation et rapports automatisés.</li>
-            </ul>
-            <div class="tech-row"><span>Django</span><span>Flutter</span><span>Firebase</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ PROJETS ═══ -->
-  <section id="travaux">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>04</b> — projets</div><h2>Réalisations sélectionnées</h2></div>
-        <p class="lead">Des plateformes fintech aux systèmes e-commerce en production, du cadrage au déploiement.</p>
-      </div>
-
-      <div class="proj reveal">
-        <div>
-          <div class="proj-class">class <b>SportifAfrica</b>(EcommercePlatform):</div>
-          <h3>SPORTIF Africa — Plateforme e-commerce sportive complète</h3>
-          <p class="desc">Une plateforme Django/PostgreSQL de bout en bout : site marchand, back-office multi-rôles et point de vente physique unifiés autour d'un seul système de stocks et de paiements.</p>
-          <ul class="feature-list">
-            <li>Paiement Wave (Checkout API + webhooks HMAC), réconciliation automatique et détection de fraude</li>
-            <li>Trois portefeuilles isolés (boutique / développeur / référence Wave) avec répartition automatique</li>
-            <li>POS interne pour les ventes en boutique, reçus PDF générés à la volée</li>
-            <li>Permissions granulaires du personnel, notifications temps réel, back-office complet</li>
-          </ul>
-          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django 5</span><span>PostgreSQL</span><span>Tailwind CSS</span><span>Wave API</span></div>
-        </div>
-        <div class="tilt-wrap"><div class="tilt-card glass wallet-mock" data-tilt>
-          <div class="tilt-sheen"></div>
-          <div class="tilt-bar"><i></i><i></i><i></i></div>
-          <div class="tilt-body">
-            <div class="wm-row"><span>Wallet boutique</span><b>240 000 F</b></div>
-            <div class="wm-row"><span>Wallet développeur <span class="wm-tag">2%</span></span><b>4 800 F</b></div>
-            <div class="wm-row"><span>Réf. Wave <span class="wm-tag">1%</span></span><b>2 400 F</b></div>
-            <div class="wm-chart"><div style="height:40%"></div><div style="height:65%"></div><div style="height:50%"></div><div style="height:85%"></div><div style="height:60%"></div><div style="height:90%"></div></div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="proj reveal">
-        <div>
-          <div class="proj-class">class <b>SpaghettiDAbidjan</b>(FoodDeliveryPlatform):</div>
-          <h3>Spaghetti d'Abidjan — Livraison de plats locaux</h3>
-          <p class="desc">Plateforme de commande et de livraison de plats ivoiriens (attiéké, garba, alloco) avec paiement mobile intégré de bout en bout.</p>
-          <ul class="feature-list">
-            <li>Paiement en ligne via Wave, confirmation automatique de commande</li>
-            <li>Recherche et filtres avancés : budget max, épicé, végétal, promotions</li>
-            <li>Backend Django avec catalogue de plats par catégories</li>
-          </ul>
-          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>PostgreSQL</span><span>Wave API</span><span>Nginx</span></div>
-          <a href="https://spaguettidabidjan.com/" target="_blank" class="proj-link">Voir le site →</a>
-        </div>
-        <div class="tilt-wrap"><div class="tilt-card glass food-mock" data-tilt>
-          <div class="tilt-sheen"></div>
-          <div class="tilt-bar"><i></i><i></i><i></i></div>
-          <div class="tilt-body">
-            <div class="fm-hero"><div class="fm-tag">● OUVERT · LIVRAISON EN COURS</div><h4>Le goût d'Abidjan, livré chaud.</h4></div>
-            <div class="fm-cards"><div class="fm-card"></div><div class="fm-card"></div><div class="fm-card"></div><div class="fm-card"></div></div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="proj reveal">
-        <div>
-          <div class="proj-class">class <b>FNEIvoire</b>(BillingCompliance):</div>
-          <h3>FNE Ivoire — Facturation Normalisée Électronique</h3>
-          <p class="desc">Plateforme SaaS répondant à l'obligation de Facturation Normalisée Électronique de la DGI ivoirienne (2025) : génération, signature et transmission des factures en temps réel.</p>
-          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>Celery</span><span>PostgreSQL</span><span>SaaS multi-tenant</span></div>
-          <a href="https://fne.myoctogone.com/" target="_blank" class="proj-link">Voir le projet →</a>
-        </div>
-        <div class="tilt-wrap"><div class="tilt-card glass api-mock" data-tilt>
-          <div class="tilt-sheen"></div>
-          <div class="tilt-bar"><i></i><i></i><i></i></div>
-          <div class="tilt-body mock-body">
-            <div><span class="t-prompt">POST</span> /api/v1/factures/emettre</div>
-            <div>{ "montant_ttc": <span style="color:var(--gold)">2480000</span>, "devise": <span class="t-str">"XOF"</span> }</div>
-            <div><span class="t-ok">201 CREATED</span> facture signée DGI</div>
-            <div style="color:var(--text-dim)"># QR code fiscal généré</div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="proj reveal">
-        <div>
-          <div class="proj-class">class <b>BRVMAnalytics</b>(MarketDataAPI):</div>
-          <h3>BRVM Analytics — Marchés boursiers en temps réel</h3>
-          <p class="desc">Plateforme d'analyse pour la Bourse Régionale des Valeurs Mobilières de l'UEMOA, agrégeant cours, volumes et indices dans huit pays d'Afrique de l'Ouest.</p>
-          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>Redis</span><span>REST API</span><span>Fintech</span></div>
-          <a href="https://brvm.myoctogone.com/" target="_blank" class="proj-link">Voir le projet →</a>
-        </div>
-        <div class="tilt-wrap"><div class="tilt-card glass wave-mock" data-tilt>
-          <div class="tilt-sheen"></div>
-          <div class="tilt-bar"><i></i><i></i><i></i></div>
-          <div class="tilt-body">
-            <div class="wv-status">● indice BRVM composite +2.34%</div>
-            <div class="wv-line w1"></div><div class="wv-line w2"></div><div class="wv-line w3"></div>
-            <div class="wv-amount">14 250 F</div>
-            <div class="wv-sub">SONATEL CI · dernière clôture</div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="proj reveal">
-        <div>
-          <div class="proj-class">class <b>WaveBusinessSDK</b>(OpenSourceLib):</div>
-          <h3>Wave Business API SDK</h3>
-          <p class="desc">Kit de développement Python publié sur PyPI pour intégrer paiements, payouts et webhooks Wave Business, avec signature HMAC-SHA256 systématique.</p>
-          <div class="tech-row" style="margin-bottom:1.6rem"><span>Python</span><span>PyPI</span><span>HMAC-SHA256</span><span>Tests</span></div>
-          <a href="https://github.com/daniel10027/wave-business-api" target="_blank" class="proj-link">Voir le dépôt →</a>
-        </div>
-        <div class="tilt-wrap"><div class="tilt-card glass api-mock" data-tilt>
-          <div class="tilt-sheen"></div>
-          <div class="tilt-bar"><i></i><i></i><i></i></div>
-          <div class="tilt-body mock-body">
-            <div><span class="t-prompt">$</span> pip install wave-business-sdk</div>
-            <div><span class="t-prompt">&gt;&gt;&gt;</span> client = Client(api_key=<span class="t-str">"sk_live_***"</span>)</div>
-            <div><span class="t-prompt">&gt;&gt;&gt;</span> client.payouts.create(...)</div>
-            <div><span class="t-ok">✓ 200 OK</span> signature vérifiée</div>
-          </div>
-        </div></div>
-      </div>
-
-      <div class="proj reveal">
-        <div>
-          <div class="proj-class">class <b>SMSSchoolERP</b>(EducationSuite):</div>
-          <h3>SMS — School Management System</h3>
-          <p class="desc">Système de gestion scolaire complet : inscriptions, emplois du temps, notes, facturation. Déployé en pilote dans quatre établissements — <strong>1er Prix Moov Africa CI StartUp Challenge 2025</strong>.</p>
-          <div class="tech-row" style="margin-bottom:1.6rem"><span>Django</span><span>DRF</span><span>Flutter</span><span>Web/Android/iOS</span></div>
-          <a href="https://github.com/daniel10027" target="_blank" class="proj-link">Voir le profil GitHub →</a>
-        </div>
-        <div class="tilt-wrap"><div class="tilt-card glass pos-mock" data-tilt>
-          <div class="tilt-sheen"></div>
-          <div class="tilt-bar"><i></i><i></i><i></i></div>
-          <div class="tilt-body">
-            <div class="pos-grid"><div class="pos-item">1 248<br>élèves</div><div class="pos-item">96%<br>paiement</div><div class="pos-item">4<br>écoles</div></div>
-            <div class="pos-total"><span>ENCAISSÉ CE MOIS</span><b>18.4M F</b></div>
-          </div>
-        </div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ AUTRES ═══ -->
-  <section id="autres">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>05</b> — portefeuille</div><h2>Autres réalisations</h2></div>
-        <p class="lead">Une sélection de projets complémentaires, livrés pour des clients en Côte d'Ivoire et à l'international.</p>
-      </div>
-      <div class="grid-others stagger reveal">
-        <div class="other-card glass"><span class="oc-tag">ERP / GESTION</span><h3>OS-IRIS</h3><p>ERP complet pour la gestion des stocks, des ventes et de la comptabilité commerciale pour PME.</p></div>
-        <div class="other-card glass"><span class="oc-tag">RH / BIOMÉTRIE</span><h3>Sentinelle RH</h3><p>Gestion des présences par RFID, QR codes et reconnaissance faciale, données live.</p></div>
-        <div class="other-card glass"><span class="oc-tag">FINTECH / MOBILE</span><h3>MomoFund</h3><p>Crowdfunding via l'API MTN Mobile Money — 2ᵉ place Hackathon MTN MTS 2024.</p></div>
-        <div class="other-card glass"><span class="oc-tag">PRODUCTIVITÉ</span><h3>TimesTrackers</h3><p>Suivi du temps de travail et gestion de projets pour équipes distribuées.</p></div>
-        <div class="other-card glass"><span class="oc-tag">IMMOBILIER</span><h3>Ma Resie</h3><p>Plateforme de mise en relation immobilière, Next.js connecté à une API Django.</p></div>
-        <div class="other-card glass"><span class="oc-tag">AGRITECH / SPATIAL</span><h3>TraceAgriChain</h3><p>Traçabilité agricole : blockchain, imagerie satellite et cartographie 3D. Finaliste ICESCO 2025.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ DISTINCTIONS ═══ -->
-  <section id="distinctions">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>06</b> — distinctions</div><h2>Reconnaissance &amp; récompenses</h2></div>
-        <p class="lead">Trois compétitions, trois finalités différentes — éducation, espace &amp; agriculture, finance mobile.</p>
-      </div>
-      <div class="reveal">
-        <div class="award-row glass"><div class="ar-date">DÉC. 2025</div><div><h3>1er Prix Moov Africa CI StartUp Challenge 2025</h3><p>Remporté avec SMS (School Management System) — ERP éducatif multiplateforme validé par une phase pilote sur quatre établissements.</p></div><div class="ar-rank">VAINQUEUR</div></div>
-        <div class="award-row glass"><div class="ar-date">MAI 2025</div><div><h3>Finaliste MASS Solutions Spatiales Africaines (ICESCO)</h3><p>TraceAgriChain — blockchain, imagerie satellite et cartographie 3D pour la traçabilité agricole.</p></div><div class="ar-rank">FINALISTE</div></div>
-        <div class="award-row glass"><div class="ar-date">JANV. 2024</div><div><h3>2ᵉ Place Hackathon MTN MTS Côte d'Ivoire</h3><p>MomoFund — plateforme de crowdfunding Mobile Money via l'API MTN MoMo.</p></div><div class="ar-rank">2ᵉ PLACE</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ FORMATION ═══ -->
-  <section id="formation">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>07</b> — formation</div><h2>Formation &amp; certifications</h2></div>
-        <p class="lead">Un socle académique en génie logiciel et big data, complété par des certifications professionnelles ciblées.</p>
-      </div>
-      <div class="edu-grid reveal">
-        <div>
-          <div class="eyebrow" style="margin-bottom:1rem"># diplômes</div>
-          <ul class="edu-list">
-            <li><div><span class="e-title">MSc en Génie Logiciel</span><span class="e-sub">Wolf University / GoMyCode</span></div><span class="e-year">2025</span></li>
-            <li><div><span class="e-title">Master en Informatique — Génie Logiciel</span><span class="e-sub">IIPEA — Abidjan</span></div><span class="e-year">2023</span></li>
-            <li><div><span class="e-title">Master en Big Data Analytics</span><span class="e-sub">Université Virtuelle de Côte d'Ivoire</span></div><span class="e-year">2023</span></li>
-            <li><div><span class="e-title">Licence en Bases de Données</span><span class="e-sub">Université Virtuelle de Côte d'Ivoire</span></div><span class="e-year">2020</span></li>
-            <li><div><span class="e-title">Baccalauréat Scientifique Série C</span><span class="e-sub">Lycée Municipal de Port-Bouët</span></div><span class="e-year">2017</span></li>
-          </ul>
-        </div>
-        <div>
-          <div class="eyebrow" style="margin-bottom:1rem"># certifications</div>
-          <ul class="edu-list">
-            <li><div><span class="e-title">Python for Data Science</span><span class="e-sub">IBM</span></div></li>
-            <li><div><span class="e-title">Big Data Analysis</span><span class="e-sub">IBM</span></div></li>
-            <li><div><span class="e-title">Machine Learning &amp; Data Visualization with Python</span><span class="e-sub">IBM</span></div></li>
-            <li><div><span class="e-title">Microsoft Technologies Association Programming</span><span class="e-sub">Microsoft</span></div></li>
-            <li><div><span class="e-title">ITIL® Foundation in IT Service Management</span><span class="e-sub">AXELOS</span></div></li>
-            <li><div><span class="e-title">Administrateur de Bases de Données</span><span class="e-sub">NaN — Not A Number CI</span></div></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ TÉMOIGNAGES ═══ -->
-  <section id="temoignages">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>08</b> — témoignages</div><h2>Ce qu'en disent les clients</h2></div>
-        <p class="lead">Quelques retours de directions techniques et de chefs de projet ayant collaboré sur ces réalisations.</p>
-      </div>
-      <div class="testi-grid stagger reveal">
-        <div class="testi-card glass"><span class="tq">"</span><p>Daniel a conçu pour nous une plateforme académique sur mesure, fiable et facile à utiliser. Son expertise backend a permis d'automatiser des processus complexes.</p><div class="testi-author"><div class="testi-avatar">JK</div><div><div class="testi-name">Jean Kouassi</div><div class="testi-role">Directeur IT, Groupe École Sup</div></div></div></div>
-        <div class="testi-card glass"><span class="tq">"</span><p>Sa capacité à comprendre nos besoins et à livrer dans les délais a été remarquable, de la spécification jusqu'au déploiement.</p><div class="testi-author"><div class="testi-avatar">YN</div><div><div class="testi-name">Yao N'Dri</div><div class="testi-role">CTO, Saas Group Côte d'Ivoire</div></div></div></div>
-        <div class="testi-card glass"><span class="tq">"</span><p>Professionnel, réactif et force de proposition. Il a transformé notre idée en une application performante, sécurisée et évolutive.</p><div class="testi-author"><div class="testi-avatar">NK</div><div><div class="testi-name">Nadine Koné</div><div class="testi-role">Cheffe de projet, ONASUR</div></div></div></div>
-        <div class="testi-card glass"><span class="tq">"</span><p>L'architecture mise en place est solide : elle supporte aujourd'hui des centaines d'utilisateurs sans incident majeur depuis le lancement.</p><div class="testi-author"><div class="testi-avatar">KA</div><div><div class="testi-name">Kouadio Alain</div><div class="testi-role">Responsable Digital, MINADER</div></div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ CTA ═══ -->
-  <section id="cta">
-    <div class="wrap">
-      <div class="reveal">
-        <div class="eyebrow" style="justify-content:center"># prochaine étape</div>
-        <h2>Prêt à construire la prochaine étape de votre <span class="grad-text">produit numérique</span> ?</h2>
-        <p>Que vous ayez besoin d'une architecture backend solide, d'une intégration de paiement mobile ou d'un audit technique, je réponds généralement sous 24 heures.</p>
-        <div class="hero-ctas">
-          <a href="#contact" class="btn btn-solid magnetic">Planifier un appel</a>
-          <a href="https://wa.me/2250748733365" target="_blank" class="btn btn-grad magnetic">Écrire sur WhatsApp</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ CONTACT ═══ -->
-  <section id="contact">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div><div class="eyebrow"><b>09</b> — contact</div><h2>Discutons de votre projet</h2></div>
-        <p class="lead">Toutes les coordonnées utiles, et un calendrier pour réserver un créneau directement.</p>
-      </div>
-      <div class="contact-grid">
-        <div class="reveal">
-          <ul class="contact-list">
-            <li><span class="cl-label">WhatsApp</span><span class="cl-value"><a href="https://wa.me/2250748733365" target="_blank">+225 07 48 73 33 65</a></span></li>
-            <li><span class="cl-label">Email</span><span class="cl-value"><a href="mailto:danielguedegbe10027@gmail.com">danielguedegbe10027@gmail.com</a></span></li>
-            <li><span class="cl-label">LinkedIn</span><span class="cl-value"><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">daniel-guedegbe</a></span></li>
-            <li><span class="cl-label">GitHub</span><span class="cl-value"><a href="https://github.com/daniel10027" target="_blank">daniel10027</a></span></li>
-            <li><span class="cl-label">Localisation</span><span class="cl-value">Abidjan, Côte d'Ivoire 🇨🇮</span></li>
-            <li><span class="cl-label">Disponibilité</span><span class="cl-value available-tag">● remote / hybride / relocalisation</span></li>
-          </ul>
-          <div class="hero-ctas" style="margin-top:2.4rem">
-            <a href="https://wa.me/2250748733365" target="_blank" class="btn btn-solid magnetic">Écrire sur WhatsApp</a>
-            <a href="mailto:danielguedegbe10027@gmail.com" class="btn btn-grad magnetic">Envoyer un email</a>
-          </div>
-        </div>
-        <div class="cal-card glass reveal">
-          <h4># planifier un rendez-vous</h4>
-          <div style="width:100%;height:480px;overflow:auto" id="my-cal-inline"></div>
-          <script type="text/javascript">
-            (function (C, A, L) {
-              let p = function (a, ar) { a.q.push(ar); };
-              let d = C.document;
-              C.Cal = C.Cal || function () {
-                let cal = C.Cal; let ar = arguments;
-                if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
-                if (ar[0] === L) {
-                  const api = function () { p(api, arguments); };
-                  const namespace = ar[1]; api.q = api.q || [];
-                  if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar);
-                  return;
-                }
-                p(cal, ar);
-              };
-            })(window, "https://app.cal.com/embed/embed.js", "init");
-            Cal("init", "30min", { origin: "https://app.cal.com" });
-            Cal.ns["30min"]("inline", { elementOrSelector: "#my-cal-inline", config: { layout: "month_view", theme: "dark" }, calLink: "jean-marie-daniel-vianney-guedegbe-qfjxgu/30min" });
-            Cal.ns["30min"]("ui", { theme: "dark", cssVarsPerTheme: { dark: { "cal-brand": "#8B5CF6" } }, hideEventTypeDetails: false, layout: "month_view" });
-          </script>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="wrap footer-grid">
-    <a href="#hero" class="brand"><span class="brand-mark">DG</span> Daniel Guedegbe</a>
-    <ul class="footer-links">
-      <li><a href="https://github.com/daniel10027" target="_blank">GitHub</a></li>
-      <li><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">LinkedIn</a></li>
-      <li><a href="https://wa.me/2250748733365" target="_blank">WhatsApp</a></li>
-      <li><a href="mailto:danielguedegbe10027@gmail.com">Email</a></li>
-    </ul>
-    <div class="footer-copy"># © 2026 Daniel Guedegbe — Abidjan, Côte d'Ivoire</div>
   </div>
-</footer>
+</div>
 
+<!-- Contrôles tactiles -->
+<div id="touch-controls">
+  <div id="touch-joystick"><div class="nub" id="joy-nub"></div></div>
+  <div id="touch-boost">BOOST</div>
+</div>
+
+<!-- ═══ MODAL SECTION ═══ -->
+<div id="modal-overlay">
+  <div id="modal-panel">
+    <div class="modal-tag"><span class="d"></span> <span id="modal-tag-text">MODULE DÉBLOQUÉ</span></div>
+    <h2 id="modal-title" class="hud-font"></h2>
+    <div id="modal-body"></div>
+    <button id="modal-close" class="hud-font">▶ CONTINUER L'EXPLORATION</button>
+  </div>
+</div>
+
+<!-- ═══ ÉCRAN DE VICTOIRE ═══ -->
+<div id="victory-overlay">
+  <div class="victory-inner">
+    <div class="victory-title hud-font">MISSION ACCOMPLIE</div>
+    <p class="victory-sub">Les 7 modules du système ont été scannés avec succès. Vous connaissez maintenant tout le parcours de Daniel — il ne reste qu'à passer à l'étape suivante.</p>
+    <div class="victory-ctas">
+      <a href="https://wa.me/2250748733365" target="_blank" class="v-btn v-btn-primary">Écrire sur WhatsApp</a>
+      <a href="mailto:danielguedegbe10027@gmail.com" class="v-btn v-btn-ghost">Envoyer un email</a>
+      <a href="https://drive.google.com/file/d/1WobBU8LyFQWqRjznG0AHsm00Cpl_dJgs/view?usp=sharing" target="_blank" class="v-btn v-btn-ghost">Télécharger le CV</a>
+    </div>
+    <span class="victory-replay" id="replay-link">↺ Continuer à explorer le monde</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// PROGRESS BAR
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-  document.getElementById('progress').style.width = pct + '%';
-});
+/* ==========================================================
+   DANIEL.EXE — Jeu d'exploration 3D portfolio
+   ========================================================== */
+(function(){
+  'use strict';
 
-// MOBILE MENU
-const menuToggle = document.getElementById('menuToggle');
-const mobileMenu = document.getElementById('mobileMenu');
-menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+  // ---------- DONNÉES DES NŒUDS (contenu réel du CV) ----------
+  const NODES_DATA = [
+    {
+      id:'profil', title:'PROFIL', color:0x00F0FF, pos:[18,4,-10],
+      html:`<p>Depuis plus de six ans, je conçois et je livre des plateformes logicielles qui tiennent leurs promesses <strong>en production</strong>. Basé à Abidjan, j'interviens comme consultant backend pour <strong>Orange Liberia</strong> et développeur full stack pour <strong>Illigo</strong>.</p>
+      <p>Mon terrain de jeu : Python, Django, FastAPI côté serveur, Flutter côté mobile, Clean Architecture et Domain-Driven Design. J'ai dirigé pendant cinq ans le département IT de <strong>IIPEA</strong>, où j'ai livré un ERP scolaire primé au Moov Africa CI StartUp Challenge 2025.</p>
+      <div class="tag-row"><span>Abidjan, CI</span><span>Remote / Hybride</span><span>FR · EN</span></div>`
+    },
+    {
+      id:'stack', title:'STACK TECHNIQUE', color:0x8B5CF6, pos:[-20,6,-16],
+      html:`<p>Les briques que j'assemble au quotidien :</p>
+      <ul>
+        <li><strong>Langages</strong> — Python, JavaScript, Dart, SQL, Bash</li>
+        <li><strong>Frameworks</strong> — Django, DRF, FastAPI, Flask, Next.js, Flutter</li>
+        <li><strong>Données</strong> — PostgreSQL, MySQL, MongoDB, Redis</li>
+        <li><strong>Infra</strong> — Docker, Nginx, Gunicorn, GitHub Actions, Ansible</li>
+        <li><strong>Temps réel</strong> — Celery, MQTT, WebSockets, Django Channels</li>
+        <li><strong>Paiements</strong> — Wave API, Webhooks HMAC, MTN MoMo</li>
+      </ul>`
+    },
+    {
+      id:'parcours', title:'PARCOURS PROFESSIONNEL', color:0xFF2E9A, pos:[24,10,14],
+      html:`<div class="entry"><div class="e-head"><span>ACTUEL</span><span>SEPT. 2025 →</span></div><h4>Consultant Backend Developer</h4><p style="margin:0">Orange Liberia — microservices Python/Flask télécoms, APIs critiques, Docker/Ansible.</p></div>
+      <div class="entry"><div class="e-head"><span>ACTIF</span><span>MAI 2025 →</span></div><h4>Développeur Backend Mobilité</h4><p style="margin:0">Illigo — plateforme IoT, Django/DRF Clean Architecture, tracking GPS temps réel.</p></div>
+      <div class="entry"><div class="e-head"><span>5 ANS</span><span>2020 → 2025</span></div><h4>Lead Développeur &amp; Responsable IT</h4><p style="margin:0">IIPEA — ERP scolaire primé, management d'équipe, Django/PostgreSQL/Flutter.</p></div>`
+    },
+    {
+      id:'projets', title:'PROJETS SHIPPÉS', color:0xFFE93E, pos:[-22,8,18],
+      html:`<div class="entry"><h4>SPORTIF Africa</h4><p style="margin:0">Plateforme e-commerce sportive : paiement Wave, 3 wallets isolés (boutique/dev/référence), POS interne, permissions granulaires du personnel.</p></div>
+      <div class="entry"><h4>Spaghetti d'Abidjan</h4><p style="margin:0">Livraison de plats locaux avec paiement Wave intégré et filtres avancés (budget, épicé, végétal).</p></div>
+      <div class="entry"><h4>FNE Ivoire &amp; BRVM Analytics</h4><p style="margin:0">Facturation électronique DGI et données boursières UEMOA temps réel.</p></div>
+      <div class="entry" style="border:none;margin:0;padding:0"><h4>Wave Business SDK</h4><p style="margin:0">Kit Python publié sur PyPI, signature HMAC-SHA256, tests automatisés.</p></div>`
+    },
+    {
+      id:'distinctions', title:'DISTINCTIONS', color:0x34E4A6, pos:[30,5,-22],
+      html:`<div class="entry"><div class="e-head"><span>VAINQUEUR</span><span>DÉC. 2025</span></div><h4>1er Prix Moov Africa CI StartUp Challenge</h4><p style="margin:0">Remporté avec SMS — ERP scolaire multiplateforme, 4 établissements pilotes.</p></div>
+      <div class="entry"><div class="e-head"><span>FINALISTE</span><span>MAI 2025</span></div><h4>MASS Solutions Spatiales (ICESCO)</h4><p style="margin:0">TraceAgriChain — blockchain, imagerie satellite, cartographie 3D.</p></div>
+      <div class="entry" style="border:none;margin:0;padding:0"><div class="e-head"><span>2ᵉ PLACE</span><span>JANV. 2024</span></div><h4>Hackathon MTN MTS Côte d'Ivoire</h4><p style="margin:0">MomoFund — crowdfunding via l'API MTN Mobile Money.</p></div>`
+    },
+    {
+      id:'formation', title:'FORMATION & CERTIFICATIONS', color:0x00F0FF, pos:[-26,10,-8],
+      html:`<p><strong>Diplômes</strong></p>
+      <ul>
+        <li>MSc Génie Logiciel — Wolf University / GoMyCode (2025)</li>
+        <li>Master Informatique — IIPEA Abidjan (2023)</li>
+        <li>Master Big Data Analytics — UVCI (2023)</li>
+      </ul>
+      <p><strong>Certifications</strong></p>
+      <ul>
+        <li>Python for Data Science — IBM</li>
+        <li>Machine Learning &amp; Data Viz with Python — IBM</li>
+        <li>ITIL® Foundation — AXELOS</li>
+      </ul>`
+    },
+    {
+      id:'contact', title:'ÉTABLIR LE CONTACT', color:0xFF2E9A, pos:[4,14,30],
+      html:`<p>Disponible en remote, hybride ou relocalisation. Je réponds généralement sous 24 heures.</p>
+      <p class="mono" style="font-size:.85rem">📍 Abidjan, Côte d'Ivoire &nbsp;·&nbsp; ● disponible</p>
+      <div class="cta-links">
+        <a href="https://wa.me/2250748733365" target="_blank">WhatsApp →</a>
+        <a href="mailto:danielguedegbe10027@gmail.com" target="_blank">Email →</a>
+        <a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">LinkedIn →</a>
+        <a href="https://github.com/daniel10027" target="_blank">GitHub →</a>
+      </div>`
+    },
+  ];
 
-// REVEAL ON SCROLL
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  // ---------- THREE.JS SETUP ----------
+  const canvas = document.getElementById('scene');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-// ACTIVE NAV LINK
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
-  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-});
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x04030A, 0.012);
+  scene.background = new THREE.Color(0x04030A);
 
-// COUNT UP STATS
-const counted = new Set();
-const countObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting && !counted.has(e.target)) {
-      counted.add(e.target);
-      const target = parseInt(e.target.dataset.target, 10);
-      let c = 0;
-      const step = Math.max(target / 40, 0.1);
-      const tick = () => {
-        c += step;
-        if (c >= target) { e.target.textContent = target; }
-        else { e.target.textContent = Math.floor(c); requestAnimationFrame(tick); }
-      };
-      tick();
-    }
+  const camera = new THREE.PerspectiveCamera(68, window.innerWidth/window.innerHeight, 0.1, 800);
+  camera.position.set(0, 6, 14);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
   });
-}, { threshold: 0.5 });
-document.querySelectorAll('.count').forEach(el => countObserver.observe(el));
 
-// CUSTOM CURSOR
-const dot = document.getElementById('cursor-dot');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-if (window.matchMedia('(hover: hover)').matches) {
-  window.addEventListener('mousemove', (e) => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-    document.getElementById('spotlight').style.setProperty('--mx', mx + 'px');
-    document.getElementById('spotlight').style.setProperty('--my', my + 'px');
-  });
-  const animateRing = () => {
-    rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
-  };
-  animateRing();
-  document.querySelectorAll('a, button, [data-tilt]').forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-  });
-}
+  // Lumières
+  scene.add(new THREE.AmbientLight(0x6060a0, .55));
+  const dirLight = new THREE.DirectionalLight(0x88bbff, .5);
+  dirLight.position.set(10, 30, 10);
+  scene.add(dirLight);
 
-// MAGNETIC BUTTONS
-document.querySelectorAll('.magnetic').forEach(btn => {
-  btn.addEventListener('mousemove', (e) => {
-    const r = btn.getBoundingClientRect();
-    const relX = e.clientX - r.left - r.width / 2;
-    const relY = e.clientY - r.top - r.height / 2;
-    btn.style.transform = `translate(${relX * 0.25}px, ${relY * 0.35}px)`;
-  });
-  btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
-});
+  // Grille néon (sol infini stylisé)
+  const gridSize = 400, gridDiv = 80;
+  const grid = new THREE.GridHelper(gridSize, gridDiv, 0x00F0FF, 0x1a1440);
+  grid.position.y = -6;
+  grid.material.transparent = true;
+  grid.material.opacity = 0.35;
+  scene.add(grid);
 
-// 3D TILT PROJECT CARDS
-document.querySelectorAll('[data-tilt]').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const r = card.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width;
-    const py = (e.clientY - r.top) / r.height;
-    const rotX = (py - 0.5) * -10;
-    const rotY = (px - 0.5) * 10;
-    card.style.transform = `perspective(1400px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
-    card.style.setProperty('--sx', (px * 100) + '%');
-    card.style.setProperty('--sy', (py * 100) + '%');
-  });
-  card.addEventListener('mouseleave', () => { card.style.transform = 'perspective(1400px) rotateX(0) rotateY(0) scale(1)'; });
-});
+  // Grille miroir (plafond) pour effet tunnel
+  const grid2 = grid.clone();
+  grid2.position.y = 40;
+  grid2.material = grid.material.clone();
+  grid2.material.opacity = 0.08;
+  scene.add(grid2);
 
-// PARTICLE NETWORK CANVAS (hero)
-(function () {
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  const hero = document.getElementById('hero');
-  let w, h, particles = [];
-  const mouse = { x: null, y: null };
-  const COLORS = ['139,92,246', '34,211,238', '244,114,182'];
+  // Halo horizon
+  const haloGeo = new THREE.SphereGeometry(360, 32, 32);
+  const haloMat = new THREE.MeshBasicMaterial({ color:0x120a30, side:THREE.BackSide, fog:false });
+  scene.add(new THREE.Mesh(haloGeo, haloMat));
 
-  function resize() {
-    w = canvas.width = hero.offsetWidth;
-    h = canvas.height = hero.offsetHeight;
-    const count = Math.min(Math.floor((w * h) / 16000), 90);
-    particles = Array.from({ length: count }, () => ({
-      x: Math.random() * w, y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 1.6 + 0.6, c: COLORS[Math.floor(Math.random() * COLORS.length)],
-    }));
+  // Étoiles
+  const starGeo = new THREE.BufferGeometry();
+  const starCount = 1400;
+  const starPos = new Float32Array(starCount * 3);
+  for (let i=0;i<starCount;i++){
+    starPos[i*3] = (Math.random()-0.5) * 500;
+    starPos[i*3+1] = Math.random() * 200 - 20;
+    starPos[i*3+2] = (Math.random()-0.5) * 500;
   }
-  window.addEventListener('resize', resize);
-  hero.addEventListener('mousemove', (e) => {
-    const r = hero.getBoundingClientRect();
-    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-  });
-  hero.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+  const starMat = new THREE.PointsMaterial({ color:0xffffff, size:0.9, transparent:true, opacity:.75 });
+  scene.add(new THREE.Points(starGeo, starMat));
 
-  function tick() {
-    ctx.clearRect(0, 0, w, h);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0 || p.x > w) p.vx *= -1;
-      if (p.y < 0 || p.y > h) p.vy *= -1;
-      if (mouse.x !== null) {
-        const dx = p.x - mouse.x, dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 130) { p.x += dx / dist * 0.6; p.y += dy / dist * 0.6; }
+  // ---------- VAISSEAU JOUEUR ----------
+  const shipGroup = new THREE.Group();
+  const shipCore = new THREE.Mesh(
+    new THREE.OctahedronGeometry(0.9, 0),
+    new THREE.MeshStandardMaterial({ color:0x00F0FF, emissive:0x00F0FF, emissiveIntensity:1.4, metalness:.3, roughness:.2, wireframe:false })
+  );
+  shipGroup.add(shipCore);
+  const shipWire = new THREE.Mesh(
+    new THREE.OctahedronGeometry(1.3, 0),
+    new THREE.MeshBasicMaterial({ color:0xFF2E9A, wireframe:true, transparent:true, opacity:.6 })
+  );
+  shipGroup.add(shipWire);
+  const shipLight = new THREE.PointLight(0x00F0FF, 2.4, 22);
+  shipGroup.add(shipLight);
+  shipGroup.position.set(0, 4, 8);
+  scene.add(shipGroup);
+
+  // Traînée de boost
+  const trailCount = 60;
+  const trailGeo = new THREE.BufferGeometry();
+  const trailPos = new Float32Array(trailCount * 3);
+  trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPos, 3));
+  const trailMat = new THREE.PointsMaterial({ color:0xFF2E9A, size:.5, transparent:true, opacity:.55 });
+  const trailPoints = new THREE.Points(trailGeo, trailMat);
+  scene.add(trailPoints);
+  const trailHistory = [];
+
+  // ---------- NŒUDS DE DONNÉES ----------
+  const nodes = NODES_DATA.map(d => {
+    const group = new THREE.Group();
+    const core = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.6, 0),
+      new THREE.MeshStandardMaterial({ color:d.color, emissive:d.color, emissiveIntensity:1.1, metalness:.4, roughness:.25 })
+    );
+    group.add(core);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(2.6, 0.05, 8, 48),
+      new THREE.MeshBasicMaterial({ color:d.color, transparent:true, opacity:.55 })
+    );
+    ring.rotation.x = Math.PI/2.3;
+    group.add(ring);
+    const ring2 = ring.clone();
+    ring2.rotation.x = -Math.PI/2.6;
+    ring2.rotation.z = Math.PI/3;
+    group.add(ring2);
+    const light = new THREE.PointLight(d.color, 3, 30);
+    group.add(light);
+    group.position.set(...d.pos);
+    scene.add(group);
+    return { ...d, group, core, collected:false, t: Math.random()*10 };
+  });
+
+  // Particules de collecte (pool réutilisable)
+  const burstParticles = [];
+  function spawnBurst(pos, color){
+    const geo = new THREE.BufferGeometry();
+    const count = 46;
+    const positions = new Float32Array(count*3);
+    const velocities = [];
+    for (let i=0;i<count;i++){
+      positions[i*3]=pos.x; positions[i*3+1]=pos.y; positions[i*3+2]=pos.z;
+      const v = new THREE.Vector3((Math.random()-0.5), (Math.random()-0.5), (Math.random()-0.5)).normalize().multiplyScalar(0.15+Math.random()*0.25);
+      velocities.push(v);
+    }
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.PointsMaterial({ color, size:.6, transparent:true, opacity:1 });
+    const pts = new THREE.Points(geo, mat);
+    scene.add(pts);
+    burstParticles.push({ pts, velocities, life:1.0 });
+  }
+
+  // ---------- ENTRÉES CLAVIER ----------
+  const keys = {};
+  window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; });
+  window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+  // ---------- ENTRÉES TACTILES ----------
+  const touchState = { active:false, dx:0, dy:0, boost:false };
+  const joy = document.getElementById('touch-joystick');
+  const nub = document.getElementById('joy-nub');
+  let joyOrigin = null;
+  function joyStart(e){ touchState.active = true; const t = e.touches ? e.touches[0] : e; const r = joy.getBoundingClientRect(); joyOrigin = { x:r.left+r.width/2, y:r.top+r.height/2 }; }
+  function joyMove(e){ if (!touchState.active || !joyOrigin) return; const t = e.touches ? e.touches[0] : e; let dx = t.clientX - joyOrigin.x, dy = t.clientY - joyOrigin.y; const max = 44; const dist = Math.min(Math.hypot(dx,dy), max); const ang = Math.atan2(dy,dx); dx = Math.cos(ang)*dist; dy = Math.sin(ang)*dist; nub.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`; touchState.dx = dx/max; touchState.dy = dy/max; }
+  function joyEnd(){ touchState.active = false; touchState.dx = 0; touchState.dy = 0; joyOrigin=null; nub.style.transform='translate(-50%,-50%)'; }
+  joy.addEventListener('touchstart', joyStart, {passive:true});
+  joy.addEventListener('touchmove', joyMove, {passive:true});
+  joy.addEventListener('touchend', joyEnd);
+  const boostBtn = document.getElementById('touch-boost');
+  boostBtn.addEventListener('touchstart', () => touchState.boost = true, {passive:true});
+  boostBtn.addEventListener('touchend', () => touchState.boost = false);
+
+  // ---------- AUDIO (WebAudio, sans fichier externe) ----------
+  let audioCtx = null, muted = false;
+  function ensureAudio(){ if (!audioCtx) { try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } }
+  function playChime(){
+    if (muted || !audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(660, audioCtx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.18);
+    g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + 0.5);
+  }
+  document.getElementById('mute-btn').addEventListener('click', (e) => {
+    muted = !muted; e.currentTarget.textContent = muted ? '🔇' : '🔊';
+  });
+
+  // ---------- ÉTAT DU JEU ----------
+  let started = false, paused = false, gameWon = false;
+  let score = 0;
+  const totalNodes = nodes.length;
+  const worldBound = 60;
+  const velocity = new THREE.Vector3();
+  let heading = 0; // angle Y du vaisseau
+  let boosting = false;
+
+  function updateScoreUI(){
+    document.getElementById('score-num').textContent = score + '/' + totalNodes;
+    document.getElementById('score-bar').style.width = (score/totalNodes*100) + '%';
+  }
+
+  function openModal(node){
+    paused = true;
+    document.getElementById('modal-tag-text').textContent = 'MODULE DÉBLOQUÉ — ' + node.title;
+    document.getElementById('modal-title').textContent = node.title;
+    document.getElementById('modal-body').innerHTML = node.html;
+    document.getElementById('modal-overlay').classList.add('show');
+  }
+  function closeModal(){
+    document.getElementById('modal-overlay').classList.remove('show');
+    paused = false;
+    if (gameWon) return;
+    if (score >= totalNodes) triggerVictory();
+  }
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+
+  function triggerVictory(){
+    gameWon = true;
+    setTimeout(() => document.getElementById('victory-overlay').classList.add('show'), 400);
+  }
+  document.getElementById('replay-link').addEventListener('click', () => {
+    document.getElementById('victory-overlay').classList.remove('show');
+  });
+
+  function collectNode(node){
+    node.collected = true;
+    score++;
+    updateScoreUI();
+    spawnBurst(node.group.position, node.color);
+    ensureAudio(); playChime();
+    // Estompe le nœud collecté
+    node.core.material.emissiveIntensity = 0.35;
+    node.core.material.opacity = 0.5;
+    node.core.material.transparent = true;
+    openModal(node);
+  }
+
+  // ---------- BOUCLE PRINCIPALE ----------
+  const clock = new THREE.Clock();
+  let promptTarget = null;
+
+  function updatePlayer(dt){
+    if (paused) return;
+    const forward = new THREE.Vector3(Math.sin(heading), 0, Math.cos(heading));
+    const right = new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading));
+
+    let ix = 0, iz = 0, iy = 0;
+    if (keys['z'] || keys['arrowup'] || keys['w']) iz -= 1;
+    if (keys['s'] || keys['arrowdown']) iz += 1;
+    if (keys['q'] || keys['arrowleft'] || keys['a']) ix -= 1;
+    if (keys['d'] || keys['arrowright']) ix += 1;
+    if (keys[' ']) iy += 1;
+    if (keys['control']) iy -= 1;
+    boosting = !!keys['shift'] || touchState.boost;
+
+    // Entrée tactile (override si actif)
+    if (touchState.active) { ix = touchState.dx; iz = touchState.dy; }
+
+    // Rotation du cap en fonction de l'input horizontal
+    heading -= ix * dt * 1.6;
+
+    const speed = (boosting ? 22 : 11);
+    const move = new THREE.Vector3();
+    move.addScaledVector(forward, -iz * speed * dt);
+    move.y = iy * speed * dt;
+
+    shipGroup.position.add(move);
+    shipGroup.position.x = THREE.MathUtils.clamp(shipGroup.position.x, -worldBound, worldBound);
+    shipGroup.position.z = THREE.MathUtils.clamp(shipGroup.position.z, -worldBound, worldBound);
+    shipGroup.position.y = THREE.MathUtils.clamp(shipGroup.position.y, -3, 34);
+
+    // Orientation du vaisseau
+    const targetRotY = heading;
+    shipGroup.rotation.y += (targetRotY - shipGroup.rotation.y) * Math.min(dt*6, 1);
+    shipCore.rotation.x += dt * 1.2;
+    shipWire.rotation.y -= dt * .8;
+
+    shipLight.intensity = boosting ? 4 : 2.4;
+
+    // Traînée
+    trailHistory.unshift(shipGroup.position.clone());
+    if (trailHistory.length > trailCount) trailHistory.pop();
+    const posAttr = trailGeo.attributes.position;
+    for (let i=0;i<trailCount;i++){
+      const p = trailHistory[i] || shipGroup.position;
+      posAttr.setXYZ(i, p.x, p.y, p.z);
+    }
+    posAttr.needsUpdate = true;
+    trailMat.opacity = boosting ? .7 : .25;
+
+    // Caméra troisième personne
+    const camOffset = new THREE.Vector3(Math.sin(heading)* -7, 3.4, Math.cos(heading)* -7);
+    const desiredCamPos = shipGroup.position.clone().add(camOffset).add(new THREE.Vector3(0,2.2,0));
+    camera.position.lerp(desiredCamPos, Math.min(dt*4, 1));
+    const lookTarget = shipGroup.position.clone().add(new THREE.Vector3(0,1.2,0));
+    camera.lookAt(lookTarget);
+  }
+
+  function updateNodes(dt){
+    let nearest = null, nearestDist = Infinity;
+    nodes.forEach(n => {
+      n.t += dt;
+      n.group.position.y += Math.sin(n.t*1.4) * 0.006;
+      n.group.rotation.y += dt * 0.5;
+      n.core.rotation.x += dt * 0.3;
+      if (!n.collected) {
+        const d = n.group.position.distanceTo(shipGroup.position);
+        if (d < nearestDist) { nearestDist = d; nearest = n; }
+        if (d < 3.2 && !paused) collectNode(n);
       }
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${p.c},.7)`;
-      ctx.fill();
     });
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(139,92,246,${0.13 * (1 - dist / 120)})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        }
-      }
+    const pill = document.getElementById('prompt-pill');
+    if (nearest && nearestDist < 14 && !paused) {
+      pill.classList.add('show');
+      pill.textContent = '◉ ' + nearest.title + ' — ' + Math.max(0, Math.round(nearestDist)) + 'm';
+    } else {
+      pill.classList.remove('show');
     }
-    requestAnimationFrame(tick);
   }
-  resize();
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) tick();
+
+  function updateBursts(dt){
+    for (let i=burstParticles.length-1;i>=0;i--){
+      const b = burstParticles[i];
+      b.life -= dt*0.9;
+      const posAttr = b.pts.geometry.attributes.position;
+      for (let j=0;j<b.velocities.length;j++){
+        posAttr.array[j*3] += b.velocities[j].x;
+        posAttr.array[j*3+1] += b.velocities[j].y;
+        posAttr.array[j*3+2] += b.velocities[j].z;
+      }
+      posAttr.needsUpdate = true;
+      b.pts.material.opacity = Math.max(0, b.life);
+      if (b.life <= 0){ scene.remove(b.pts); burstParticles.splice(i,1); }
+    }
+  }
+
+  // ---------- MINI-CARTE ----------
+  const mmCanvas = document.getElementById('minimap');
+  const mmCtx = mmCanvas.getContext('2d');
+  function drawMinimap(){
+    const W = mmCanvas.width, H = mmCanvas.height;
+    mmCtx.clearRect(0,0,W,H);
+    mmCtx.strokeStyle = 'rgba(0,240,255,.25)';
+    mmCtx.strokeRect(1,1,W-2,H-2);
+    const scale = (W*0.42) / worldBound;
+    const cx = W/2, cy = H/2;
+    // nodes
+    nodes.forEach(n => {
+      const x = cx + n.group.position.x * scale;
+      const y = cy + n.group.position.z * scale;
+      mmCtx.beginPath();
+      mmCtx.arc(x, y, 3.2, 0, Math.PI*2);
+      mmCtx.fillStyle = n.collected ? 'rgba(255,255,255,.25)' : '#'+n.color.toString(16).padStart(6,'0');
+      mmCtx.fill();
+    });
+    // player
+    const px = cx + shipGroup.position.x * scale;
+    const py = cy + shipGroup.position.z * scale;
+    mmCtx.save();
+    mmCtx.translate(px, py);
+    mmCtx.rotate(heading);
+    mmCtx.beginPath();
+    mmCtx.moveTo(0,-6); mmCtx.lineTo(4,5); mmCtx.lineTo(-4,5); mmCtx.closePath();
+    mmCtx.fillStyle = '#00F0FF';
+    mmCtx.fill();
+    mmCtx.restore();
+  }
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const dt = Math.min(clock.getDelta(), 0.05);
+    if (started) {
+      updatePlayer(dt);
+      updateNodes(dt);
+      updateBursts(dt);
+      drawMinimap();
+    }
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // ---------- DÉMARRAGE ----------
+  document.getElementById('start-btn').addEventListener('click', () => {
+    ensureAudio();
+    document.getElementById('start-screen').classList.add('hide');
+    started = true;
+  });
+  document.getElementById('skip-link').addEventListener('click', () => {
+    // Ouvre un récapitulatif texte complet (accessibilité / rapidité) sans toucher au score du jeu
+    document.getElementById('start-screen').classList.add('hide');
+    started = true;
+    const allHtml = NODES_DATA.map(n => `<div class="entry"><h4>${n.title}</h4>${n.html}</div>`).join('');
+    document.getElementById('modal-tag-text').textContent = 'RÉCAPITULATIF COMPLET';
+    document.getElementById('modal-title').textContent = 'CV — Vue texte complète';
+    document.getElementById('modal-body').innerHTML = allHtml;
+    document.getElementById('modal-overlay').classList.add('show');
+    paused = true;
+  });
 })();
 </script>
 </body>
