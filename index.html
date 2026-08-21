@@ -2,686 +2,468 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>DANIEL.EXE — Exploration du système Daniel Guedegbe</title>
-<meta name="description" content="Portfolio jouable de Daniel Guedegbe, Ingénieur Backend Python/Django — pilotez un vaisseau à travers un monde 3D pour découvrir son parcours." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Curriculum Vitae  Jean Marie Daniel Vianney GUEDEGBE</title>
+<meta name="description" content="Curriculum Vitae officiel de Jean Marie Daniel Vianney Guedegbe, Ingénieur Logiciel Backend Senior. Document complet à usage professionnel et institutionnel." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --bg:#04030A;
-  --cyan:#00F0FF;
-  --magenta:#FF2E9A;
-  --yellow:#FFE93E;
-  --violet:#8B5CF6;
-  --glass:rgba(10,8,24,.72);
-  --line:rgba(0,240,255,.25);
-  --ok:#34E4A6;
-  --text:#EAF6FF;
-  --text-soft:#8E9BC2;
+  --navy:#0B2A6B;
+  --navy-deep:#081D4D;
+  --navy-light:#3A5A96;
+  --gold:#9C7A32;
+  --paper:#FFFFFF;
+  --page:#EEF0F4;
+  --ink:#1A1D24;
+  --ink-soft:#4A4F5C;
+  --ink-dim:#7B8091;
+  --line:#D8DCE4;
+  --line-strong:#B9C0CC;
+  --tint:#F4F6F9;
+  --ok-bg:#EAF3EC;
+  --ok-text:#2A6B3D;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
-body{font-family:'Inter',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;user-select:none;}
-.hud-font{font-family:'Orbitron',sans-serif;}
-.mono{font-family:'JetBrains Mono',monospace;}
-canvas#scene{position:fixed;inset:0;display:block;}
-
-/* ============ SCANLINES / VIGNETTE ============ */
-#crt{position:fixed;inset:0;z-index:5;pointer-events:none;background:
-  repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.14) 3px),
-  radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.55) 100%);
-  mix-blend-mode:normal;
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Source Sans 3',sans-serif;
+  background:var(--page);
+  color:var(--ink);
+  line-height:1.62;
+  font-size:15.5px;
+  -webkit-font-smoothing:antialiased;
 }
-#chroma{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at 50% 50%, rgba(0,240,255,.03), rgba(255,46,154,.03) 70%);}
+h1,h2,h3,h4{font-family:'Source Serif 4',serif;color:var(--navy-deep);font-weight:600;}
+a{color:var(--navy);text-decoration:none;border-bottom:1px solid var(--line-strong);transition:border-color .2s,color .2s;}
+a:hover{color:var(--gold);border-color:var(--gold);}
+p{color:var(--ink-soft);}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
 
-/* ============ START SCREEN ============ */
-#start-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#0B0A22 0%,#04030A 70%);transition:opacity .8s ease,visibility .8s ease;}
-#start-screen.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.start-inner{text-align:center;max-width:640px;padding:2rem;}
-.start-badge{display:inline-flex;align-items:center;gap:.6rem;padding:.5rem 1.1rem;border:1px solid var(--line);border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan);margin-bottom:2rem;letter-spacing:.08em;}
-.start-badge .d{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:blinkdot 1.4s infinite;}
-@keyframes blinkdot{50%{opacity:.2;}}
-.start-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.2rem,7vw,4.2rem);line-height:1.05;letter-spacing:.02em;
-  background:linear-gradient(100deg,var(--cyan),var(--violet) 40%,var(--magenta) 75%,var(--yellow));
-  -webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 220%;animation:gradmove 6s ease-in-out infinite;
-  text-shadow:0 0 60px rgba(0,240,255,.25);
+/* ============ BARRE D'ACTIONS (non imprimée) ============ */
+#toolbar{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--navy-deep);color:#fff;padding:.7rem 1.5rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.15);}
+#toolbar .tb-label{font-size:.78rem;letter-spacing:.04em;opacity:.85;}
+#toolbar .tb-actions{display:flex;gap:.7rem;}
+#toolbar button{font-family:'Source Sans 3',sans-serif;font-size:.78rem;font-weight:600;padding:.5rem 1.1rem;border-radius:4px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;transition:background .2s;}
+#toolbar button:hover{background:rgba(255,255,255,.16);}
+#toolbar button.primary{background:var(--gold);border-color:var(--gold);color:#1A1D24;}
+#toolbar button.primary:hover{background:#B18E42;}
+
+/* ============ DOCUMENT (façon A4) ============ */
+#page-spacer{height:56px;}
+.document{max-width:940px;margin:2rem auto 4rem;background:var(--paper);box-shadow:0 1px 3px rgba(0,0,0,.06),0 20px 50px -20px rgba(11,42,107,.18);border:1px solid var(--line);}
+@media(max-width:1000px){.document{margin:1rem;max-width:none;}}
+
+/* ============ EN-TÊTE OFFICIEL ============ */
+.letterhead{background:linear-gradient(135deg,var(--navy-deep),var(--navy));color:#fff;padding:2.6rem 3rem 2.2rem;position:relative;}
+.letterhead::after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--gold),transparent 60%);}
+.lh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;margin-bottom:2rem;}
+.lh-doc-type{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.65);}
+.lh-ref{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:.3rem;}
+.seal{width:56px;height:56px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;}
+.seal::before{content:'';position:absolute;inset:6px;border:1px solid rgba(255,255,255,.3);border-radius:50%;}
+.seal span{font-family:'Source Serif 4',serif;font-weight:700;font-size:1.05rem;color:#fff;}
+
+.lh-main{display:flex;gap:2.2rem;align-items:center;}
+.lh-photo{width:120px;height:150px;flex-shrink:0;border:3px solid rgba(255,255,255,.9);background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.lh-photo img{width:100%;height:100%;object-fit:cover;}
+.lh-photo .ph-initials{font-family:'Source Serif 4',serif;font-size:2.6rem;font-weight:600;color:rgba(255,255,255,.85);}
+.lh-identity h1{color:#fff;font-size:clamp(1.5rem,3.6vw,2.1rem);font-weight:600;letter-spacing:.01em;margin-bottom:.4rem;line-height:1.2;}
+.lh-identity .lh-title{font-size:1rem;color:var(--gold);font-weight:500;margin-bottom:1rem;}
+.lh-contact-grid{display:grid;grid-template-columns:repeat(2,auto);gap:.35rem 2.2rem;font-size:.82rem;color:rgba(255,255,255,.85);}
+.lh-contact-grid div{display:flex;gap:.5rem;}
+.lh-contact-grid b{color:rgba(255,255,255,.55);font-weight:500;min-width:88px;display:inline-block;}
+.lh-contact-grid a{color:#fff;border-color:rgba(255,255,255,.35);}
+.lh-contact-grid a:hover{color:var(--gold);border-color:var(--gold);}
+@media(max-width:700px){.lh-main{flex-direction:column;align-items:flex-start;}.lh-contact-grid{grid-template-columns:1fr;}}
+
+/* ============ CORPS DU DOCUMENT ============ */
+.doc-body{padding:2.6rem 3rem 3.2rem;}
+@media(max-width:700px){.doc-body{padding:1.6rem 1.4rem 2.2rem;}.letterhead{padding:1.8rem 1.4rem 1.6rem;}}
+
+.section{margin-bottom:2.6rem;}
+.section:last-child{margin-bottom:0;}
+.section-title{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.3rem;padding-bottom:.6rem;border-bottom:2px solid var(--navy);}
+.section-num{font-family:'Source Serif 4',serif;font-size:.95rem;color:var(--gold);font-weight:600;}
+.section-title h2{font-size:1.15rem;letter-spacing:.01em;text-transform:uppercase;}
+
+/* Profil / synthèse */
+.summary p{margin-bottom:.9rem;font-size:.96rem;text-align:justify;}
+.summary p:last-child{margin-bottom:0;}
+.summary strong{color:var(--ink);font-weight:600;}
+
+/* Tableau générique */
+.info-table{width:100%;border-collapse:collapse;font-size:.9rem;}
+.info-table tr{border-bottom:1px solid var(--line);}
+.info-table tr:last-child{border-bottom:none;}
+.info-table td{padding:.65rem .4rem;vertical-align:top;}
+.info-table td.label{width:180px;color:var(--ink-dim);font-weight:500;}
+.info-table td.value{color:var(--ink);}
+
+/* Compétences */
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem 2.5rem;}
+.skill-cat{border-bottom:1px solid var(--line);padding-bottom:1rem;}
+.skill-cat h4{font-size:.86rem;text-transform:uppercase;letter-spacing:.05em;color:var(--navy);margin-bottom:.6rem;font-weight:600;}
+.skill-cat .tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.skill-cat .tags span{font-size:.8rem;background:var(--tint);border:1px solid var(--line);padding:.28rem .68rem;border-radius:3px;color:var(--ink-soft);}
+@media(max-width:700px){.skills-grid{grid-template-columns:1fr;}}
+
+/* Expérience professionnelle */
+.exp-entry{margin-bottom:1.9rem;padding-bottom:1.9rem;border-bottom:1px solid var(--line);page-break-inside:avoid;}
+.exp-entry:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.exp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;margin-bottom:.3rem;flex-wrap:wrap;}
+.exp-role{font-family:'Source Serif 4',serif;font-size:1.08rem;font-weight:600;color:var(--ink);}
+.exp-period{font-size:.78rem;color:#fff;background:var(--navy);padding:.28rem .7rem;border-radius:3px;white-space:nowrap;font-weight:500;}
+.exp-org{font-size:.92rem;color:var(--navy);font-weight:600;margin-bottom:.1rem;}
+.exp-loc{font-size:.78rem;color:var(--ink-dim);margin-bottom:.9rem;}
+.exp-entry ul{margin-bottom:.9rem;}
+.exp-entry li{position:relative;padding-left:1.2rem;margin-bottom:.5rem;font-size:.9rem;color:var(--ink-soft);}
+.exp-entry li::before{content:'';position:absolute;left:0;color:var(--gold);}
+.exp-tech{font-size:.78rem;color:var(--ink-dim);}
+.exp-tech b{color:var(--ink-soft);font-weight:600;}
+
+/* Projets */
+.proj-entry{margin-bottom:1.7rem;padding:1.3rem 1.5rem;background:var(--tint);border-left:3px solid var(--navy);page-break-inside:avoid;}
+.proj-entry:last-child{margin-bottom:0;}
+.proj-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.6rem;margin-bottom:.5rem;}
+.proj-name{font-family:'Source Serif 4',serif;font-size:1.02rem;font-weight:600;color:var(--ink);}
+.proj-role{font-size:.76rem;color:var(--navy);font-weight:600;text-transform:uppercase;letter-spacing:.03em;}
+.proj-desc{font-size:.89rem;margin-bottom:.7rem;}
+.proj-entry ul{margin-bottom:.6rem;}
+.proj-entry li{position:relative;padding-left:1.2rem;margin-bottom:.4rem;font-size:.86rem;color:var(--ink-soft);}
+.proj-entry li::before{content:'•';position:absolute;left:0;color:var(--navy);}
+.proj-meta{display:flex;flex-wrap:wrap;gap:.9rem;font-size:.78rem;color:var(--ink-dim);margin-top:.7rem;padding-top:.7rem;border-top:1px dashed var(--line-strong);}
+.proj-meta b{color:var(--ink-soft);}
+
+/* Distinctions */
+.award-entry{display:grid;grid-template-columns:110px 1fr;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line);}
+.award-entry:last-child{border-bottom:none;}
+.award-year{font-family:'Source Serif 4',serif;font-weight:600;color:var(--gold);font-size:.92rem;}
+.award-entry h4{font-size:.96rem;margin-bottom:.3rem;}
+.award-entry p{font-size:.86rem;margin:0;}
+
+/* Formation / certifications */
+.edu-entry{padding:.85rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
+.edu-entry:last-child{border-bottom:none;}
+.edu-entry .e-title{font-weight:600;color:var(--ink);font-size:.92rem;}
+.edu-entry .e-org{font-size:.8rem;color:var(--ink-dim);margin-top:.15rem;}
+.edu-entry .e-year{font-size:.82rem;color:var(--navy);font-weight:600;white-space:nowrap;}
+
+/* Langues */
+.lang-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+.lang-item{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;background:var(--tint);border:1px solid var(--line);}
+.lang-item .l-name{font-weight:600;font-size:.92rem;}
+.lang-item .l-level{font-size:.76rem;color:#fff;background:var(--navy);padding:.22rem .6rem;border-radius:3px;}
+@media(max-width:600px){.lang-grid{grid-template-columns:1fr;}}
+
+/* Références */
+.ref-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;}
+.ref-card{padding:1.3rem 1.4rem;border:1px solid var(--line);}
+.ref-card p.quote{font-size:.86rem;font-style:italic;color:var(--ink-soft);margin-bottom:.9rem;}
+.ref-card .r-name{font-weight:600;font-size:.9rem;color:var(--ink);}
+.ref-card .r-role{font-size:.78rem;color:var(--ink-dim);}
+@media(max-width:700px){.ref-grid{grid-template-columns:1fr;}}
+
+/* Déclaration finale */
+.declaration{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--line-strong);}
+.declaration p{font-size:.85rem;font-style:italic;color:var(--ink-dim);margin-bottom:2.2rem;}
+.sig-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;}
+.sig-block{font-size:.84rem;color:var(--ink-soft);}
+.sig-block b{display:block;color:var(--ink);font-weight:600;margin-bottom:.2rem;}
+
+footer.doc-footer{text-align:center;padding:1.4rem;font-size:.72rem;color:var(--ink-dim);}
+
+/* ============ IMPRESSION ============ */
+@media print{
+  #toolbar,#page-spacer{display:none !important;}
+  body{background:#fff;font-size:11.5px;}
+  .document{box-shadow:none;border:none;margin:0;max-width:none;}
+  .letterhead{background:var(--navy-deep) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .exp-entry,.proj-entry,.award-entry{page-break-inside:avoid;}
+  a{border-bottom:none;color:var(--ink);}
 }
-@keyframes gradmove{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
-.start-sub{color:var(--text-soft);font-size:1rem;font-weight:300;margin:1.4rem auto 2.4rem;max-width:46ch;}
-.start-sub b{color:var(--text);font-weight:600;}
-#start-btn{font-family:'Orbitron',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.06em;padding:1.05rem 2.6rem;border-radius:14px;border:1px solid var(--cyan);background:rgba(0,240,255,.08);color:var(--cyan);cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden;}
-#start-btn:hover{background:rgba(0,240,255,.18);box-shadow:0 0 40px rgba(0,240,255,.35);transform:translateY(-2px);}
-#start-btn::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);animation:sheen 3s ease-in-out infinite;}
-@keyframes sheen{0%{left:-60%;}100%{left:130%;}}
-.start-controls{display:flex;justify-content:center;gap:2.2rem;margin-top:2.6rem;flex-wrap:wrap;}
-.ctrl-hint{display:flex;flex-direction:column;align-items:center;gap:.5rem;}
-.key{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-soft);border:1px solid var(--line);border-radius:6px;padding:.35rem .6rem;background:rgba(0,240,255,.04);}
-.ctrl-hint span{font-size:.66rem;color:var(--text-soft);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;}
-.skip-link{display:block;margin-top:2.4rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-dim,#55597a);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
-.skip-link:hover{color:var(--cyan);}
-
-/* ============ HUD ============ */
-#hud{position:fixed;inset:0;z-index:20;pointer-events:none;}
-.hud-topbar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:1.3rem 1.6rem;}
-.hud-panel{background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(14px);padding:.85rem 1.2rem;pointer-events:auto;}
-.hud-id{display:flex;align-items:center;gap:.7rem;}
-.hud-id .avatar{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),var(--magenta));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;font-size:.85rem;color:#04030A;}
-.hud-id-text .name{font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.03em;}
-.hud-id-text .sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-soft);}
-
-.hud-score{display:flex;align-items:center;gap:.9rem;}
-.hud-score .label{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-soft);letter-spacing:.1em;}
-.hud-score .bar{width:130px;height:7px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;}
-.hud-score .bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--magenta));transition:width .5s ease;}
-.hud-score .num{font-family:'Orbitron',sans-serif;font-weight:700;font-size:.8rem;color:var(--cyan);}
-
-.hud-mute{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;}
-
-.hud-bottombar{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:1.3rem 1.6rem;}
-#minimap{border-radius:14px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);}
-.hud-legend{display:flex;gap:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--text-soft);}
-.hud-legend .lk{border:1px solid var(--line);border-radius:5px;padding:.25rem .5rem;margin-right:.3rem;color:var(--cyan);}
-
-#crosshair{position:absolute;top:50%;left:50%;width:22px;height:22px;transform:translate(-50%,-50%);pointer-events:none;}
-#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(0,240,255,.55);}
-#crosshair::before{left:50%;top:0;width:1px;height:100%;transform:translateX(-50%);}
-#crosshair::after{top:50%;left:0;height:1px;width:100%;transform:translateY(-50%);}
-
-.prompt-pill{position:absolute;top:64%;left:50%;transform:translate(-50%,0) scale(.9);padding:.6rem 1.1rem;border-radius:999px;background:var(--glass);border:1px solid var(--cyan);font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan);opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;}
-.prompt-pill.show{opacity:1;transform:translate(-50%,0) scale(1);}
-
-/* Mobile virtual controls */
-#touch-controls{position:fixed;inset:0;z-index:22;pointer-events:none;display:none;}
-#touch-joystick{position:absolute;bottom:2rem;left:2rem;width:120px;height:120px;border-radius:50%;border:1px solid var(--line);background:rgba(0,240,255,.05);pointer-events:auto;}
-#touch-joystick .nub{position:absolute;top:50%;left:50%;width:50px;height:50px;border-radius:50%;background:rgba(0,240,255,.25);border:1px solid var(--cyan);transform:translate(-50%,-50%);}
-#touch-boost{position:absolute;bottom:2.4rem;right:2rem;width:78px;height:78px;border-radius:50%;border:1px solid var(--magenta);background:rgba(255,46,154,.1);pointer-events:auto;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--magenta);text-align:center;}
-@media(max-width:820px), (pointer:coarse){
-  #touch-controls{display:block;}
-  .hud-legend{display:none;}
-}
-
-/* ============ SECTION MODAL ============ */
-#modal-overlay{position:fixed;inset:0;z-index:60;background:rgba(2,2,8,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s ease;}
-#modal-overlay.show{opacity:1;visibility:visible;}
-#modal-panel{width:min(560px,100%);max-height:82vh;overflow-y:auto;background:linear-gradient(160deg,rgba(15,12,34,.92),rgba(6,5,16,.96));border:1px solid var(--line);border-radius:22px;padding:2.2rem;transform:translateY(30px) scale(.96);transition:transform .45s cubic-bezier(.2,1,.3,1);box-shadow:0 60px 120px -40px rgba(0,0,0,.8);}
-#modal-overlay.show #modal-panel{transform:translateY(0) scale(1);}
-.modal-tag{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.14em;color:var(--ok);margin-bottom:1rem;}
-.modal-tag .d{width:6px;height:6px;border-radius:50%;background:var(--ok);}
-#modal-title{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:1.2rem;letter-spacing:.01em;
-  background:linear-gradient(100deg,var(--cyan),var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent;}
-#modal-body{font-size:.92rem;color:var(--text-soft);font-weight:300;line-height:1.75;}
-#modal-body p{margin-bottom:1rem;}
-#modal-body strong{color:var(--text);font-weight:600;}
-#modal-body ul{list-style:none;margin:.8rem 0 1.2rem;}
-#modal-body li{position:relative;padding-left:1.3rem;margin-bottom:.55rem;}
-#modal-body li::before{content:'▸';position:absolute;left:0;color:var(--cyan);}
-#modal-body .tag-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem;}
-#modal-body .tag-row span{font-family:'JetBrains Mono',monospace;font-size:.62rem;border:1px solid var(--line);padding:.25rem .6rem;border-radius:999px;color:var(--cyan);}
-#modal-body .entry{margin-bottom:1.3rem;padding-bottom:1.3rem;border-bottom:1px solid rgba(255,255,255,.06);}
-#modal-body .entry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-#modal-body .entry .e-head{display:flex;justify-content:space-between;gap:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--yellow);margin-bottom:.3rem;}
-#modal-body .entry h4{font-family:'Orbitron',sans-serif;font-size:.98rem;color:var(--text);margin-bottom:.15rem;}
-#modal-body .cta-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.2rem;}
-#modal-body .cta-links a{font-family:'JetBrains Mono',monospace;font-size:.76rem;padding:.6rem 1rem;border-radius:10px;border:1px solid var(--cyan);color:var(--cyan);transition:all .3s;}
-#modal-body .cta-links a:hover{background:rgba(0,240,255,.12);}
-#modal-close{margin-top:1.6rem;width:100%;padding:.95rem;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);font-family:'Orbitron',sans-serif;font-size:.78rem;letter-spacing:.05em;cursor:pointer;transition:all .3s;}
-#modal-close:hover{border-color:var(--cyan);color:var(--cyan);}
-
-/* ============ VICTORY SCREEN ============ */
-#victory-overlay{position:fixed;inset:0;z-index:80;background:radial-gradient(ellipse at 50% 40%,rgba(0,240,255,.08),rgba(2,2,8,.92) 65%);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .8s ease,visibility .8s ease;padding:1.5rem;}
-#victory-overlay.show{opacity:1;visibility:visible;}
-.victory-inner{max-width:560px;text-align:center;}
-.victory-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:1rem;
-  background:linear-gradient(100deg,var(--yellow),var(--magenta),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 220%;animation:gradmove 5s ease-in-out infinite;}
-.victory-sub{color:var(--text-soft);font-size:.95rem;font-weight:300;margin-bottom:2.2rem;max-width:44ch;margin-left:auto;margin-right:auto;}
-.victory-ctas{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;}
-.v-btn{font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;padding:.9rem 1.6rem;border-radius:12px;letter-spacing:.03em;transition:all .3s;}
-.v-btn-primary{background:linear-gradient(100deg,var(--cyan),var(--magenta));color:#04030A;}
-.v-btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px -12px rgba(0,240,255,.45);}
-.v-btn-ghost{border:1px solid var(--line);color:var(--text);}
-.v-btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
-.victory-replay{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-soft);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
-.victory-replay:hover{color:var(--cyan);}
-
-@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;}}
 </style>
 </head>
 <body>
 
-<canvas id="scene"></canvas>
-<div id="chroma"></div>
-<div id="crt"></div>
-
-<!-- ═══ ÉCRAN DE DÉMARRAGE ═══ -->
-<div id="start-screen">
-  <div class="start-inner">
-    <div class="start-badge"><span class="d"></span> SYSTEM://DANIEL_GUEDEGBE — EN LIGNE</div>
-    <h1 class="start-title hud-font">EXPLORE<br>LE SYSTÈME</h1>
-    <p class="start-sub">Pilotez un vaisseau à travers l'univers numérique de <b>Daniel Guedegbe</b>, Ingénieur Backend Python/Django. Traversez les 7 nœuds de données pour révéler profil, stack, parcours, projets et contact.</p>
-    <button id="start-btn" class="hud-font">▶ COMMENCER LA MISSION</button>
-    <div class="start-controls">
-      <div class="ctrl-hint"><span class="key">Z Q S D</span><span>ou flèches — déplacer</span></div>
-      <div class="ctrl-hint"><span class="key">MAJ</span><span>boost</span></div>
-      <div class="ctrl-hint"><span class="key">ESPACE / CTRL</span><span>monter / descendre</span></div>
-    </div>
-    <span class="skip-link" id="skip-link">Ignorer le jeu — voir le CV en texte simple →</span>
+<div id="toolbar">
+  <span class="tb-label">CURRICULUM VITAE  DOCUMENT OFFICIEL</span>
+  <div class="tb-actions">
+    <button onclick="window.print()" class="primary">Imprimer / Exporter en PDF</button>
+    <a href="https://drive.google.com/file/d/1WobBU8LyFQWqRjznG0AHsm00Cpl_dJgs/view?usp=sharing" target="_blank" style="border:none"><button>Télécharger le CV (PDF)</button></a>
   </div>
 </div>
+<div id="page-spacer"></div>
 
-<!-- ═══ HUD ═══ -->
-<div id="hud">
-  <div class="hud-topbar">
-    <div class="hud-panel hud-id">
-      <div class="avatar">DG</div>
-      <div class="hud-id-text"><div class="name hud-font">DANIEL GUEDEGBE</div><div class="sub">BACKEND ENGINEER · PYTHON/DJANGO</div></div>
+<div class="document">
+
+  <!-- ═══ EN-TÊTE OFFICIEL ═══ -->
+  <div class="letterhead">
+    <div class="lh-top">
+      <div>
+        <div class="lh-doc-type">Curriculum Vitae  Document professionnel</div>
+        <div class="lh-ref">Référence : CV-DG-2026 · Édition Janvier 2026</div>
+      </div>
+      <div class="seal"><span>DG</span></div>
     </div>
-    <div class="hud-panel hud-score">
-      <div><div class="label">MODULES DÉCOUVERTS</div><div class="bar"><i id="score-bar"></i></div></div>
-      <div class="num hud-font" id="score-num">0/7</div>
-      <div class="hud-mute hud-panel" id="mute-btn" title="Couper le son">🔊</div>
+    <div class="lh-main">
+      <div class="lh-photo"><span class="ph-initials">DG</span></div>
+      <div class="lh-identity">
+        <h1>Jean Marie Daniel Vianney GUEDEGBE</h1>
+        <div class="lh-title">Ingénieur Logiciel Backend Senior  Spécialiste Python / Django</div>
+        <div class="lh-contact-grid">
+          <div><b>Téléphone</b><a href="tel:+2250748733365">+225 07 48 73 33 65</a></div>
+          <div><b>E-mail</b><a href="mailto:danielguedegbe10027@gmail.com">danielguedegbe10027@gmail.com</a></div>
+          <div><b>Résidence</b>Abidjan, Côte d'Ivoire</div>
+          <div><b>LinkedIn</b><a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">linkedin.com/in/daniel-guedegbe</a></div>
+          <div><b>Disponibilité</b>Remote / hybride / relocalisation</div>
+          <div><b>GitHub</b><a href="https://github.com/daniel10027" target="_blank">github.com/daniel10027</a></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div id="crosshair"></div>
-  <div class="prompt-pill hud-font" id="prompt-pill">◉ APPROCHEZ POUR SCANNER</div>
-  <div class="hud-bottombar">
-    <canvas id="minimap" width="150" height="150"></canvas>
-    <div class="hud-legend">
-      <span><span class="lk">ZQSD</span>déplacer</span>
-      <span><span class="lk">MAJ</span>boost</span>
-      <span><span class="lk">ESPACE</span>monter</span>
-      <span><span class="lk">CTRL</span>descendre</span>
+
+  <div class="doc-body">
+
+    <!-- I. PROFIL -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">I.</span><h2>Profil professionnel</h2></div>
+      <div class="summary">
+        <p>Ingénieur logiciel backend fort de plus de <strong>six années d'expérience</strong> dans la conception, le développement et le déploiement d'architectures applicatives destinées à la production, au sein d'organisations privées et institutionnelles en Côte d'Ivoire et à l'international. Spécialiste des écosystèmes <strong>Python, Django et Django REST Framework</strong>, avec une expertise complémentaire en développement mobile multiplateforme (Flutter) et en intégration de systèmes de paiement mobile (Wave, MTN Mobile Money).</p>
+        <p>Actuellement <strong>Consultant Backend Developer pour Orange Liberia</strong> et <strong>Développeur Backend pour Illigo</strong> (plateforme de mobilité intelligente), après cinq années passées à la tête du département informatique de l'Institut International Polytechnique des Élites d'Abidjan (IIPEA) en qualité de Lead Développeur Full Stack et Responsable IT.</p>
+        <p>Compétences avérées en architecture logicielle (Clean Architecture, Domain-Driven Design, principes SOLID), en gestion d'équipes techniques, en conception de systèmes de paiement mobile sécurisés, et en pilotage de projets numériques de bout en bout  du cadrage fonctionnel à la mise en production et à la maintenance. Habitué à la collaboration en environnement multiculturel, en français comme en anglais.</p>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Contrôles tactiles -->
-<div id="touch-controls">
-  <div id="touch-joystick"><div class="nub" id="joy-nub"></div></div>
-  <div id="touch-boost">BOOST</div>
-</div>
-
-<!-- ═══ MODAL SECTION ═══ -->
-<div id="modal-overlay">
-  <div id="modal-panel">
-    <div class="modal-tag"><span class="d"></span> <span id="modal-tag-text">MODULE DÉBLOQUÉ</span></div>
-    <h2 id="modal-title" class="hud-font"></h2>
-    <div id="modal-body"></div>
-    <button id="modal-close" class="hud-font">▶ CONTINUER L'EXPLORATION</button>
-  </div>
-</div>
-
-<!-- ═══ ÉCRAN DE VICTOIRE ═══ -->
-<div id="victory-overlay">
-  <div class="victory-inner">
-    <div class="victory-title hud-font">MISSION ACCOMPLIE</div>
-    <p class="victory-sub">Les 7 modules du système ont été scannés avec succès. Vous connaissez maintenant tout le parcours de Daniel — il ne reste qu'à passer à l'étape suivante.</p>
-    <div class="victory-ctas">
-      <a href="https://wa.me/2250748733365" target="_blank" class="v-btn v-btn-primary">Écrire sur WhatsApp</a>
-      <a href="mailto:danielguedegbe10027@gmail.com" class="v-btn v-btn-ghost">Envoyer un email</a>
-      <a href="https://drive.google.com/file/d/1WobBU8LyFQWqRjznG0AHsm00Cpl_dJgs/view?usp=sharing" target="_blank" class="v-btn v-btn-ghost">Télécharger le CV</a>
+    <!-- II. COMPÉTENCES -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">II.</span><h2>Compétences techniques</h2></div>
+      <div class="skills-grid">
+        <div class="skill-cat"><h4>Langages de programmation</h4><div class="tags"><span>Python</span><span>JavaScript (ES6+)</span><span>Dart</span><span>SQL</span><span>Bash</span></div></div>
+        <div class="skill-cat"><h4>Frameworks &amp; bibliothèques</h4><div class="tags"><span>Django</span><span>Django REST Framework</span><span>FastAPI</span><span>Flask</span><span>Next.js</span><span>Angular</span><span>Flutter</span><span>Tailwind CSS</span></div></div>
+        <div class="skill-cat"><h4>Bases de données &amp; stockage</h4><div class="tags"><span>PostgreSQL</span><span>MySQL</span><span>MongoDB</span><span>SQL Server</span><span>Redis</span></div></div>
+        <div class="skill-cat"><h4>Infrastructure &amp; DevOps</h4><div class="tags"><span>Docker</span><span>Docker Compose</span><span>Nginx</span><span>Gunicorn</span><span>GitHub Actions</span><span>GitLab CI/CD</span><span>Ansible</span><span>DigitalOcean</span><span>Heroku</span></div></div>
+        <div class="skill-cat"><h4>Traitement temps réel &amp; asynchrone</h4><div class="tags"><span>Celery</span><span>Redis</span><span>MQTT</span><span>WebSockets</span><span>Django Channels</span></div></div>
+        <div class="skill-cat"><h4>Paiements &amp; systèmes financiers</h4><div class="tags"><span>Wave Checkout API</span><span>Webhooks signés HMAC-SHA256</span><span>API MTN Mobile Money</span><span>Réconciliation de paiements</span><span>Systèmes multi-portefeuilles</span></div></div>
+        <div class="skill-cat"><h4>Architecture &amp; méthodologies</h4><div class="tags"><span>Clean Architecture</span><span>Domain-Driven Design</span><span>Microservices</span><span>MVC / MVT</span><span>API REST</span><span>TDD</span><span>SCRUM</span></div></div>
+        <div class="skill-cat"><h4>Outils &amp; spécialités complémentaires</h4><div class="tags"><span>Postman</span><span>Git</span><span>OpenCV</span><span>Firebase</span><span>Odoo</span><span>RFID / Biométrie</span></div></div>
+      </div>
     </div>
-    <span class="victory-replay" id="replay-link">↺ Continuer à explorer le monde</span>
+
+    <!-- III. EXPÉRIENCE PROFESSIONNELLE -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">III.</span><h2>Expérience professionnelle</h2></div>
+
+      <div class="exp-entry">
+        <div class="exp-head"><span class="exp-role">Consultant Backend Developer</span><span class="exp-period">Septembre 2025  Présent</span></div>
+        <div class="exp-org">Orange Liberia</div>
+        <div class="exp-loc">Abidjan, Côte d'Ivoire (télétravail)</div>
+        <ul>
+          <li>Conception et développement de microservices Python/Flask pour des systèmes critiques télécoms, garantissant haute disponibilité et sécurité des données.</li>
+          <li>Construction d'APIs REST robustes et scalables, assurant l'interopérabilité avec des applications internes, des plateformes financières et des systèmes inter-opérateurs.</li>
+          <li>Optimisation des bases de données SQL Server et NoSQL : indexation, réglage des requêtes et supervision des performances.</li>
+          <li>Déploiement et automatisation de l'infrastructure via Docker et Ansible, mise en place de pipelines CI/CD sous GitLab.</li>
+          <li>Personnalisation de modules Odoo pour renforcer les flux de facturation, de gestion de la relation client (CRM) et des opérations métier.</li>
+        </ul>
+        <div class="exp-tech"><b>Environnement technique :</b> Python, Flask, Odoo, SQL Server, Docker, Ansible, GitLab CI/CD</div>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-head"><span class="exp-role">Développeur Backend  Mobilité Intelligente</span><span class="exp-period">Mai 2025  Présent</span></div>
+        <div class="exp-org">Illigo</div>
+        <div class="exp-loc">Abidjan, Côte d'Ivoire (hybride)</div>
+        <ul>
+          <li>Développement et maintenance d'un backend modulaire Python/Django/DRF structuré selon les principes de la Clean Architecture pour une plateforme de mobilité intelligente.</li>
+          <li>Intégration avec une infrastructure IoT complexe (stations, véhicules, badges, chargeurs) via les protocoles MQTT, REST et WebSocket.</li>
+          <li>Implémentation du suivi GPS en temps réel, du contrôle à distance des véhicules et de la télémétrie live via Firebase et WebSockets.</li>
+          <li>Rédaction de tests automatisés et participation aux revues de code, en collaboration étroite avec les équipes produit et frontend.</li>
+        </ul>
+        <div class="exp-tech"><b>Environnement technique :</b> Django, DRF, MQTT, PostgreSQL, Celery, Redis, Firebase, Flutter</div>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-head"><span class="exp-role">Lead Développeur Full Stack &amp; Responsable Informatique</span><span class="exp-period">Juin 2020  Mai 2025</span></div>
+        <div class="exp-org">IIPEA  Institut International Polytechnique des Élites d'Abidjan</div>
+        <div class="exp-loc">Abidjan, Côte d'Ivoire</div>
+        <ul>
+          <li>Pilotage du cycle complet de développement logiciel  de la conception à la mise en production  pour plusieurs applications web institutionnelles développées en Python/Django.</li>
+          <li>Management et encadrement d'une équipe de développeurs : orientation technique, assurance qualité du code et respect des délais.</li>
+          <li>Conception et livraison d'un ERP scolaire complet (SMS  School Management System) couvrant la gestion académique, administrative et financière  distingué du 1er Prix au Moov Africa CI StartUp Challenge 2025.</li>
+          <li>Collaboration continue avec les équipes frontend afin de garantir une intégration API fluide et une expérience utilisateur optimale.</li>
+        </ul>
+        <div class="exp-tech"><b>Environnement technique :</b> Python, Django, DRF, PostgreSQL, Flutter, Firebase, Git</div>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-head"><span class="exp-role">Développeur Backend Python / Django</span><span class="exp-period">Mars 2022  Avril 2023</span></div>
+        <div class="exp-org">Saas Group</div>
+        <div class="exp-loc">Côte d'Ivoire (télétravail)</div>
+        <ul>
+          <li>Conception et développement de la plateforme RH Sentinelle : système de gestion des présences par RFID, QR codes, reconnaissance faciale et biométrie digitale.</li>
+          <li>Développement de notifications push en temps réel, de fonctions de géolocalisation, de gestion des ressources et de modules de reporting personnalisés.</li>
+          <li>Modélisation du schéma PostgreSQL pour la scalabilité, mise en œuvre de Redis pour la mise en cache et de Django Channels pour les données en temps réel.</li>
+        </ul>
+        <div class="exp-tech"><b>Environnement technique :</b> Django, DRF, PostgreSQL, Redis, Django Channels, OpenCV, Docker</div>
+      </div>
+
+      <div class="exp-entry">
+        <div class="exp-head"><span class="exp-role">Développeur Mobile &amp; Backend</span><span class="exp-period">Mars 2021  Janvier 2022</span></div>
+        <div class="exp-org">SIEFTP / Tropic BTP</div>
+        <div class="exp-loc">Côte d'Ivoire (télétravail)</div>
+        <ul>
+          <li>Développement d'APIs backend en Django/DRF et d'applications mobiles multiplateformes avec Flutter pour plusieurs projets clients.</li>
+          <li>Réalisation d'une application de pointage et de suivi de chantier intégrant géolocalisation, suivi du temps de travail et génération automatisée de rapports.</li>
+          <li>Gestion complète de la base de données : conception du schéma, optimisation des requêtes et stratégies de sauvegarde.</li>
+        </ul>
+        <div class="exp-tech"><b>Environnement technique :</b> Django, DRF, Flutter, PostgreSQL, Firebase</div>
+      </div>
+    </div>
+
+    <!-- IV. PROJETS ET RÉALISATIONS -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">IV.</span><h2>Projets et réalisations majeures</h2></div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">SPORTIF Africa  Plateforme e-commerce sportive complète</span><span class="proj-role">Conception &amp; développement complet</span></div>
+        <p class="proj-desc">Plateforme Django/PostgreSQL de bout en bout pour la vente d'équipements sportifs, unifiant site marchand, back-office multi-rôles et point de vente physique autour d'un système central de gestion des stocks et des paiements.</p>
+        <ul>
+          <li>Intégration du paiement en ligne Wave (Checkout API et webhooks signés HMAC), avec réconciliation automatique des transactions et détection d'anomalies de paiement.</li>
+          <li>Conception d'un système de trois portefeuilles isolés (boutique, développeur, référence Wave) avec répartition automatique des commissions et validation manuelle des demandes de retrait.</li>
+          <li>Développement d'un point de vente (POS) interne pour les ventes en boutique, avec génération de reçus PDF à la volée.</li>
+          <li>Gestion des permissions granulaires du personnel, notifications temps réel et back-office administratif complet (stocks, promotions, ventes flash).</li>
+        </ul>
+        <div class="proj-meta"><span><b>Technologies :</b> Django 5, PostgreSQL, Tailwind CSS, API Wave, CI/CD</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">Spaghetti d'Abidjan  Plateforme de livraison de plats locaux</span><span class="proj-role">Conception &amp; développement complet</span></div>
+        <p class="proj-desc">Plateforme de commande et de livraison de plats de la cuisine ivoirienne (attiéké, garba, alloco, sauces mijotées), avec un tunnel de commande optimisé et un paiement mobile intégré de bout en bout.</p>
+        <ul>
+          <li>Intégration du paiement en ligne via Wave, avec confirmation automatique des commandes.</li>
+          <li>Système de recherche et de filtres avancés : budget maximal, niveau d'épices, options végétales, promotions en cours.</li>
+          <li>Backend Django avec gestion du catalogue de plats par catégories et suivi des commandes.</li>
+        </ul>
+        <div class="proj-meta"><span><b>Technologies :</b> Django, PostgreSQL, API Wave, Nginx, Gunicorn</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">FNE Ivoire  Facturation Normalisée Électronique</span><span class="proj-role">Conception &amp; développement</span></div>
+        <p class="proj-desc">Plateforme SaaS conçue pour répondre à l'obligation de Facturation Normalisée Électronique instaurée par la Direction Générale des Impôts ivoirienne en 2025 : génération, signature et transmission des factures en temps réel à l'administration fiscale.</p>
+        <div class="proj-meta"><span><b>Technologies :</b> Django, Celery, PostgreSQL, API REST, architecture SaaS multi-tenant</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">BRVM Analytics  Données boursières en temps réel</span><span class="proj-role">Conception &amp; développement</span></div>
+        <p class="proj-desc">Plateforme d'analyse pour la Bourse Régionale des Valeurs Mobilières de l'UEMOA, agrégeant cours, volumes et indices des sociétés cotées dans huit pays d'Afrique de l'Ouest.</p>
+        <div class="proj-meta"><span><b>Technologies :</b> Django, PostgreSQL, Redis, API REST</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">Wave Business API SDK</span><span class="proj-role">Bibliothèque open-source</span></div>
+        <p class="proj-desc">Kit de développement Python publié sur PyPI, permettant l'intégration des paiements, des paiements sortants (payouts) et des webhooks Wave Business, avec signature HMAC-SHA256 systématique.</p>
+        <div class="proj-meta"><span><b>Technologies :</b> Python, PyPI, API REST, HMAC-SHA256, tests automatisés</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">PandaTree  Recensement du patrimoine végétal national</span><span class="proj-role">Développement backend &amp; mobile</span></div>
+        <p class="proj-desc">Développée en collaboration avec le Centre National de Recherche Agronomique (CNRA), plateforme de recensement et de cartographie du patrimoine arboricole ivoirien.</p>
+        <div class="proj-meta"><span><b>Technologies :</b> Django, DRF, Flutter, systèmes d'information géographique, PostgreSQL</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">SMS  School Management System</span><span class="proj-role">Conception &amp; développement complet</span></div>
+        <p class="proj-desc">Système de gestion scolaire couvrant l'intégralité du cycle académique, administratif et financier d'un établissement, déployé en phase pilote dans quatre établissements. Distingué du 1er Prix au Moov Africa CI StartUp Challenge 2025.</p>
+        <div class="proj-meta"><span><b>Technologies :</b> Django, DRF, Flutter, PostgreSQL, plateformes Web/Android/iOS</span></div>
+      </div>
+
+      <div class="proj-entry">
+        <div class="proj-head"><span class="proj-name">Autres réalisations notables</span><span class="proj-role">Portefeuille complémentaire</span></div>
+        <ul>
+          <li><strong>OS-IRIS</strong>  ERP de gestion des stocks, des ventes et de la comptabilité commerciale pour PME.</li>
+          <li><strong>Sentinelle RH</strong>  Système de gestion des présences par RFID, QR codes et reconnaissance faciale.</li>
+          <li><strong>MomoFund</strong>  Plateforme de crowdfunding via l'API MTN Mobile Money.</li>
+          <li><strong>TimesTrackers</strong>  Suivi du temps de travail et gestion de projets pour équipes distribuées.</li>
+          <li><strong>Ma Resie</strong>  Plateforme de mise en relation immobilière (Next.js / Django).</li>
+          <li><strong>TraceAgriChain</strong>  Traçabilité agricole combinant blockchain, imagerie satellite et cartographie 3D.</li>
+          <li><strong>AlloCar</strong>  Plateforme de covoiturage intelligent (Flask / Angular / Flutter).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V. DISTINCTIONS -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">V.</span><h2>Distinctions et récompenses</h2></div>
+      <div class="award-entry">
+        <div class="award-year">Décembre 2025</div>
+        <div><h4>1er Prix  Moov Africa CI StartUp Challenge 2025</h4><p>Remporté avec le projet SMS (School Management System), ERP éducatif multiplateforme (Web, Android, iOS) validé par une phase pilote sur quatre établissements scolaires.</p></div>
+      </div>
+      <div class="award-entry">
+        <div class="award-year">Mai 2025</div>
+        <div><h4>Finaliste  MASS Solutions Spatiales Africaines (ICESCO)</h4><p>Présentation du projet TraceAgriChain, combinant blockchain, imagerie satellite et cartographie 3D pour la traçabilité complète des matières premières agricoles, de la production à l'exportation.</p></div>
+      </div>
+      <div class="award-entry">
+        <div class="award-year">Janvier 2024</div>
+        <div><h4>2ᵉ Place  Hackathon MTN MTS Côte d'Ivoire</h4><p>Développement du projet MomoFund, plateforme de financement participatif (crowdfunding) via l'API MTN Mobile Money.</p></div>
+      </div>
+    </div>
+
+    <!-- VI. FORMATION -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">VI.</span><h2>Formation académique</h2></div>
+      <div class="edu-entry"><div><div class="e-title">MSc en Génie Logiciel</div><div class="e-org">Wolf University / GoMyCode</div></div><div class="e-year">2025</div></div>
+      <div class="edu-entry"><div><div class="e-title">Master en Informatique  Spécialité Génie Logiciel</div><div class="e-org">IIPEA  Institut International Polytechnique des Élites d'Abidjan</div></div><div class="e-year">2023</div></div>
+      <div class="edu-entry"><div><div class="e-title">Master en Big Data Analytics</div><div class="e-org">Université Virtuelle de Côte d'Ivoire (soutenance en cours)</div></div><div class="e-year">2023</div></div>
+      <div class="edu-entry"><div><div class="e-title">Licence en Bases de Données</div><div class="e-org">Université Virtuelle de Côte d'Ivoire</div></div><div class="e-year">2020</div></div>
+      <div class="edu-entry"><div><div class="e-title">Baccalauréat Scientifique, Série C</div><div class="e-org">Lycée Municipal de Port-Bouët</div></div><div class="e-year">2017</div></div>
+    </div>
+
+    <!-- VII. CERTIFICATIONS -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">VII.</span><h2>Certifications professionnelles</h2></div>
+      <div class="edu-entry"><div><div class="e-title">Python for Data Science</div><div class="e-org">IBM</div></div></div>
+      <div class="edu-entry"><div><div class="e-title">Big Data Analysis</div><div class="e-org">IBM</div></div></div>
+      <div class="edu-entry"><div><div class="e-title">Machine Learning &amp; Data Visualization with Python</div><div class="e-org">IBM</div></div></div>
+      <div class="edu-entry"><div><div class="e-title">Microsoft Technologies Association Programming</div><div class="e-org">Microsoft</div></div></div>
+      <div class="edu-entry"><div><div class="e-title">ITIL® Foundation in IT Service Management</div><div class="e-org">AXELOS</div></div></div>
+      <div class="edu-entry"><div><div class="e-title">Administrateur de Bases de Données</div><div class="e-org">NaN  Not A Number Côte d'Ivoire</div></div></div>
+      <div class="edu-entry"><div><div class="e-title">Planification de projet informatisé &amp; suivi opérationnel</div><div class="e-org">MDS Canada</div></div></div>
+    </div>
+
+    <!-- VIII. LANGUES -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">VIII.</span><h2>Langues</h2></div>
+      <div class="lang-grid">
+        <div class="lang-item"><span class="l-name">Français</span><span class="l-level">Langue maternelle</span></div>
+        <div class="lang-item"><span class="l-name">Anglais</span><span class="l-level">Niveau professionnel</span></div>
+      </div>
+    </div>
+
+    <!-- IX. RÉFÉRENCES -->
+    <div class="section">
+      <div class="section-title"><span class="section-num">IX.</span><h2>Références professionnelles</h2></div>
+      <div class="ref-grid">
+        <div class="ref-card"><p class="quote">« Daniel a conçu pour nous une plateforme académique sur mesure, fiable et facile à utiliser. Son expertise backend a permis d'automatiser des processus complexes. »</p><div class="r-name">Jean Kouassi</div><div class="r-role">Directeur Informatique, Groupe École Sup</div></div>
+        <div class="ref-card"><p class="quote">« Sa capacité à comprendre nos besoins et à livrer dans les délais a été remarquable, de la spécification jusqu'au déploiement. »</p><div class="r-name">Yao N'Dri</div><div class="r-role">Directeur Technique, Saas Group Côte d'Ivoire</div></div>
+        <div class="ref-card"><p class="quote">« Professionnel, réactif et force de proposition. Il a transformé notre idée en une application performante, sécurisée et évolutive. »</p><div class="r-name">Nadine Koné</div><div class="r-role">Cheffe de Projet, ONASUR</div></div>
+        <div class="ref-card"><p class="quote">« L'architecture mise en place est solide : elle supporte aujourd'hui des centaines d'utilisateurs sans incident majeur depuis le lancement. »</p><div class="r-name">Kouadio Alain</div><div class="r-role">Responsable Digital, MINADER</div></div>
+      </div>
+    </div>
+
+    <!-- DÉCLARATION -->
+    <div class="declaration">
+      <p>Je soussigné, Jean Marie Daniel Vianney GUEDEGBE, certifie sur l'honneur que les informations contenues dans le présent curriculum vitae sont exactes et sincères, et me tiens à la disposition de toute institution souhaitant les vérifier.</p>
+      <div class="sig-row">
+        <div class="sig-block"><b>Fait à Abidjan, Côte d'Ivoire</b>Document établi en janvier 2026</div>
+        <div class="sig-block"><b>Jean Marie Daniel Vianney GUEDEGBE</b>Ingénieur Logiciel Backend Senior</div>
+      </div>
+    </div>
+
   </div>
+
+  <footer class="doc-footer">Curriculum Vitae  Jean Marie Daniel Vianney GUEDEGBE  Document confidentiel à usage professionnel</footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-/* ==========================================================
-   DANIEL.EXE — Jeu d'exploration 3D portfolio
-   ========================================================== */
-(function(){
-  'use strict';
-
-  // ---------- DONNÉES DES NŒUDS (contenu réel du CV) ----------
-  const NODES_DATA = [
-    {
-      id:'profil', title:'PROFIL', color:0x00F0FF, pos:[18,4,-10],
-      html:`<p>Depuis plus de six ans, je conçois et je livre des plateformes logicielles qui tiennent leurs promesses <strong>en production</strong>. Basé à Abidjan, j'interviens comme consultant backend pour <strong>Orange Liberia</strong> et développeur full stack pour <strong>Illigo</strong>.</p>
-      <p>Mon terrain de jeu : Python, Django, FastAPI côté serveur, Flutter côté mobile, Clean Architecture et Domain-Driven Design. J'ai dirigé pendant cinq ans le département IT de <strong>IIPEA</strong>, où j'ai livré un ERP scolaire primé au Moov Africa CI StartUp Challenge 2025.</p>
-      <div class="tag-row"><span>Abidjan, CI</span><span>Remote / Hybride</span><span>FR · EN</span></div>`
-    },
-    {
-      id:'stack', title:'STACK TECHNIQUE', color:0x8B5CF6, pos:[-20,6,-16],
-      html:`<p>Les briques que j'assemble au quotidien :</p>
-      <ul>
-        <li><strong>Langages</strong> — Python, JavaScript, Dart, SQL, Bash</li>
-        <li><strong>Frameworks</strong> — Django, DRF, FastAPI, Flask, Next.js, Flutter</li>
-        <li><strong>Données</strong> — PostgreSQL, MySQL, MongoDB, Redis</li>
-        <li><strong>Infra</strong> — Docker, Nginx, Gunicorn, GitHub Actions, Ansible</li>
-        <li><strong>Temps réel</strong> — Celery, MQTT, WebSockets, Django Channels</li>
-        <li><strong>Paiements</strong> — Wave API, Webhooks HMAC, MTN MoMo</li>
-      </ul>`
-    },
-    {
-      id:'parcours', title:'PARCOURS PROFESSIONNEL', color:0xFF2E9A, pos:[24,10,14],
-      html:`<div class="entry"><div class="e-head"><span>ACTUEL</span><span>SEPT. 2025 →</span></div><h4>Consultant Backend Developer</h4><p style="margin:0">Orange Liberia — microservices Python/Flask télécoms, APIs critiques, Docker/Ansible.</p></div>
-      <div class="entry"><div class="e-head"><span>ACTIF</span><span>MAI 2025 →</span></div><h4>Développeur Backend Mobilité</h4><p style="margin:0">Illigo — plateforme IoT, Django/DRF Clean Architecture, tracking GPS temps réel.</p></div>
-      <div class="entry"><div class="e-head"><span>5 ANS</span><span>2020 → 2025</span></div><h4>Lead Développeur &amp; Responsable IT</h4><p style="margin:0">IIPEA — ERP scolaire primé, management d'équipe, Django/PostgreSQL/Flutter.</p></div>`
-    },
-    {
-      id:'projets', title:'PROJETS SHIPPÉS', color:0xFFE93E, pos:[-22,8,18],
-      html:`<div class="entry"><h4>SPORTIF Africa</h4><p style="margin:0">Plateforme e-commerce sportive : paiement Wave, 3 wallets isolés (boutique/dev/référence), POS interne, permissions granulaires du personnel.</p></div>
-      <div class="entry"><h4>Spaghetti d'Abidjan</h4><p style="margin:0">Livraison de plats locaux avec paiement Wave intégré et filtres avancés (budget, épicé, végétal).</p></div>
-      <div class="entry"><h4>FNE Ivoire &amp; BRVM Analytics</h4><p style="margin:0">Facturation électronique DGI et données boursières UEMOA temps réel.</p></div>
-      <div class="entry" style="border:none;margin:0;padding:0"><h4>Wave Business SDK</h4><p style="margin:0">Kit Python publié sur PyPI, signature HMAC-SHA256, tests automatisés.</p></div>`
-    },
-    {
-      id:'distinctions', title:'DISTINCTIONS', color:0x34E4A6, pos:[30,5,-22],
-      html:`<div class="entry"><div class="e-head"><span>VAINQUEUR</span><span>DÉC. 2025</span></div><h4>1er Prix Moov Africa CI StartUp Challenge</h4><p style="margin:0">Remporté avec SMS — ERP scolaire multiplateforme, 4 établissements pilotes.</p></div>
-      <div class="entry"><div class="e-head"><span>FINALISTE</span><span>MAI 2025</span></div><h4>MASS Solutions Spatiales (ICESCO)</h4><p style="margin:0">TraceAgriChain — blockchain, imagerie satellite, cartographie 3D.</p></div>
-      <div class="entry" style="border:none;margin:0;padding:0"><div class="e-head"><span>2ᵉ PLACE</span><span>JANV. 2024</span></div><h4>Hackathon MTN MTS Côte d'Ivoire</h4><p style="margin:0">MomoFund — crowdfunding via l'API MTN Mobile Money.</p></div>`
-    },
-    {
-      id:'formation', title:'FORMATION & CERTIFICATIONS', color:0x00F0FF, pos:[-26,10,-8],
-      html:`<p><strong>Diplômes</strong></p>
-      <ul>
-        <li>MSc Génie Logiciel — Wolf University / GoMyCode (2025)</li>
-        <li>Master Informatique — IIPEA Abidjan (2023)</li>
-        <li>Master Big Data Analytics — UVCI (2023)</li>
-      </ul>
-      <p><strong>Certifications</strong></p>
-      <ul>
-        <li>Python for Data Science — IBM</li>
-        <li>Machine Learning &amp; Data Viz with Python — IBM</li>
-        <li>ITIL® Foundation — AXELOS</li>
-      </ul>`
-    },
-    {
-      id:'contact', title:'ÉTABLIR LE CONTACT', color:0xFF2E9A, pos:[4,14,30],
-      html:`<p>Disponible en remote, hybride ou relocalisation. Je réponds généralement sous 24 heures.</p>
-      <p class="mono" style="font-size:.85rem">📍 Abidjan, Côte d'Ivoire &nbsp;·&nbsp; ● disponible</p>
-      <div class="cta-links">
-        <a href="https://wa.me/2250748733365" target="_blank">WhatsApp →</a>
-        <a href="mailto:danielguedegbe10027@gmail.com" target="_blank">Email →</a>
-        <a href="https://www.linkedin.com/in/daniel-guedegbe/" target="_blank">LinkedIn →</a>
-        <a href="https://github.com/daniel10027" target="_blank">GitHub →</a>
-      </div>`
-    },
-  ];
-
-  // ---------- THREE.JS SETUP ----------
-  const canvas = document.getElementById('scene');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x04030A, 0.012);
-  scene.background = new THREE.Color(0x04030A);
-
-  const camera = new THREE.PerspectiveCamera(68, window.innerWidth/window.innerHeight, 0.1, 800);
-  camera.position.set(0, 6, 14);
-
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  // Lumières
-  scene.add(new THREE.AmbientLight(0x6060a0, .55));
-  const dirLight = new THREE.DirectionalLight(0x88bbff, .5);
-  dirLight.position.set(10, 30, 10);
-  scene.add(dirLight);
-
-  // Grille néon (sol infini stylisé)
-  const gridSize = 400, gridDiv = 80;
-  const grid = new THREE.GridHelper(gridSize, gridDiv, 0x00F0FF, 0x1a1440);
-  grid.position.y = -6;
-  grid.material.transparent = true;
-  grid.material.opacity = 0.35;
-  scene.add(grid);
-
-  // Grille miroir (plafond) pour effet tunnel
-  const grid2 = grid.clone();
-  grid2.position.y = 40;
-  grid2.material = grid.material.clone();
-  grid2.material.opacity = 0.08;
-  scene.add(grid2);
-
-  // Halo horizon
-  const haloGeo = new THREE.SphereGeometry(360, 32, 32);
-  const haloMat = new THREE.MeshBasicMaterial({ color:0x120a30, side:THREE.BackSide, fog:false });
-  scene.add(new THREE.Mesh(haloGeo, haloMat));
-
-  // Étoiles
-  const starGeo = new THREE.BufferGeometry();
-  const starCount = 1400;
-  const starPos = new Float32Array(starCount * 3);
-  for (let i=0;i<starCount;i++){
-    starPos[i*3] = (Math.random()-0.5) * 500;
-    starPos[i*3+1] = Math.random() * 200 - 20;
-    starPos[i*3+2] = (Math.random()-0.5) * 500;
-  }
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  const starMat = new THREE.PointsMaterial({ color:0xffffff, size:0.9, transparent:true, opacity:.75 });
-  scene.add(new THREE.Points(starGeo, starMat));
-
-  // ---------- VAISSEAU JOUEUR ----------
-  const shipGroup = new THREE.Group();
-  const shipCore = new THREE.Mesh(
-    new THREE.OctahedronGeometry(0.9, 0),
-    new THREE.MeshStandardMaterial({ color:0x00F0FF, emissive:0x00F0FF, emissiveIntensity:1.4, metalness:.3, roughness:.2, wireframe:false })
-  );
-  shipGroup.add(shipCore);
-  const shipWire = new THREE.Mesh(
-    new THREE.OctahedronGeometry(1.3, 0),
-    new THREE.MeshBasicMaterial({ color:0xFF2E9A, wireframe:true, transparent:true, opacity:.6 })
-  );
-  shipGroup.add(shipWire);
-  const shipLight = new THREE.PointLight(0x00F0FF, 2.4, 22);
-  shipGroup.add(shipLight);
-  shipGroup.position.set(0, 4, 8);
-  scene.add(shipGroup);
-
-  // Traînée de boost
-  const trailCount = 60;
-  const trailGeo = new THREE.BufferGeometry();
-  const trailPos = new Float32Array(trailCount * 3);
-  trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPos, 3));
-  const trailMat = new THREE.PointsMaterial({ color:0xFF2E9A, size:.5, transparent:true, opacity:.55 });
-  const trailPoints = new THREE.Points(trailGeo, trailMat);
-  scene.add(trailPoints);
-  const trailHistory = [];
-
-  // ---------- NŒUDS DE DONNÉES ----------
-  const nodes = NODES_DATA.map(d => {
-    const group = new THREE.Group();
-    const core = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.6, 0),
-      new THREE.MeshStandardMaterial({ color:d.color, emissive:d.color, emissiveIntensity:1.1, metalness:.4, roughness:.25 })
-    );
-    group.add(core);
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(2.6, 0.05, 8, 48),
-      new THREE.MeshBasicMaterial({ color:d.color, transparent:true, opacity:.55 })
-    );
-    ring.rotation.x = Math.PI/2.3;
-    group.add(ring);
-    const ring2 = ring.clone();
-    ring2.rotation.x = -Math.PI/2.6;
-    ring2.rotation.z = Math.PI/3;
-    group.add(ring2);
-    const light = new THREE.PointLight(d.color, 3, 30);
-    group.add(light);
-    group.position.set(...d.pos);
-    scene.add(group);
-    return { ...d, group, core, collected:false, t: Math.random()*10 };
-  });
-
-  // Particules de collecte (pool réutilisable)
-  const burstParticles = [];
-  function spawnBurst(pos, color){
-    const geo = new THREE.BufferGeometry();
-    const count = 46;
-    const positions = new Float32Array(count*3);
-    const velocities = [];
-    for (let i=0;i<count;i++){
-      positions[i*3]=pos.x; positions[i*3+1]=pos.y; positions[i*3+2]=pos.z;
-      const v = new THREE.Vector3((Math.random()-0.5), (Math.random()-0.5), (Math.random()-0.5)).normalize().multiplyScalar(0.15+Math.random()*0.25);
-      velocities.push(v);
-    }
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const mat = new THREE.PointsMaterial({ color, size:.6, transparent:true, opacity:1 });
-    const pts = new THREE.Points(geo, mat);
-    scene.add(pts);
-    burstParticles.push({ pts, velocities, life:1.0 });
-  }
-
-  // ---------- ENTRÉES CLAVIER ----------
-  const keys = {};
-  window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; });
-  window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
-
-  // ---------- ENTRÉES TACTILES ----------
-  const touchState = { active:false, dx:0, dy:0, boost:false };
-  const joy = document.getElementById('touch-joystick');
-  const nub = document.getElementById('joy-nub');
-  let joyOrigin = null;
-  function joyStart(e){ touchState.active = true; const t = e.touches ? e.touches[0] : e; const r = joy.getBoundingClientRect(); joyOrigin = { x:r.left+r.width/2, y:r.top+r.height/2 }; }
-  function joyMove(e){ if (!touchState.active || !joyOrigin) return; const t = e.touches ? e.touches[0] : e; let dx = t.clientX - joyOrigin.x, dy = t.clientY - joyOrigin.y; const max = 44; const dist = Math.min(Math.hypot(dx,dy), max); const ang = Math.atan2(dy,dx); dx = Math.cos(ang)*dist; dy = Math.sin(ang)*dist; nub.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`; touchState.dx = dx/max; touchState.dy = dy/max; }
-  function joyEnd(){ touchState.active = false; touchState.dx = 0; touchState.dy = 0; joyOrigin=null; nub.style.transform='translate(-50%,-50%)'; }
-  joy.addEventListener('touchstart', joyStart, {passive:true});
-  joy.addEventListener('touchmove', joyMove, {passive:true});
-  joy.addEventListener('touchend', joyEnd);
-  const boostBtn = document.getElementById('touch-boost');
-  boostBtn.addEventListener('touchstart', () => touchState.boost = true, {passive:true});
-  boostBtn.addEventListener('touchend', () => touchState.boost = false);
-
-  // ---------- AUDIO (WebAudio, sans fichier externe) ----------
-  let audioCtx = null, muted = false;
-  function ensureAudio(){ if (!audioCtx) { try { audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} } }
-  function playChime(){
-    if (muted || !audioCtx) return;
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(660, audioCtx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.18);
-    g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
-    o.connect(g); g.connect(audioCtx.destination);
-    o.start(); o.stop(audioCtx.currentTime + 0.5);
-  }
-  document.getElementById('mute-btn').addEventListener('click', (e) => {
-    muted = !muted; e.currentTarget.textContent = muted ? '🔇' : '🔊';
-  });
-
-  // ---------- ÉTAT DU JEU ----------
-  let started = false, paused = false, gameWon = false;
-  let score = 0;
-  const totalNodes = nodes.length;
-  const worldBound = 60;
-  const velocity = new THREE.Vector3();
-  let heading = 0; // angle Y du vaisseau
-  let boosting = false;
-
-  function updateScoreUI(){
-    document.getElementById('score-num').textContent = score + '/' + totalNodes;
-    document.getElementById('score-bar').style.width = (score/totalNodes*100) + '%';
-  }
-
-  function openModal(node){
-    paused = true;
-    document.getElementById('modal-tag-text').textContent = 'MODULE DÉBLOQUÉ — ' + node.title;
-    document.getElementById('modal-title').textContent = node.title;
-    document.getElementById('modal-body').innerHTML = node.html;
-    document.getElementById('modal-overlay').classList.add('show');
-  }
-  function closeModal(){
-    document.getElementById('modal-overlay').classList.remove('show');
-    paused = false;
-    if (gameWon) return;
-    if (score >= totalNodes) triggerVictory();
-  }
-  document.getElementById('modal-close').addEventListener('click', closeModal);
-
-  function triggerVictory(){
-    gameWon = true;
-    setTimeout(() => document.getElementById('victory-overlay').classList.add('show'), 400);
-  }
-  document.getElementById('replay-link').addEventListener('click', () => {
-    document.getElementById('victory-overlay').classList.remove('show');
-  });
-
-  function collectNode(node){
-    node.collected = true;
-    score++;
-    updateScoreUI();
-    spawnBurst(node.group.position, node.color);
-    ensureAudio(); playChime();
-    // Estompe le nœud collecté
-    node.core.material.emissiveIntensity = 0.35;
-    node.core.material.opacity = 0.5;
-    node.core.material.transparent = true;
-    openModal(node);
-  }
-
-  // ---------- BOUCLE PRINCIPALE ----------
-  const clock = new THREE.Clock();
-  let promptTarget = null;
-
-  function updatePlayer(dt){
-    if (paused) return;
-    const forward = new THREE.Vector3(Math.sin(heading), 0, Math.cos(heading));
-    const right = new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading));
-
-    let ix = 0, iz = 0, iy = 0;
-    if (keys['z'] || keys['arrowup'] || keys['w']) iz -= 1;
-    if (keys['s'] || keys['arrowdown']) iz += 1;
-    if (keys['q'] || keys['arrowleft'] || keys['a']) ix -= 1;
-    if (keys['d'] || keys['arrowright']) ix += 1;
-    if (keys[' ']) iy += 1;
-    if (keys['control']) iy -= 1;
-    boosting = !!keys['shift'] || touchState.boost;
-
-    // Entrée tactile (override si actif)
-    if (touchState.active) { ix = touchState.dx; iz = touchState.dy; }
-
-    // Rotation du cap en fonction de l'input horizontal
-    heading -= ix * dt * 1.6;
-
-    const speed = (boosting ? 22 : 11);
-    const move = new THREE.Vector3();
-    move.addScaledVector(forward, -iz * speed * dt);
-    move.y = iy * speed * dt;
-
-    shipGroup.position.add(move);
-    shipGroup.position.x = THREE.MathUtils.clamp(shipGroup.position.x, -worldBound, worldBound);
-    shipGroup.position.z = THREE.MathUtils.clamp(shipGroup.position.z, -worldBound, worldBound);
-    shipGroup.position.y = THREE.MathUtils.clamp(shipGroup.position.y, -3, 34);
-
-    // Orientation du vaisseau
-    const targetRotY = heading;
-    shipGroup.rotation.y += (targetRotY - shipGroup.rotation.y) * Math.min(dt*6, 1);
-    shipCore.rotation.x += dt * 1.2;
-    shipWire.rotation.y -= dt * .8;
-
-    shipLight.intensity = boosting ? 4 : 2.4;
-
-    // Traînée
-    trailHistory.unshift(shipGroup.position.clone());
-    if (trailHistory.length > trailCount) trailHistory.pop();
-    const posAttr = trailGeo.attributes.position;
-    for (let i=0;i<trailCount;i++){
-      const p = trailHistory[i] || shipGroup.position;
-      posAttr.setXYZ(i, p.x, p.y, p.z);
-    }
-    posAttr.needsUpdate = true;
-    trailMat.opacity = boosting ? .7 : .25;
-
-    // Caméra troisième personne
-    const camOffset = new THREE.Vector3(Math.sin(heading)* -7, 3.4, Math.cos(heading)* -7);
-    const desiredCamPos = shipGroup.position.clone().add(camOffset).add(new THREE.Vector3(0,2.2,0));
-    camera.position.lerp(desiredCamPos, Math.min(dt*4, 1));
-    const lookTarget = shipGroup.position.clone().add(new THREE.Vector3(0,1.2,0));
-    camera.lookAt(lookTarget);
-  }
-
-  function updateNodes(dt){
-    let nearest = null, nearestDist = Infinity;
-    nodes.forEach(n => {
-      n.t += dt;
-      n.group.position.y += Math.sin(n.t*1.4) * 0.006;
-      n.group.rotation.y += dt * 0.5;
-      n.core.rotation.x += dt * 0.3;
-      if (!n.collected) {
-        const d = n.group.position.distanceTo(shipGroup.position);
-        if (d < nearestDist) { nearestDist = d; nearest = n; }
-        if (d < 3.2 && !paused) collectNode(n);
-      }
-    });
-    const pill = document.getElementById('prompt-pill');
-    if (nearest && nearestDist < 14 && !paused) {
-      pill.classList.add('show');
-      pill.textContent = '◉ ' + nearest.title + ' — ' + Math.max(0, Math.round(nearestDist)) + 'm';
-    } else {
-      pill.classList.remove('show');
-    }
-  }
-
-  function updateBursts(dt){
-    for (let i=burstParticles.length-1;i>=0;i--){
-      const b = burstParticles[i];
-      b.life -= dt*0.9;
-      const posAttr = b.pts.geometry.attributes.position;
-      for (let j=0;j<b.velocities.length;j++){
-        posAttr.array[j*3] += b.velocities[j].x;
-        posAttr.array[j*3+1] += b.velocities[j].y;
-        posAttr.array[j*3+2] += b.velocities[j].z;
-      }
-      posAttr.needsUpdate = true;
-      b.pts.material.opacity = Math.max(0, b.life);
-      if (b.life <= 0){ scene.remove(b.pts); burstParticles.splice(i,1); }
-    }
-  }
-
-  // ---------- MINI-CARTE ----------
-  const mmCanvas = document.getElementById('minimap');
-  const mmCtx = mmCanvas.getContext('2d');
-  function drawMinimap(){
-    const W = mmCanvas.width, H = mmCanvas.height;
-    mmCtx.clearRect(0,0,W,H);
-    mmCtx.strokeStyle = 'rgba(0,240,255,.25)';
-    mmCtx.strokeRect(1,1,W-2,H-2);
-    const scale = (W*0.42) / worldBound;
-    const cx = W/2, cy = H/2;
-    // nodes
-    nodes.forEach(n => {
-      const x = cx + n.group.position.x * scale;
-      const y = cy + n.group.position.z * scale;
-      mmCtx.beginPath();
-      mmCtx.arc(x, y, 3.2, 0, Math.PI*2);
-      mmCtx.fillStyle = n.collected ? 'rgba(255,255,255,.25)' : '#'+n.color.toString(16).padStart(6,'0');
-      mmCtx.fill();
-    });
-    // player
-    const px = cx + shipGroup.position.x * scale;
-    const py = cy + shipGroup.position.z * scale;
-    mmCtx.save();
-    mmCtx.translate(px, py);
-    mmCtx.rotate(heading);
-    mmCtx.beginPath();
-    mmCtx.moveTo(0,-6); mmCtx.lineTo(4,5); mmCtx.lineTo(-4,5); mmCtx.closePath();
-    mmCtx.fillStyle = '#00F0FF';
-    mmCtx.fill();
-    mmCtx.restore();
-  }
-
-  function animate(){
-    requestAnimationFrame(animate);
-    const dt = Math.min(clock.getDelta(), 0.05);
-    if (started) {
-      updatePlayer(dt);
-      updateNodes(dt);
-      updateBursts(dt);
-      drawMinimap();
-    }
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  // ---------- DÉMARRAGE ----------
-  document.getElementById('start-btn').addEventListener('click', () => {
-    ensureAudio();
-    document.getElementById('start-screen').classList.add('hide');
-    started = true;
-  });
-  document.getElementById('skip-link').addEventListener('click', () => {
-    // Ouvre un récapitulatif texte complet (accessibilité / rapidité) sans toucher au score du jeu
-    document.getElementById('start-screen').classList.add('hide');
-    started = true;
-    const allHtml = NODES_DATA.map(n => `<div class="entry"><h4>${n.title}</h4>${n.html}</div>`).join('');
-    document.getElementById('modal-tag-text').textContent = 'RÉCAPITULATIF COMPLET';
-    document.getElementById('modal-title').textContent = 'CV — Vue texte complète';
-    document.getElementById('modal-body').innerHTML = allHtml;
-    document.getElementById('modal-overlay').classList.add('show');
-    paused = true;
-  });
-})();
-</script>
 </body>
 </html>
