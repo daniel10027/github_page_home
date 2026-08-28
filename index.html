@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daniel Guedegbe Ingénieur Logiciel Full Stack Senior</title>
+    <title>Daniel Guedegbe — Ingénieur Logiciel Full Stack Senior</title>
     <meta
       name="description"
-      content="Daniel Guedegbe  Ingénieur Logiciel Full Stack Senior basé à Abidjan. Architectures Python/Django, APIs, plateformes SaaS, ERP & applications Flutter."
+      content="Daniel Guedegbe — Ingénieur Logiciel Full Stack Senior basé à Abidjan. Architectures Python/Django, APIs, plateformes SaaS, ERP & applications Flutter."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +32,6 @@
         --shadow: 0 30px 60px -30px rgba(27, 33, 29, 0.25);
         --ease: cubic-bezier(0.16, 1, 0.3, 1);
       }
-
       * {
         margin: 0;
         padding: 0;
@@ -61,7 +60,6 @@
         background: var(--sage);
         color: var(--paper);
       }
-
       .wrap {
         max-width: 1240px;
         margin: 0 auto;
@@ -78,7 +76,6 @@
           padding: 0 1.5rem;
         }
       }
-
       h1,
       h2,
       h3,
@@ -92,7 +89,6 @@
         font-style: italic;
         color: var(--sage-deep);
       }
-
       .eyebrow {
         font-family: "IBM Plex Mono", monospace;
         font-size: 0.72rem;
@@ -111,7 +107,6 @@
         height: 1px;
         background: var(--gold);
       }
-
       /* ── PROGRESS BAR ── */
       #progress {
         position: fixed;
@@ -123,7 +118,6 @@
         z-index: 1000;
         transition: width 0.1s linear;
       }
-
       /* ── NAV ── */
       header {
         position: fixed;
@@ -269,7 +263,6 @@
         font-size: 1.1rem;
         color: var(--ink);
       }
-
       /* ── HERO ── */
       #hero {
         padding-top: 11rem;
@@ -378,8 +371,7 @@
         color: var(--muted);
         margin-top: 0.5rem;
       }
-
-      /* HERO VISUAL  abstract editorial composition */
+      /* HERO VISUAL — abstract editorial composition */
       .hero-visual {
         position: relative;
         aspect-ratio: 1/1.05;
@@ -490,7 +482,20 @@
         padding: 0.4rem 0.75rem;
         border-radius: 999px;
       }
-
+      /* ── PARTICULES DE FOND (site entier) ── */
+      #siteParticles {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        pointer-events: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #siteParticles {
+          display: none;
+        }
+      }
       /* ── SECTION HEAD ── */
       .section-head {
         display: flex;
@@ -517,7 +522,6 @@
           gap: 1.2rem;
         }
       }
-
       /* ── REVEAL ── */
       .reveal {
         opacity: 0;
@@ -530,7 +534,6 @@
         opacity: 1;
         transform: none;
       }
-
       /* ── PROFIL ── */
       #profil {
         border-top: 1px solid var(--line);
@@ -600,7 +603,6 @@
         color: var(--sage-deep);
         border-color: var(--sage-deep);
       }
-
       /* PRINCIPLES */
       .principles {
         display: grid;
@@ -630,14 +632,12 @@
         font-weight: 300;
         max-width: 32ch;
       }
-
       @media (max-width: 900px) {
         .profil-grid,
         .principles {
           grid-template-columns: 1fr;
         }
       }
-
       /* ── PRACTICE AREAS ── */
       #practice {
         background: var(--paper-2);
@@ -698,7 +698,6 @@
           grid-template-columns: 1fr;
         }
       }
-
       /* ── PARCOURS / LEDGER ── */
       .ledger {
         border-top: 1px solid var(--line-strong);
@@ -750,7 +749,7 @@
         max-width: 64ch;
       }
       .ledger-row li::before {
-        content: "";
+        content: "—";
         position: absolute;
         left: 0;
         color: var(--gold);
@@ -774,7 +773,6 @@
           gap: 1rem;
         }
       }
-
       /* ── LE BILAN / SKILLS ── */
       #bilan {
         background: var(--ink);
@@ -846,7 +844,6 @@
           border-right: none;
         }
       }
-
       /* ── PROJECTS / ÉTUDES DE CAS ── */
       .case {
         display: grid;
@@ -940,8 +937,7 @@
           gap: 2rem;
         }
       }
-
-      /* MOCKUP  common chrome */
+      /* MOCKUP — common chrome */
       .mock-bar {
         display: flex;
         gap: 6px;
@@ -958,8 +954,7 @@
         padding: 1.4rem;
         height: calc(100% - 38px);
       }
-
-      /* MOCKUP 1  Invoice (FNE) */
+      /* MOCKUP 1 — Invoice (FNE) */
       .doc-mock .doc-head {
         display: flex;
         justify-content: space-between;
@@ -1021,8 +1016,7 @@
         color: var(--sage-deep);
         font-size: 1.1rem;
       }
-
-      /* MOCKUP 2  Chart (BRVM) */
+      /* MOCKUP 2 — Chart (BRVM) */
       .chart-mock .chart-head {
         display: flex;
         justify-content: space-between;
@@ -1054,8 +1048,7 @@
       .ticker-down {
         color: var(--gold);
       }
-
-      /* MOCKUP 3  Terminal (Wave SDK) */
+      /* MOCKUP 3 — Terminal (Wave SDK) */
       .term-mock {
         background: var(--ink);
         height: 100%;
@@ -1084,8 +1077,7 @@
         padding: 0.1rem 0.4rem;
         border-radius: 4px;
       }
-
-      /* MOCKUP 4  Map (PandaTree) */
+      /* MOCKUP 4 — Map (PandaTree) */
       .map-mock .mock-body {
         position: relative;
         padding: 0;
@@ -1104,8 +1096,7 @@
         border: 2px solid var(--card);
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       }
-
-      /* MOCKUP 5  Dashboard stats (SMS) */
+      /* MOCKUP 5 — Dashboard stats (Edone / e-commerce) */
       .dash-mock .dash-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -1140,8 +1131,7 @@
         border-radius: 4px 4px 0 0;
         background: linear-gradient(180deg, var(--sage), var(--sage-light));
       }
-
-      /* MOCKUP 6  Phone (AlloCar) */
+      /* MOCKUP 6 — Phone (AlloCar) */
       .phone-mock .mock-body {
         display: flex;
         justify-content: center;
@@ -1206,7 +1196,6 @@
         width: 40px;
         background: var(--sage-light);
       }
-
       /* ── AUTRES RÉALISATIONS ── */
       #autres {
         background: var(--paper-2);
@@ -1259,7 +1248,6 @@
           grid-template-columns: 1fr;
         }
       }
-
       /* ── DISTINCTIONS ── */
       .awards {
         border-top: 1px solid var(--line-strong);
@@ -1309,7 +1297,6 @@
           text-align: left;
         }
       }
-
       /* ── FORMATION / CERTIFICATIONS ── */
       .edu-grid {
         display: grid;
@@ -1354,7 +1341,6 @@
           gap: 0.5rem;
         }
       }
-
       /* ── TÉMOIGNAGES ── */
       #temoignages {
         background: var(--paper-2);
@@ -1419,7 +1405,6 @@
           grid-template-columns: 1fr;
         }
       }
-
       /* ── CTA BAND ── */
       #cta {
         background: var(--ink);
@@ -1461,7 +1446,6 @@
         background: rgba(246, 244, 239, 0.08);
         border-color: var(--paper);
       }
-
       /* ── CONTACT ── */
       .contact-grid {
         display: grid;
@@ -1534,7 +1518,6 @@
           gap: 0.3rem;
         }
       }
-
       /* ── FOOTER ── */
       footer {
         border-top: 1px solid var(--line);
@@ -1566,8 +1549,7 @@
         font-size: 0.7rem;
         color: var(--muted);
       }
-
-      /* MEDIA  nav collapse */
+      /* MEDIA — nav collapse */
       @media (max-width: 900px) {
         .nav-links {
           display: none;
@@ -1600,7 +1582,7 @@
   </head>
   <body>
     <div id="progress"></div>
-
+    <canvas id="siteParticles" aria-hidden="true"></canvas>
     <!-- ═══ HEADER / NAV ═══ -->
     <header>
       <nav class="wrap">
@@ -1638,7 +1620,6 @@
         <a href="https://wa.me/2250748733365" target="_blank">WhatsApp →</a>
       </div>
     </header>
-
     <main>
       <!-- ═══ HERO ═══ -->
       <section id="hero">
@@ -1647,14 +1628,14 @@
             <div>
               <div class="status-pill reveal visible">
                 <span class="status-dot"></span>
-                Disponible Remote / Hybride · Abidjan, Côte d'Ivoire
+                Disponible — Remote / Hybride · Abidjan, Côte d'Ivoire
               </div>
               <h1 class="hero-title reveal visible">
                 Des fondations logicielles solides pour les ambitions
                 <em>numériques</em> de l'Afrique.
               </h1>
               <p class="hero-sub reveal visible">
-                Je m'appelle <strong>Daniel Guedegbe</strong> Ingénieur Logiciel
+                Je m'appelle <strong>Daniel Guedegbe</strong> — Ingénieur Logiciel
                 Full Stack Senior basé à Abidjan. Depuis plus de six ans, je
                 conçois des architectures backend Python/Django, des APIs
                 critiques et des applications Flutter pour des plateformes
@@ -1665,7 +1646,7 @@
                   >Consulter les études de cas</a
                 >
                 <a
-                  href="https://drive.google.com/file/d/1WobBU8LyFQWqRjznG0AHsm00Cpl_dJgs/view?usp=sharing"
+                  href="https://drive.google.com/file/d/1wmdBI65t16h6F3Z9gx1WjW9Bhe41qCjS/view?usp=sharing"
                   target="_blank"
                   class="btn btn-ghost"
                   >Télécharger le CV</a
@@ -1682,7 +1663,7 @@
                 </div>
                 <div class="ledger-item">
                   <div class="ledger-num">
-                    <span class="count" data-target="12">0</span
+                    <span class="count" data-target="14">0</span
                     ><span class="plus">+</span>
                   </div>
                   <div class="ledger-label">Projets livrés</div>
@@ -1702,7 +1683,6 @@
                 </div>
               </div>
             </div>
-
             <!-- VISUAL -->
             <div class="hero-visual reveal visible">
               <div class="hv-grid"></div>
@@ -1721,18 +1701,17 @@
                 <div class="bar" style="height: 55%"></div>
                 <div class="bar" style="height: 70%"></div>
               </div>
-              <div class="hv-tag">api · v2.1 200 OK</div>
+              <div class="hv-tag">api · v2.1 — 200 OK</div>
             </div>
           </div>
         </div>
       </section>
-
       <!-- ═══ PROFIL ═══ -->
       <section id="profil">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">01 Profil</div>
+              <div class="eyebrow">01 — Profil</div>
               <h2>Six années de rigueur, une discipline.</h2>
             </div>
             <p class="lead">
@@ -1745,7 +1724,7 @@
             <div class="reveal">
               <p>
                 Depuis plus de six ans, je conçois et je livre des plateformes
-                logicielles qui tiennent leurs promesses en production pas
+                logicielles qui tiennent leurs promesses en production — pas
                 seulement en démonstration. Basé à Abidjan, au cœur de
                 l'écosystème technologique ouest-africain, j'interviens
                 aujourd'hui comme consultant backend pour
@@ -1758,25 +1737,27 @@
                 FastAPI côté serveur, Flutter côté mobile, et une attention
                 particulière portée à la Clean Architecture, au Domain-Driven
                 Design et aux principes SOLID. J'aime les systèmes qui survivent
-                à leur créateur un code lisible, testé, documenté, pensé pour
+                à leur créateur — un code lisible, testé, documenté, pensé pour
                 être repris et compris par d'autres équipes.
               </p>
               <p>
                 Avant cela, j'ai dirigé pendant cinq ans le département IT de
-                <strong>IIPEA</strong>, où j'ai piloté la conception d'un ERP
-                scolaire complet, primé lors du Moov Africa CI StartUp Challenge
-                2025. J'ai également construit des systèmes de présence
-                biométrique pour Saas Group, des plateformes de paiement mobile
-                s'appuyant sur l'API MTN Mobile Money, et des outils de
-                cartographie nationale du patrimoine végétal pour le compte du
-                CNRA.
+                <strong>IIPEA</strong>, où j'ai piloté plusieurs applications web
+                institutionnelles et encadré une équipe de développeurs. J'ai
+                également construit des systèmes de présence biométrique pour
+                Saas Group, des plateformes de paiement mobile s'appuyant sur
+                l'API MTN Mobile Money, et des outils de cartographie nationale
+                du patrimoine végétal pour le compte du CNRA. En parallèle, j'ai
+                conçu <strong>Edone</strong>, un ERP scolaire complet primé lors
+                du Moov Africa CI StartUp Challenge 2025.
               </p>
               <p>
-                Ce qui me motive : transformer des besoins métiers complexes
-                paiements, logistique, conformité fiscale, gestion d'actifs en
-                produits numériques fiables, élégants et faciles à maintenir. Je
-                travaille aussi bien en autonomie complète qu'au sein d'équipes
-                pluridisciplinaires, en français comme en anglais.
+                Ce qui me motive : transformer des besoins métiers complexes —
+                paiements, logistique, conformité fiscale, e-commerce, gestion
+                d'actifs — en produits numériques fiables, élégants et faciles à
+                maintenir. Je travaille aussi bien en autonomie complète qu'au
+                sein d'équipes pluridisciplinaires, en français comme en
+                anglais.
               </p>
             </div>
             <div class="facts reveal">
@@ -1841,7 +1822,6 @@
               </div>
             </div>
           </div>
-
           <div class="principles">
             <div class="principle reveal">
               <div class="pn">PRINCIPE 01</div>
@@ -1873,13 +1853,12 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ PRACTICE AREAS ═══ -->
       <section id="practice">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">02 Expertise</div>
+              <div class="eyebrow">02 — Expertise</div>
               <h2>Domaines d'intervention</h2>
             </div>
             <p class="lead">
@@ -1905,7 +1884,7 @@
               <div class="pc-num">02 / 06</div>
               <h3>Plateformes Web</h3>
               <p>
-                Applications web modernes avec Next.js ou Angular interfaces
+                Applications web modernes avec Next.js ou Angular — interfaces
                 réactives, performantes et optimisées pour le référencement.
               </p>
               <div class="practice-tags">
@@ -1962,29 +1941,70 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ PARCOURS ═══ -->
       <section id="parcours">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">03 Parcours</div>
+              <div class="eyebrow">03 — Parcours</div>
               <h2>Expériences professionnelles</h2>
             </div>
             <p class="lead">
-              Cinq engagements, du conseil pour de grands groupes télécoms à la
-              direction technique d'équipes produit.
+              Six engagements, du leadership technique pour l'impact social au
+              conseil pour de grands groupes télécoms.
             </p>
           </div>
           <div class="ledger reveal">
             <div class="ledger-row">
               <div class="lr-meta">
-                <div class="lr-period">SEPT. 2025 PRÉSENT</div>
+                <div class="lr-period">NOV. 2025 — AOÛT 2026 · 10 MOIS</div>
+                <div class="lr-company">Espoir Collectif</div>
+                <div class="lr-loc">Paris, France (Hybride)</div>
+              </div>
+              <div>
+                <div class="lr-role">
+                  Tech Lead — Applications &amp; Digital Solutions
+                </div>
+                <ul>
+                  <li>
+                    Direction de la stratégie technique et de l'architecture des
+                    applications web et mobiles au service de programmes sociaux
+                    et éducatifs à fort impact, en France et en Afrique.
+                  </li>
+                  <li>
+                    Définition des standards d'ingénierie, des critères de
+                    qualité de code et des bonnes pratiques adoptés par
+                    l'ensemble de l'équipe.
+                  </li>
+                  <li>
+                    Traduction des besoins métiers et sociaux en solutions
+                    numériques fiables et scalables, en étroite collaboration
+                    avec des parties prenantes non techniques.
+                  </li>
+                  <li>
+                    Formation et mentorat d'ingénieurs et d'apprenants, pour
+                    renforcer la capacité technique de l'équipe.
+                  </li>
+                  <li>
+                    Contribution à la stratégie de transformation numérique de
+                    l'organisation sur deux continents.
+                  </li>
+                </ul>
+                <div class="tech-row">
+                  <span>Tech Leadership</span><span>Architecture logicielle</span
+                  ><span>Django</span><span>Flutter</span
+                  ><span>Mentorat</span><span>Stratégie digitale</span>
+                </div>
+              </div>
+            </div>
+            <div class="ledger-row">
+              <div class="lr-meta">
+                <div class="lr-period">SEPT. 2025 — PRÉSENT</div>
                 <div class="lr-company">Orange Liberia</div>
                 <div class="lr-loc">Abidjan (Remote)</div>
               </div>
               <div>
-                <div class="lr-role">Consultant Backend Developer</div>
+                <div class="lr-role">Backend Developer</div>
                 <ul>
                   <li>
                     Conception et développement de microservices Python/Flask
@@ -2017,16 +2037,15 @@
                 </div>
               </div>
             </div>
-
             <div class="ledger-row">
               <div class="lr-meta">
-                <div class="lr-period">MAI 2025 PRÉSENT</div>
+                <div class="lr-period">MAI 2025 — PRÉSENT</div>
                 <div class="lr-company">Illigo</div>
                 <div class="lr-loc">Abidjan (Hybride)</div>
               </div>
               <div>
                 <div class="lr-role">
-                  Développeur Backend Mobilité Intelligente
+                  Développeur Backend — Mobilité Intelligente
                 </div>
                 <ul>
                   <li>
@@ -2056,10 +2075,9 @@
                 </div>
               </div>
             </div>
-
             <div class="ledger-row">
               <div class="lr-meta">
-                <div class="lr-period">JUIN 2020 MAI 2025</div>
+                <div class="lr-period">JUIN 2020 — MAI 2025</div>
                 <div class="lr-company">IIPEA</div>
                 <div class="lr-loc">Abidjan, Côte d'Ivoire</div>
               </div>
@@ -2069,8 +2087,8 @@
                 </div>
                 <ul>
                   <li>
-                    Pilotage du cycle complet de développement logiciel
-                    conception jusqu'à la production pour plusieurs applications
+                    Pilotage du cycle complet de développement logiciel —
+                    conception jusqu'à la production — pour plusieurs applications
                     web institutionnelles en Python/Django.
                   </li>
                   <li>
@@ -2079,9 +2097,9 @@
                     délais.
                   </li>
                   <li>
-                    Conception et livraison d'un ERP scolaire complet (SMS)
-                    couvrant la gestion académique, administrative et financière
-                    1er Prix Moov Africa CI StartUp Challenge 2025.
+                    Mise en place de standards de qualité logicielle : revues de
+                    code, tests automatisés et documentation technique au sein
+                    du département IT.
                   </li>
                   <li>
                     Collaboration avec les équipes frontend pour garantir une
@@ -2096,10 +2114,9 @@
                 </div>
               </div>
             </div>
-
             <div class="ledger-row">
               <div class="lr-meta">
-                <div class="lr-period">MARS 2022 AVR. 2023</div>
+                <div class="lr-period">MARS 2022 — AVR. 2023</div>
                 <div class="lr-company">Saas Group</div>
                 <div class="lr-loc">Côte d'Ivoire (Remote)</div>
               </div>
@@ -2129,10 +2146,9 @@
                 </div>
               </div>
             </div>
-
             <div class="ledger-row">
               <div class="lr-meta">
-                <div class="lr-period">MARS 2021 JANV. 2022</div>
+                <div class="lr-period">MARS 2021 — JANV. 2022</div>
                 <div class="lr-company">SIEFTP / Tropic BTP</div>
                 <div class="lr-loc">Côte d'Ivoire (Remote)</div>
               </div>
@@ -2164,18 +2180,17 @@
           </div>
         </div>
       </section>
-
-      <!-- ═══ LE BILAN  SKILLS ═══ -->
+      <!-- ═══ LE BILAN — SKILLS ═══ -->
       <section id="bilan">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">04 Compétences</div>
+              <div class="eyebrow">04 — Compétences</div>
               <h2>Le bilan technique</h2>
             </div>
             <p class="lead">
               Un inventaire structuré des langages, frameworks et outils
-              mobilisés au quotidien classés comme les postes d'un bilan.
+              mobilisés au quotidien — classés comme les postes d'un bilan.
             </p>
           </div>
           <div class="bilan-grid reveal">
@@ -2260,26 +2275,25 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ ÉTUDES DE CAS ═══ -->
       <section id="travaux">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">05 Études de cas</div>
+              <div class="eyebrow">05 — Études de cas</div>
               <h2>Réalisations sélectionnées</h2>
             </div>
             <p class="lead">
-              Six projets représentatifs fintech, e-gouvernement, cartographie
-              et mobilité du cadrage à la mise en production.
+              Huit projets représentatifs — fintech, e-gouvernement,
+              cartographie, mobilité et e-commerce — du cadrage à la mise en
+              production.
             </p>
           </div>
-
-          <!-- CASE 1  FNE -->
+          <!-- CASE 1 — FNE -->
           <div class="case reveal">
             <div>
-              <div class="case-index">ÉTUDE 01 FACTURATION ÉLECTRONIQUE</div>
-              <h3>FNE Ivoire Facturation Normalisée Électronique</h3>
+              <div class="case-index">ÉTUDE 01 — FACTURATION ÉLECTRONIQUE</div>
+              <h3>FNE Ivoire — Facturation Normalisée Électronique</h3>
               <p class="desc">
                 Conçue pour répondre à l'obligation de Facturation Normalisée
                 Électronique instaurée par la Direction Générale des Impôts
@@ -2315,18 +2329,17 @@
                 <div class="doc-line w1"></div>
                 <div class="doc-line w2"></div>
                 <div class="doc-total">
-                  <span>FACTURE NORMALISÉE TOTAL TTC</span>
+                  <span>FACTURE NORMALISÉE — TOTAL TTC</span>
                   <b>2 480 000 F</b>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- CASE 2  BRVM -->
+          <!-- CASE 2 — BRVM -->
           <div class="case reveal">
             <div>
-              <div class="case-index">ÉTUDE 02 DONNÉES FINANCIÈRES</div>
-              <h3>BRVM Analytics Marchés boursiers en temps réel</h3>
+              <div class="case-index">ÉTUDE 02 — DONNÉES FINANCIÈRES</div>
+              <h3>BRVM Analytics — Marchés boursiers en temps réel</h3>
               <p class="desc">
                 Une plateforme d'analyse pour la Bourse Régionale des Valeurs
                 Mobilières de l'UEMOA, agrégeant les cours, volumes et indices
@@ -2390,11 +2403,10 @@
               </div>
             </div>
           </div>
-
-          <!-- CASE 3  WAVE SDK -->
+          <!-- CASE 3 — WAVE SDK -->
           <div class="case reveal">
             <div>
-              <div class="case-index">ÉTUDE 03 OUTILLAGE OPEN-SOURCE</div>
+              <div class="case-index">ÉTUDE 03 — OUTILLAGE OPEN-SOURCE</div>
               <h3>Wave Business API SDK</h3>
               <p class="desc">
                 Un kit de développement Python publié sur PyPI, permettant aux
@@ -2440,12 +2452,11 @@
               </div>
             </div>
           </div>
-
-          <!-- CASE 4  PANDATREE -->
+          <!-- CASE 4 — PANDATREE -->
           <div class="case reveal">
             <div>
-              <div class="case-index">ÉTUDE 04 CARTOGRAPHIE &amp; SIG</div>
-              <h3>PandaTree Patrimoine végétal national</h3>
+              <div class="case-index">ÉTUDE 04 — CARTOGRAPHIE &amp; SIG</div>
+              <h3>PandaTree — Patrimoine végétal national</h3>
               <p class="desc">
                 Développée en collaboration avec le Centre National de Recherche
                 Agronomique (CNRA), PandaTree est une plateforme de recensement
@@ -2502,20 +2513,18 @@
               </div>
             </div>
           </div>
-
-          <!-- CASE 5  SMS -->
+          <!-- CASE 5 — EDONE -->
           <div class="case reveal">
             <div>
-              <div class="case-index">ÉTUDE 05 ERP ÉDUCATIF</div>
-              <h3>SMS School Management System</h3>
+              <div class="case-index">ÉTUDE 05 — ERP ÉDUCATIF</div>
+              <h3>Edone — ERP scolaire nouvelle génération</h3>
               <p class="desc">
-                Conçu durant mon mandat de Responsable IT chez IIPEA, ce système
-                de gestion scolaire couvre l'intégralité du cycle académique,
-                administratif et financier d'un établissement : inscriptions,
-                emplois du temps, notes, facturation et communication avec les
-                familles. Déployé en phase pilote dans quatre établissements, le
-                projet a remporté le 1er Prix du Moov Africa CI StartUp
-                Challenge 2025.
+                Edone est un système de gestion scolaire complet couvrant
+                l'intégralité du cycle académique, administratif et financier
+                d'un établissement : inscriptions, emplois du temps, notes,
+                facturation et communication avec les familles. Déployé en phase
+                pilote dans quatre établissements, le projet a remporté le 1er
+                Prix du Moov Africa CI StartUp Challenge 2025.
               </p>
               <div class="award-badge">
                 🏆 1er Prix Moov Africa CI StartUp Challenge 2025
@@ -2558,12 +2567,11 @@
               </div>
             </div>
           </div>
-
-          <!-- CASE 6  ALLOCAR -->
+          <!-- CASE 6 — ALLOCAR -->
           <div class="case reveal">
             <div>
-              <div class="case-index">ÉTUDE 06 MOBILITÉ &amp; COVOITURAGE</div>
-              <h3>AlloCar Covoiturage intelligent</h3>
+              <div class="case-index">ÉTUDE 06 — MOBILITÉ &amp; COVOITURAGE</div>
+              <h3>AlloCar — Covoiturage intelligent</h3>
               <p class="desc">
                 Une plateforme de covoiturage pensée pour les contraintes
                 locales : connectivité variable, paiements mobiles, itinéraires
@@ -2617,15 +2625,117 @@
               </div>
             </div>
           </div>
+          <!-- CASE 7 — SPAGHETTI D'ABIDJAN -->
+          <div class="case reveal">
+            <div>
+              <div class="case-index">ÉTUDE 07 — E-COMMERCE ALIMENTAIRE</div>
+              <h3>Spaghetti d'Abidjan — Livraison de repas locaux</h3>
+              <p class="desc">
+                Une plateforme de commande et de livraison de plats ivoiriens
+                authentiques — attiéké, garba, alloco, sauces mijotées — pensée
+                pour la restauration locale d'Abidjan. Le catalogue dynamique
+                organise les produits par catégories (plats africains,
+                grillades, street food, boissons), avec des filtres par budget
+                et par profil (épicé, végétal, promotions) et un tunnel de
+                commande fluide du choix du plat à la livraison.
+              </p>
+              <div class="tech-row" style="margin-bottom: 1.6rem">
+                <span>E-commerce</span><span>Catalogue produits</span
+                ><span>Panier & commande</span><span>UI/UX</span>
+              </div>
+              <a
+                href="https://spaguettidabidjan.com/"
+                target="_blank"
+                class="case-link"
+                >Voir le projet →</a
+              >
+            </div>
+            <div class="case-visual dash-mock">
+              <div class="mock-bar"><i></i><i></i><i></i></div>
+              <div class="mock-body">
+                <div class="dash-grid">
+                  <div class="dash-stat">
+                    <b>25–35</b><span>MIN DE LIVRAISON</span>
+                  </div>
+                  <div class="dash-stat">
+                    <b>2 600</b><span>F · ATTIÉKÉ POULET</span>
+                  </div>
+                  <div class="dash-stat">
+                    <b>OUVERT</b><span>MAINTENANT</span>
+                  </div>
+                </div>
+                <div class="dash-bars">
+                  <div style="height: 50%"></div>
+                  <div style="height: 75%"></div>
+                  <div style="height: 40%"></div>
+                  <div style="height: 90%"></div>
+                  <div style="height: 60%"></div>
+                  <div style="height: 80%"></div>
+                  <div style="height: 45%"></div>
+                  <div style="height: 65%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- CASE 8 — SPORTIF AFRICA -->
+          <div class="case reveal">
+            <div>
+              <div class="case-index">ÉTUDE 08 — E-COMMERCE SPORTIF</div>
+              <h3>Sportif Africa — Équipements sportifs en ligne</h3>
+              <p class="desc">
+                Une boutique en ligne dédiée aux clubs, académies et athlètes de
+                Côte d'Ivoire : ballons, crampons, chasubles, matériel médical
+                et accessoires d'entraînement. La plateforme intègre un système
+                de ventes flash avec compte à rebours, un catalogue segmenté par
+                catégories et un paiement mobile sécurisé via Wave, avec
+                livraison à Abidjan et retrait en boutique.
+              </p>
+              <div class="tech-row" style="margin-bottom: 1.6rem">
+                <span>E-commerce</span><span>Ventes flash</span
+                ><span>Paiement Wave</span><span>Catalogue produits</span>
+              </div>
+              <a
+                href="https://sportifafrica.com/"
+                target="_blank"
+                class="case-link"
+                >Voir le projet →</a
+              >
+            </div>
+            <div class="case-visual dash-mock">
+              <div class="mock-bar"><i></i><i></i><i></i></div>
+              <div class="mock-body">
+                <div class="dash-grid">
+                  <div class="dash-stat">
+                    <b>500+</b><span>CLUBS ÉQUIPÉS</span>
+                  </div>
+                  <div class="dash-stat">
+                    <b>12K+</b><span>PRODUITS LIVRÉS</span>
+                  </div>
+                  <div class="dash-stat">
+                    <b>48h</b><span>LIVRAISON ABIDJAN</span>
+                  </div>
+                </div>
+                <div class="dash-bars">
+                  <div style="height: 35%"></div>
+                  <div style="height: 55%"></div>
+                  <div style="height: 70%"></div>
+                  <div style="height: 85%"></div>
+                  <div style="height: 50%"></div>
+                  <div style="height: 95%"></div>
+                  <div style="height: 40%"></div>
+                  <div style="height: 60%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-
       <!-- ═══ AUTRES RÉALISATIONS ═══ -->
       <section id="autres">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">06 Portefeuille</div>
+              <div class="eyebrow">06 — Portefeuille</div>
               <h2>Autres réalisations</h2>
             </div>
             <p class="lead">
@@ -2661,7 +2771,7 @@
               <span class="oc-tag">FINTECH / MOBILE</span>
               <h3>MomoFund</h3>
               <p>
-                Plateforme de crowdfunding via l'API MTN Mobile Money 2ᵉ place
+                Plateforme de crowdfunding via l'API MTN Mobile Money — 2ᵉ place
                 au Hackathon MTN MTS Côte d'Ivoire 2024.
               </p>
               <div class="tech-row">
@@ -2695,7 +2805,7 @@
               <h3>TraceAgriChain</h3>
               <p>
                 Traçabilité agricole combinant blockchain, imagerie satellite et
-                cartographie 3D Finaliste MASS / ICESCO 2025.
+                cartographie 3D — Finaliste MASS / ICESCO 2025.
               </p>
               <div class="tech-row">
                 <span>Blockchain</span><span>Satellite</span
@@ -2705,18 +2815,17 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ DISTINCTIONS ═══ -->
       <section id="distinctions">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">07 Distinctions</div>
+              <div class="eyebrow">07 — Distinctions</div>
               <h2>Reconnaissance &amp; récompenses</h2>
             </div>
             <p class="lead">
-              Trois compétitions, trois finalités différentes éducation, espace
-              &amp; agriculture, finance mobile.
+              Trois compétitions, trois finalités différentes — éducation,
+              espace &amp; agriculture, finance mobile.
             </p>
           </div>
           <div class="awards reveal">
@@ -2725,10 +2834,10 @@
               <div>
                 <h3>1er Prix Moov Africa CI StartUp Challenge 2025</h3>
                 <p>
-                  Remporté avec SMS (School Management System) ERP éducatif
-                  multiplateforme (Web, Android, iOS) pour la gestion
-                  académique, administrative et financière, validé par une phase
-                  pilote sur quatre établissements.
+                  Remporté avec Edone — ERP éducatif multiplateforme (Web,
+                  Android, iOS) pour la gestion académique, administrative et
+                  financière, validé par une phase pilote sur quatre
+                  établissements.
                 </p>
               </div>
               <div class="ar-rank">VAINQUEUR</div>
@@ -2736,12 +2845,12 @@
             <div class="award-row">
               <div class="ar-date">MAI 2025</div>
               <div>
-                <h3>Finaliste MASS Solutions Spatiales Africaines (ICESCO)</h3>
+                <h3>Finaliste — MASS Solutions Spatiales Africaines (ICESCO)</h3>
                 <p>
-                  Présentation de TraceAgriChain solution combinant blockchain,
-                  imagerie satellite et cartographie 3D pour la traçabilité
-                  complète des matières premières agricoles, de la production à
-                  l'exportation.
+                  Présentation de TraceAgriChain — solution combinant
+                  blockchain, imagerie satellite et cartographie 3D pour la
+                  traçabilité complète des matières premières agricoles, de la
+                  production à l'exportation.
                 </p>
               </div>
               <div class="ar-rank">FINALISTE</div>
@@ -2749,9 +2858,9 @@
             <div class="award-row">
               <div class="ar-date">JANV. 2024</div>
               <div>
-                <h3>2ᵉ Place Hackathon MTN MTS Côte d'Ivoire</h3>
+                <h3>2ᵉ Place — Hackathon MTN MTS Côte d'Ivoire</h3>
                 <p>
-                  Développement de MomoFund plateforme de crowdfunding Mobile
+                  Développement de MomoFund — plateforme de crowdfunding Mobile
                   Money permettant le financement collaboratif de projets via
                   l'API MTN MoMo, accessible à tous.
                 </p>
@@ -2761,13 +2870,12 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ FORMATION & CERTIFICATIONS ═══ -->
       <section id="formation">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">08 Formation</div>
+              <div class="eyebrow">08 — Formation</div>
               <h2>Formation &amp; certifications</h2>
             </div>
             <p class="lead">
@@ -2781,7 +2889,9 @@
               <ul class="edu-list">
                 <li>
                   <div>
-                    <span class="e-title">MSc en Génie Logiciel</span
+                    <span class="e-title"
+                      >Master of Science in Computer Science: Software
+                      Engineering</span
                     ><span class="e-sub">Wolf University / GoMyCode</span>
                   </div>
                   <span class="e-year">2025</span>
@@ -2789,9 +2899,9 @@
                 <li>
                   <div>
                     <span class="e-title"
-                      >Master en Informatique Génie Logiciel</span
+                      >Master en Informatique — Génie Logiciel</span
                     ><span class="e-sub"
-                      >IIPEA Institut International Polytechnique des Élites
+                      >IIPEA — Institut International Polytechnique des Élites
                       d'Abidjan</span
                     >
                   </div>
@@ -2801,7 +2911,7 @@
                   <div>
                     <span class="e-title">Master en Big Data Analytics</span
                     ><span class="e-sub"
-                      >Université Virtuelle de Côte d'Ivoire soutenance en
+                      >Université Virtuelle de Côte d'Ivoire — soutenance en
                       cours</span
                     >
                   </div>
@@ -2819,7 +2929,7 @@
                 <li>
                   <div>
                     <span class="e-title"
-                      >Baccalauréat Scientifique Série C</span
+                      >Baccalauréat Scientifique — Série C</span
                     ><span class="e-sub">Lycée Municipal de Port-Bouët</span>
                   </div>
                   <span class="e-year">2017</span>
@@ -2869,7 +2979,7 @@
                   <div>
                     <span class="e-title"
                       >Administrateur de Bases de Données</span
-                    ><span class="e-sub">NaN Not A Number CI</span>
+                    ><span class="e-sub">NaN — Not A Number CI</span>
                   </div>
                 </li>
                 <li>
@@ -2885,13 +2995,12 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ TÉMOIGNAGES ═══ -->
       <section id="temoignages">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">09 Témoignages</div>
+              <div class="eyebrow">09 — Témoignages</div>
               <h2>Ce qu'en disent les clients</h2>
             </div>
             <p class="lead">
@@ -2912,7 +3021,7 @@
                 <div class="testi-avatar">JK</div>
                 <div>
                   <div class="testi-name">Jean Kouassi</div>
-                  <div class="testi-role">Directeur IT Groupe École Sup</div>
+                  <div class="testi-role">Directeur IT — Groupe École Sup</div>
                 </div>
               </div>
             </div>
@@ -2927,7 +3036,7 @@
                 <div class="testi-avatar">YN</div>
                 <div>
                   <div class="testi-name">Yao N'Dri</div>
-                  <div class="testi-role">CTO Saas Group Côte d'Ivoire</div>
+                  <div class="testi-role">CTO — Saas Group Côte d'Ivoire</div>
                 </div>
               </div>
             </div>
@@ -2942,7 +3051,7 @@
                 <div class="testi-avatar">NK</div>
                 <div>
                   <div class="testi-name">Nadine Koné</div>
-                  <div class="testi-role">Cheffe de projet ONASUR</div>
+                  <div class="testi-role">Cheffe de projet — ONASUR</div>
                 </div>
               </div>
             </div>
@@ -2957,14 +3066,13 @@
                 <div class="testi-avatar">KA</div>
                 <div>
                   <div class="testi-name">Kouadio Alain</div>
-                  <div class="testi-role">Responsable Digital MINADER</div>
+                  <div class="testi-role">Responsable Digital — MINADER</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
       <!-- ═══ CTA BAND ═══ -->
       <section id="cta">
         <div class="wrap">
@@ -2995,13 +3103,12 @@
           </div>
         </div>
       </section>
-
       <!-- ═══ CONTACT ═══ -->
       <section id="contact">
         <div class="wrap">
           <div class="section-head reveal">
             <div>
-              <div class="eyebrow">10 Contact</div>
+              <div class="eyebrow">10 — Contact</div>
               <h2>Discutons de votre projet</h2>
             </div>
             <p class="lead">
@@ -3128,7 +3235,6 @@
         </div>
       </section>
     </main>
-
     <!-- ═══ FOOTER ═══ -->
     <footer>
       <div class="wrap footer-grid">
@@ -3152,19 +3258,110 @@
           <li><a href="mailto:danielguedegbe10027@gmail.com">Email</a></li>
         </ul>
         <div class="footer-copy">
-          © 2026 Daniel Guedegbe Abidjan, Côte d'Ivoire
+          © 2026 Daniel Guedegbe — Abidjan, Côte d'Ivoire
         </div>
       </div>
     </footer>
-
     <script>
+      // PARTICULES DE FOND — LÉGÈRES, SUR TOUT LE SITE
+      (function () {
+        const canvas = document.getElementById("siteParticles");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        if (reduceMotion) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let w, h, particles;
+
+        // Couleurs discrètes, cohérentes avec la palette du site
+        const colors = [
+          "86, 112, 95", // sage
+          "182, 151, 95", // gold
+          "84, 93, 86", // ink-soft
+        ];
+
+        function resize() {
+          w = canvas.width = window.innerWidth * dpr;
+          h = canvas.height = window.innerHeight * dpr;
+          canvas.style.width = window.innerWidth + "px";
+          canvas.style.height = window.innerHeight + "px";
+        }
+
+        function initParticles() {
+          const count = Math.max(
+            40,
+            Math.min(110, Math.floor((w * h) / (28000 * dpr * dpr))),
+          );
+          particles = Array.from({ length: count }, () => {
+            const isPlanet = Math.random() < 0.12;
+            return {
+              x: Math.random() * w,
+              y: Math.random() * h,
+              baseX: 0,
+              baseY: 0,
+              r: (isPlanet ? Math.random() * 1.6 + 1.6 : Math.random() * 1 + 0.4) * dpr,
+              vx: (Math.random() - 0.5) * 0.05 * dpr,
+              vy: (Math.random() * 0.05 + 0.015) * dpr,
+              tw: Math.random() * Math.PI * 2,
+              twSpeed: Math.random() * 0.012 + 0.004,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              planet: isPlanet,
+              orbitR: isPlanet ? (Math.random() * 10 + 6) * dpr : 0,
+              orbitSpeed: (Math.random() * 0.006 + 0.003) * (Math.random() < 0.5 ? 1 : -1),
+              orbitAngle: Math.random() * Math.PI * 2,
+            };
+          });
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, w, h);
+          particles.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.tw += p.twSpeed;
+            if (p.x < -10) p.x = w + 10;
+            if (p.x > w + 10) p.x = -10;
+            if (p.y < -10) p.y = h + 10;
+            if (p.y > h + 10) p.y = -10;
+            let drawX = p.x;
+            let drawY = p.y;
+            if (p.planet) {
+              p.orbitAngle += p.orbitSpeed;
+              drawX += Math.cos(p.orbitAngle) * p.orbitR;
+              drawY += Math.sin(p.orbitAngle) * p.orbitR * 0.6;
+            }
+            const maxAlpha = p.planet ? 0.16 : 0.22;
+            const alpha =
+              maxAlpha * (0.4 + Math.abs(Math.sin(p.tw)) * 0.6);
+            ctx.beginPath();
+            ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${p.color}, ${alpha})`;
+            ctx.fill();
+          });
+          requestAnimationFrame(draw);
+        }
+
+        resize();
+        initParticles();
+        requestAnimationFrame(draw);
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            resize();
+            initParticles();
+          }, 150);
+        });
+      })();
       // PROGRESS BAR
       window.addEventListener("scroll", () => {
         const h = document.documentElement;
         const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
         document.getElementById("progress").style.width = pct + "%";
       });
-
       // MOBILE MENU
       const menuToggle = document.getElementById("menuToggle");
       const mobileMenu = document.getElementById("mobileMenu");
@@ -3178,7 +3375,6 @@
             mobileMenu.classList.remove("open"),
           ),
         );
-
       // REVEAL ON SCROLL
       const revealObserver = new IntersectionObserver(
         (entries) => {
@@ -3191,7 +3387,6 @@
       document
         .querySelectorAll(".reveal")
         .forEach((el) => revealObserver.observe(el));
-
       // ACTIVE NAV LINK
       const sections = document.querySelectorAll("section[id]");
       const navLinks = document.querySelectorAll(".nav-links a");
@@ -3207,7 +3402,6 @@
           );
         });
       });
-
       // COUNT UP STATS
       const counted = new Set();
       const countObserver = new IntersectionObserver(
