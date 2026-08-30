@@ -297,7 +297,7 @@ export const projects = [
       "Système de gestion scolaire complet couvrant l'intégralité du cycle académique, administratif et financier : inscriptions, emplois du temps, notes, facturation et communication avec les familles. Déployé en phase pilote dans quatre établissements.",
     tags: ["Django", "DRF", "Flutter", "PostgreSQL", "Web / Android / iOS"],
     award: "1er Prix Moov Africa CI StartUp Challenge 2025",
-    image: "/assets/proj_school.png",
+    image: "/assets/proj_edone.png",
     href: "https://github.com/daniel10027",
     linkLabel: "Voir le profil GitHub",
   },
@@ -377,7 +377,7 @@ export const otherWork = [
     title: "TraceAgriChain",
     body: "Traçabilité agricole combinant blockchain, imagerie satellite et cartographie 3D  Finaliste MASS / ICESCO 2025.",
     tech: ["Blockchain", "Satellite", "3D Mapping"],
-    image: null,
+    image: "/assets/proj_trace-agri-chain.jpg",
   },
 ];
 
